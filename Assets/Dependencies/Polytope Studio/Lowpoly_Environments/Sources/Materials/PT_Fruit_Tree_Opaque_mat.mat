@@ -8,14 +8,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PT_Fruit_Tree_Opaque_mat
-  m_Shader: {fileID: 4800000, guid: 233be0623027421449b81f7423abaf79, type: 3}
+  m_Shader: {fileID: 4800000, guid: 313fcf3aebc04cf4ab4f8c5f2850be7f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _CUSTOMWIND_ON
-  - _TRANSLUCENCYONOFF_ON
-  m_InvalidKeywords:
-  - _CUSTOMCOLORSTINTING_ON
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -26,6 +23,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Base_Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Normal_Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseTexture:
         m_Texture: {fileID: 2800000, guid: 5733ec0c27e7c9d41a230d27ca7b85d4, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -66,6 +75,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -84,29 +97,42 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Normal_Blend: 0.5
     - _AlphaCutoff: 0.5
     - _BumpScale: 1
-    - _CUSTOMCOLORSTINTING: 1
+    - _CUSTOMCOLORSTINTING: 0
     - _CUSTOMWIND: 1
     - _CUSTOMWIND1: 1
     - _Cutoff: 0.5
+    - _DecalMeshBiasType: 0
+    - _DecalMeshDepthBias: 0
+    - _DecalMeshViewBias: 0
     - _DetailNormalMapScale: 1
+    - _DrawOrder: 0
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _Gradient: 1
-    - _GradientPower: 1
+    - _Gradient: 1.1
+    - _GradientPower: 0.88
     - _LeavesThickness: 0.5
+    - _Max: 2.41
     - _Metallic: 0
+    - _Min: 1.93
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OutlineWidth: 0.15
     - _Parallax: 0.02
-    - _QueueControl: -1
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _RimStep: 0.65
+    - _RimStepSmooth: 0.4
     - _SNOWONOFF: 0
+    - _Shades: 0.35
+    - _ShadowStep: 0.5
+    - _ShadowStepSmooth: 0.04
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SnowAmount: 1
@@ -114,14 +140,17 @@ Material:
     - _SnowFade: 0.83
     - _SnowGradient: 0.83
     - _SpecularHighlights: 1
+    - _SpecularStep: 0.6
+    - _SpecularStepSmooth: 0.05
     - _SrcBlend: 1
     - _TRANSLUCENCYONOFF: 1
+    - _TimeOfDay: 0
     - _TransAmbient: 0.1
     - _TransDirect: 0.9
-    - _TransNormal: 0.5
+    - _TransNormal: 0.225
     - _TransScattering: 2
     - _TransShadow: 0.5
-    - _TransStrength: 1
+    - _TransStrength: 0
     - _UVSec: 0
     - _WINDMASKONOFF: 0
     - _WindDensity: 0.2
@@ -133,8 +162,25 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.26415092, g: 0.19937082, b: 0.058561757, a: 1}
+    - _Color: {r: 0.122641504, g: 0.09851531, b: 0.030660376, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GroundColor: {r: 0.08490568, g: 0.05234205, b: 0.04846032, a: 1}
-    - _TopColor: {r: 0.09433961, g: 0.04684817, b: 0.010234959, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 0.6698113, g: 0.544711, b: 0.3443841, a: 1}
+    - _SpecularColor: {r: 0.16037738, g: 0.097366415, b: 0.03706836, a: 1}
+    - _TopColor: {r: 0.0754717, g: 0.040685553, b: 0.014595941, a: 1}
   m_BuildTextureStacks: []
+--- !u!114 &546622360229415536
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
