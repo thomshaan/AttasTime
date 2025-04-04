@@ -21,10 +21,10 @@ MonoBehaviour:
     m_Value: 0.9
   intensity:
     m_OverrideState: 1
-    m_Value: 0.51
+    m_Value: 2.86
   scatter:
     m_OverrideState: 1
-    m_Value: 0.7
+    m_Value: 0.447
   clamp:
     m_OverrideState: 1
     m_Value: 65472
@@ -68,7 +68,7 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.317
+    m_Value: 0.39
   smoothness:
     m_OverrideState: 1
     m_Value: 0.305
@@ -93,7 +93,7 @@ MonoBehaviour:
     m_Value: 0
   contrast:
     m_OverrideState: 1
-    m_Value: 20
+    m_Value: 65
   colorFilter:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
