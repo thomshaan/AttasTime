@@ -21,12 +21,15 @@ public class NPCSchedule : MonoBehaviour
     private Transform currentTarget;
     private MorningDestination morningDestination;
 
+    private Animator animator;
+
     private float checkInterval = 5f;
     private float nextCheckTime;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
         morningDestination = (MorningDestination)Random.Range(0, 2);
 
         if (agent == null)
@@ -64,6 +67,11 @@ public class NPCSchedule : MonoBehaviour
                 }
             }
             nextCheckTime = Time.time + checkInterval;
+        }
+
+        if (animator != null)
+        {
+            animator.SetBool("run", agent.velocity.magnitude > 0.1f);
         }
     }
 

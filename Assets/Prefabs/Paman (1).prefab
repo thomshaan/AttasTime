@@ -7716,10 +7716,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7915587461005909672}
   - component: {fileID: 7361828647814731952}
-  - component: {fileID: 3330930572917393510}
   - component: {fileID: 7108588182460345798}
   - component: {fileID: 842434575140162643}
   - component: {fileID: 8862198930484445353}
+  - component: {fileID: 5682707978597590952}
   m_Layer: 0
   m_Name: Paman (1)
   m_TagString: Player
@@ -7779,33 +7779,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!54 &3330930572917393510
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7390970453520237586}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1
 --- !u!143 &7108588182460345798
 CharacterController:
   m_ObjectHideFlags: 0
@@ -7864,6 +7837,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &5682707978597590952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7390970453520237586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75be104ff0c8d934384185e99e79b90f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currency: 100
 --- !u!1 &7405809578722332784
 GameObject:
   m_ObjectHideFlags: 0
