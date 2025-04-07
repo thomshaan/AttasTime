@@ -1,64 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
 public class LightingManager : MonoBehaviour
 {
-    //Reference ke Lighting Preset
+    public static LightingManager Instance { get; private set; }  // Singleton access
+
     [SerializeField] private Light DirectionalLight;
     [SerializeField] private LightingPreset Preset;
     [SerializeField] private float TimeMultiplier = 1f;
-    //Variabel
-    [SerializeField, Range(0, 24)] private float TimeOfDay;
+    [SerializeField, Range(0, 24)] public float TimeOfDay; // Make TimeOfDay public so others can read it
+
+    private void Awake()
+    {
+        // Initialize Singleton
+        if (Instance != null && Instance != this)
+        {
+            DestroyImmediate(this);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Update()
     {
-        if(Preset == null){
+        if (Preset == null)
             return;
-        }   
-        if(Application.isPlaying){
+
+        if (Application.isPlaying)
+        {
             TimeOfDay += Time.deltaTime * TimeMultiplier;
             TimeOfDay %= 24;
             UpdateLighting(TimeOfDay / 24f);
         }
-        else{
-            UpdateLighting(TimeOfDay/24f);
+        else
+        {
+            UpdateLighting(TimeOfDay / 24f);
         }
-
     }
 
-
-    private void UpdateLighting(float timePercent){
+    private void UpdateLighting(float timePercent)
+    {
         RenderSettings.ambientLight = Preset.AmbientColor.Evaluate(timePercent);
         RenderSettings.fogColor = Preset.FogColor.Evaluate(timePercent);
 
-        if(DirectionalLight != null){
+        if (DirectionalLight != null)
+        {
             DirectionalLight.color = Preset.DirectionalColor.Evaluate(timePercent);
-            DirectionalLight.transform.localRotation = Quaternion.Euler(new Vector3((timePercent * 360f) - 90f, 170f, 0));
-
+            DirectionalLight.transform.localRotation =
+                Quaternion.Euler(new Vector3((timePercent * 360f) - 90f, 170f, 0));
         }
     }
 
-    //Fungsi mencari directional light
     private void OnValidate()
     {
         if (DirectionalLight != null)
             return;
 
-        //Mencari lighting tab sun
         if (RenderSettings.sun != null)
         {
             DirectionalLight = RenderSettings.sun;
         }
-
-        //Mencari scene light yang sesuai kriteria Directional
         else
         {
             Light[] lights = GameObject.FindObjectsOfType<Light>();
             foreach (Light light in lights)
             {
-
                 if (light.type == LightType.Directional)
                 {
                     DirectionalLight = light;
@@ -67,5 +73,4 @@ public class LightingManager : MonoBehaviour
             }
         }
     }
-
 }
