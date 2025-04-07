@@ -7720,6 +7720,7 @@ GameObject:
   - component: {fileID: 842434575140162643}
   - component: {fileID: 8862198930484445353}
   - component: {fileID: 5682707978597590952}
+  - component: {fileID: 2682261784710447494}
   m_Layer: 0
   m_Name: Paman (1)
   m_TagString: Player
@@ -7850,6 +7851,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currency: 100
+--- !u!136 &2682261784710447494
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7390970453520237586}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.63268864
+  m_Height: 3.9
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.4500002, z: 0.1326887}
 --- !u!1 &7405809578722332784
 GameObject:
   m_ObjectHideFlags: 0
