@@ -30,6 +30,7 @@ public class LightingManager : MonoBehaviour
         {
             TimeOfDay += Time.deltaTime * TimeMultiplier;
             TimeOfDay %= 24;
+
             UpdateLighting(TimeOfDay / 24f);
         }
         else
@@ -72,5 +73,10 @@ public class LightingManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public float Day // New property for the current day
+    {
+        get { return Mathf.Floor(TimeOfDay / 24f); }
     }
 }
