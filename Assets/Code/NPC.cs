@@ -1,10 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum MorningDestination {
-    Market,
-    CityCenter
-}
+public enum MorningDestination { Market, CityCenter, Home }
 
 public class NPCSchedule : MonoBehaviour
 {
@@ -16,97 +13,196 @@ public class NPCSchedule : MonoBehaviour
 
     [Header("NPC House Assignment")]
     public int AssignedHouseIndex = 0;
+    public MorningDestination morningDestination;
 
     private NavMeshAgent agent;
-    private Transform currentTarget;
-    private MorningDestination morningDestination;
-
     private Animator animator;
+    private Transform currentTarget;
 
-    private float checkInterval = 5f;
-    private float nextCheckTime;
+    private bool isHidden = false;
+    private Renderer[] renderers;
 
-    private void Start()
+    private int lastCheckedHour = -1;
+    private float arrivalThreshold = 0.5f;
+    private int nextDepartureHour = -1;
+
+    private bool hasSpawnedToday = false;
+    private float homeStayTimer = 0f;
+    private bool arrivedAtHome = false;
+
+    private bool waitingToGoOutAgain = false;
+
+    void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        morningDestination = (MorningDestination)Random.Range(0, 2);
+        renderers = GetComponentsInChildren<Renderer>();
+        HideNPC(); // Start hidden until 7 AM
+    }
 
-        if (agent == null)
+    void Update()
+    {
+        if (LightingManager.Instance == null || agent == null || !agent.isOnNavMesh) return;
+
+        int currentHour = Mathf.FloorToInt(LightingManager.Instance.TimeOfDay);
+
+        if (currentHour != lastCheckedHour)
         {
-            Debug.LogError($"{gameObject.name} is missing NavMeshAgent!");
+            lastCheckedHour = currentHour;
+
+            if (currentHour == 7)
+            {
+                SpawnForTheDay();
+            }
+
+            // Mosque at 12 PM and 6 PM
+            if ((currentHour == 12 || currentHour == 18) && !isHidden)
+            {
+                SetDestination(Mosque);
+            }
+
+            // Active hours for back and forth movement
+            if ((currentHour >= 7 && currentHour < 12) || (currentHour > 12 && currentHour < 18))
+            {
+                if (!isHidden && !arrivedAtHome && !waitingToGoOutAgain)
+                {
+                    SetDestination(GetRandomPublicPlace());
+                }
+            }
+
+            // Return home after 8 PM
+            if (currentHour >= 20 && !isHidden)
+            {
+                SetDestination(Houses[AssignedHouseIndex]);
+                arrivedAtHome = true;
+            }
+
+            // NPC was hidden at 7 AM and randomly goes out later
+            if (isHidden && nextDepartureHour > 0 && currentHour >= nextDepartureHour && currentHour < 12)
+            {
+                ShowNPC();
+                SetDestination(GetRandomPublicPlace());
+                nextDepartureHour = -1;
+            }
         }
 
-        if (LightingManager.Instance == null)
+        if (!isHidden && agent.remainingDistance <= arrivalThreshold && !agent.pathPending)
         {
-            Debug.LogError("LightingManager.Instance is NULL!");
+            agent.isStopped = true;
+            if (animator) animator.SetBool("run", false);
+
+            if (currentTarget == Houses[AssignedHouseIndex] && !arrivedAtHome)
+            {
+                arrivedAtHome = true;
+                homeStayTimer = Random.Range(5f, 15f); // Stay 5-15 seconds
+            }
+        }
+
+        // Countdown to hide if at home
+        if (arrivedAtHome)
+        {
+            homeStayTimer -= Time.deltaTime;
+            if (homeStayTimer <= 0f)
+            {
+                // 50% chance to go out again if during active hours
+                if ((currentHour >= 7 && currentHour < 12) || (currentHour > 12 && currentHour < 18))
+                {
+                    if (Random.value < 0.5f)
+                    {
+                        waitingToGoOutAgain = true;
+                        SetDestination(GetRandomPublicPlace());
+                    }
+                    else
+                    {
+                        HideNPC();
+                    }
+                }
+                else
+                {
+                    HideNPC();
+                }
+                arrivedAtHome = false;
+            }
+        }
+    }
+
+    void SpawnForTheDay()
+    {
+        hasSpawnedToday = true;
+        Transform destination = GetMorningDestination();
+
+        if (destination == Houses[AssignedHouseIndex])
+        {
+            isHidden = true;
+            nextDepartureHour = Random.Range(8, 12); // Will leave house between 8-11 AM
         }
         else
         {
-            Debug.Log($"LightingManager Time: {LightingManager.Instance.TimeOfDay}");
+            ShowNPC();
+            SetDestination(destination);
         }
     }
 
-    private void Update()
+    void SetDestination(Transform target)
     {
-        if (LightingManager.Instance == null) return;
+        if (target == null || agent == null) return;
 
-        if (Time.time >= nextCheckTime)
-        {
-            int currentHour = Mathf.FloorToInt(LightingManager.Instance.TimeOfDay);
-            Transform target = GetDestinationForHour(currentHour);
+        currentTarget = target;
+        agent.isStopped = false;
+        agent.SetDestination(GetOffsetPosition(target.position));
+        if (animator) animator.SetBool("run", true);
 
-            if (target != null && target != currentTarget)
-            {
-                float distance = Vector3.Distance(transform.position, target.position);
-                if (distance > 0.5f)
-                {
-                    agent.SetDestination(target.position);
-                    currentTarget = target;
-                    Debug.Log($"{gameObject.name} is moving to: {target.name} at hour {currentHour}");
-                }
-            }
-            nextCheckTime = Time.time + checkInterval;
-        }
-
-        if (animator != null)
-        {
-            animator.SetBool("run", agent.velocity.magnitude > 0.1f);
-        }
+        waitingToGoOutAgain = false; // Reset any waiting flag
     }
 
-    Transform GetDestinationForHour(int hour)
+    void HideNPC()
     {
-        Debug.Log($"Checking hour: {hour}");
+        isHidden = true;
+        if (agent) agent.isStopped = true;
+        if (animator) animator.SetBool("run", false);
+        foreach (var r in renderers) r.enabled = false;
+    }
 
-        if (hour >= 6 && hour < 12)
+    void ShowNPC()
+    {
+        isHidden = false;
+        foreach (var r in renderers) r.enabled = true;
+        if (agent) agent.isStopped = false;
+        if (animator) animator.SetBool("run", true);
+    }
+
+    Vector3 GetOffsetPosition(Vector3 basePos)
+    {
+        Vector2 offset = Random.insideUnitCircle * 3f;
+        Vector3 pos = basePos + new Vector3(offset.x, 0, offset.y);
+
+        if (NavMesh.SamplePosition(pos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
         {
-            Debug.Log("Morning: going to market or city center");
-            return morningDestination == MorningDestination.Market ? Market : CityCenter;
+            return hit.position;
         }
-        else if (hour == 12)
+
+        return basePos;
+    }
+
+    Transform GetMorningDestination()
+    {
+        switch (morningDestination)
         {
-            Debug.Log("12PM: going to mosque");
-            return Mosque;
-        }
-        else if (hour > 12 && hour < 18)
-        {
-            Debug.Log("Afternoon: back to market or city center");
-            return morningDestination == MorningDestination.Market ? Market : CityCenter;
-        }
-        else if (hour == 18)
-        {
-            Debug.Log("6PM: going to mosque again");
-            return Mosque;
-        }
-        else if (hour >= 20)
-        {
-            Debug.Log("After 8PM: going home");
-            if (AssignedHouseIndex >= 0 && AssignedHouseIndex < Houses.Length)
+            case MorningDestination.Market:
+                return Market;
+            case MorningDestination.CityCenter:
+                return CityCenter;
+            case MorningDestination.Home:
                 return Houses[AssignedHouseIndex];
         }
+        return Market;
+    }
 
-        Debug.Log("No movement for this hour");
-        return null;
+    Transform GetRandomPublicPlace()
+    {
+        int rand = Random.Range(0, 3);
+        if (rand == 0) return Market;
+        if (rand == 1) return CityCenter;
+        return Houses[AssignedHouseIndex];
     }
 }
