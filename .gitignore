@@ -70,18 +70,4 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-Assets/Scenes/WorldMain/Lightmap-6_comp_light.exr.meta
-Assets/Scenes/WorldMain/Lightmap-6_comp_dir.png.meta
-Assets/Scenes/WorldMain/Lightmap-5_comp_light.exr.meta
-Assets/Scenes/WorldMain/Lightmap-5_comp_dir.png.meta
-Assets/Scenes/WorldMain/Lightmap-4_comp_light.exr.meta
-Assets/Scenes/WorldMain/Lightmap-4_comp_dir.png.meta
-Assets/Scenes/WorldMain/Lightmap-3_comp_light.exr.meta
-Assets/Scenes/WorldMain/Lightmap-3_comp_dir.png.meta
-Assets/Scenes/WorldMain/Lightmap-2_comp_light.exr.meta
-Assets/Scenes/WorldMain/Lightmap-2_comp_dir.png.meta
-Assets/Scenes/WorldMain/Lightmap-1_comp_light.exr.meta
-Assets/Scenes/WorldMain/Lightmap-1_comp_dir.png.meta
-Assets/Scenes/WorldMain/Lightmap-0_comp_light.exr.meta
-Assets/Scenes/WorldMain/Lightmap-0_comp_dir.png.meta
-Assets/Scenes/WorldMain/LightingData.asset.meta
+

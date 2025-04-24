@@ -23,7 +23,11 @@ TextureImporter:
     flipGreenChannel: 0
   isReadable: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   streamingMipmaps: 1
+=======
+  streamingMipmaps: 0
+>>>>>>> Stashed changes
 =======
   streamingMipmaps: 0
 >>>>>>> Stashed changes
@@ -40,17 +44,23 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     aniso: 3
     mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
 =======
+=======
+>>>>>>> Stashed changes
     aniso: 1
     mipBias: 0
     wrapU: 0
     wrapV: 0
     wrapW: 0
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   nPOTScale: 1
   lightmap: 0
@@ -64,15 +74,21 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   alphaUsage: 0
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 6
 =======
+=======
+>>>>>>> Stashed changes
   alphaUsage: 1
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 0
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   textureShape: 1
   singleChannelComponent: 0
@@ -92,7 +108,11 @@ TextureImporter:
     resizeAlgorithm: 0
     textureFormat: -1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     textureCompression: 0
+=======
+    textureCompression: 1
+>>>>>>> Stashed changes
 =======
     textureCompression: 1
 >>>>>>> Stashed changes
