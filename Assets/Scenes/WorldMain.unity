@@ -15,28 +15,16 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 1
-<<<<<<< Updated upstream
-  m_FogColor: {r: 0.45863718, g: 0.54054594, b: 0.40073246, a: 1}
-=======
   m_FogColor: {r: 0.45674142, g: 0.60748595, b: 0.5606264, a: 1}
->>>>>>> Stashed changes
   m_FogMode: 2
   m_FogDensity: 0.02
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-<<<<<<< Updated upstream
-  m_AmbientSkyColor: {r: 0.83932287, g: 0.7821326, b: 0.7222191, a: 1}
-  m_AmbientEquatorColor: {r: 0.10702311, g: 0.52711535, b: 0.9559735, a: 1}
-  m_AmbientGroundColor: {r: 0.038204376, g: 0.17464745, b: 0.2422812, a: 1}
-  m_AmbientIntensity: 0.71
-  m_AmbientMode: 3
-=======
-  m_AmbientSkyColor: {r: 0.9432237, g: 0.92301524, b: 0.90184444, a: 1}
+  m_AmbientSkyColor: {r: 0.9293069, g: 0.904145, b: 0.87778485, a: 1}
   m_AmbientEquatorColor: {r: 0.10702311, g: 0.52711535, b: 0.9559735, a: 1}
   m_AmbientGroundColor: {r: 0.038204376, g: 0.17464745, b: 0.2422812, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
->>>>>>> Stashed changes
   m_SubtractiveShadowColor: {r: 0.55549127, g: 0.5931859, b: 0.6886792, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: c051fe5a20f72814f9643eb10ebbd2fc, type: 2}
   m_HaloStrength: 0.727
@@ -50,11 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-<<<<<<< Updated upstream
   m_IndirectSpecularColor: {r: 0.11613611, g: 0.42406112, b: 0.73004746, a: 1}
-=======
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
->>>>>>> Stashed changes
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -332,11 +316,7 @@ PrefabInstance:
     - target: {fileID: 1940472446892267923, guid: bdb097ede7aa61d44bd06f1b2343e5c6,
         type: 3}
       propertyPath: m_LocalPosition.x
-<<<<<<< Updated upstream
-      value: 6.127411
-=======
       value: 5.720001
->>>>>>> Stashed changes
       objectReference: {fileID: 0}
     - target: {fileID: 1940472446892267923, guid: bdb097ede7aa61d44bd06f1b2343e5c6,
         type: 3}
@@ -346,11 +326,7 @@ PrefabInstance:
     - target: {fileID: 1940472446892267923, guid: bdb097ede7aa61d44bd06f1b2343e5c6,
         type: 3}
       propertyPath: m_LocalPosition.z
-<<<<<<< Updated upstream
-      value: -13.206177
-=======
       value: -13.059998
->>>>>>> Stashed changes
       objectReference: {fileID: 0}
     - target: {fileID: 1940472446892267923, guid: bdb097ede7aa61d44bd06f1b2343e5c6,
         type: 3}
@@ -360,11 +336,7 @@ PrefabInstance:
     - target: {fileID: 1940472446892267923, guid: bdb097ede7aa61d44bd06f1b2343e5c6,
         type: 3}
       propertyPath: m_LocalRotation.x
-<<<<<<< Updated upstream
-      value: -0.010982892
-=======
       value: -0.011330078
->>>>>>> Stashed changes
       objectReference: {fileID: 0}
     - target: {fileID: 1940472446892267923, guid: bdb097ede7aa61d44bd06f1b2343e5c6,
         type: 3}
@@ -374,11 +346,7 @@ PrefabInstance:
     - target: {fileID: 1940472446892267923, guid: bdb097ede7aa61d44bd06f1b2343e5c6,
         type: 3}
       propertyPath: m_LocalRotation.z
-<<<<<<< Updated upstream
-      value: 0.014577531
-=======
       value: 0.014309356
->>>>>>> Stashed changes
       objectReference: {fileID: 0}
     - target: {fileID: 1940472446892267923, guid: bdb097ede7aa61d44bd06f1b2343e5c6,
         type: 3}
@@ -454,8 +422,6 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
-<<<<<<< Updated upstream
-=======
 --- !u!1001 &125110770
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -530,7 +496,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 125110770}
   m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!4 &160491890 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6069874364476601031, guid: e7f23a78e3e36c340a975edc6d7a8f19,
@@ -1425,8 +1390,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2064597240}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!1001 &506440611
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1778,7 +1741,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 533885202}
   m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &569157895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2144,11 +2106,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 582161011}
   serializedVersion: 2
-<<<<<<< Updated upstream
-  m_LocalRotation: {x: 0.19026507, y: 0.000000012994768, z: -0.0000000025184559, w: 0.9817328}
-=======
-  m_LocalRotation: {x: 0.19026507, y: -0.000000004286818, z: 8.3080837e-10, w: 0.9817328}
->>>>>>> Stashed changes
+  m_LocalRotation: {x: 0.19026509, y: 0.000000013769839, z: -0.0000000026686688, w: 0.9817328}
   m_LocalPosition: {x: 178.62349, y: 88.22628, z: 42.619083}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2344,11 +2302,7 @@ MonoBehaviour:
   DirectionalLight: {fileID: 705507994}
   Preset: {fileID: 11400000, guid: 6feabddbae748ed48875e3c51a254732, type: 2}
   TimeMultiplier: 0.03
-<<<<<<< Updated upstream
-  TimeOfDay: 7
-=======
   TimeOfDay: 14.2
->>>>>>> Stashed changes
 --- !u!4 &674022340 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1831466945023988264, guid: 650453774fcb69e45b6d69105a3fabf6,
@@ -2457,13 +2411,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-<<<<<<< Updated upstream
-  m_Color: {r: 0.58332443, g: 0.58332443, b: 0.58332443, a: 1}
-  m_Intensity: 1
-=======
-  m_Color: {r: 0.9893256, g: 0.9893256, b: 0.9893256, a: 1}
+  m_Color: {r: 0.8166791, g: 0.8166791, b: 0.8166791, a: 1}
   m_Intensity: 1.66
->>>>>>> Stashed changes
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -2521,11 +2470,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-<<<<<<< Updated upstream
-  m_LocalRotation: {x: 0.011376112, y: 0.98767215, z: -0.13002947, w: 0.08641018}
-=======
   m_LocalRotation: {x: 0.07659401, y: 0.47534314, z: -0.87547296, w: 0.041587166}
->>>>>>> Stashed changes
   m_LocalPosition: {x: 245, y: 269, z: 176}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2628,8 +2573,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b060878ba0d0b94fa983958233442eb, type: 3}
-<<<<<<< Updated upstream
-=======
 --- !u!1001 &719488617
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2704,7 +2647,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 719488617}
   m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1 &752441724
 GameObject:
   m_ObjectHideFlags: 0
@@ -3172,7 +3114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925706522}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.075598985, y: 0.1041098, z: -0.037181146, w: 0.9909912}
+  m_LocalRotation: {x: -0.07559897, y: 0.104109794, z: -0.037181143, w: 0.99099123}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3282,8 +3224,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!1001 &973923036
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3358,7 +3298,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 973923036}
   m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &987268707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3847,8 +3786,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6972732559172186034}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!1001 &1161160894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3923,7 +3860,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1161160894}
   m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &1209716661
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5268,7 +5204,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660629853}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.017701553, y: 0.10016257, z: -0.046783928, w: 0.99371296}
+  m_LocalRotation: {x: 0.017701568, y: 0.1001626, z: -0.046783943, w: 0.99371296}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5566,8 +5502,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 342322604}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!1001 &1784254920
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5642,7 +5576,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1784254920}
   m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &1802286881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5717,8 +5650,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1209716661}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!1 &1827870200
 GameObject:
   m_ObjectHideFlags: 0
@@ -5755,7 +5686,6 @@ Transform:
   - {fileID: 125110771}
   m_Father: {fileID: 2110118021}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> Stashed changes
 --- !u!1001 &1832850020
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6379,8 +6309,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1479871452}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
-=======
 --- !u!1001 &2058836356
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6535,7 +6463,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2058836356}
   m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &2064597240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6942,7 +6869,4 @@ SceneRoots:
   - {fileID: 1093222746}
   - {fileID: 1832850020}
   - {fileID: 1489184599}
-<<<<<<< Updated upstream
-=======
   - {fileID: 1459418258}
->>>>>>> Stashed changes
