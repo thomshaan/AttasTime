@@ -1,12 +1,5 @@
 using UnityEngine;
 
-public enum CommodityType
-{
-    Rice,
-    Rendang,
-    Meat
-}
-
 public class TraderNPC : MonoBehaviour
 {
     [Header("Trader Settings")]

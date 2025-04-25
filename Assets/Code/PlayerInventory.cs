@@ -1,6 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+public enum CommodityType
+{
+    Money,
+    ExperiencePoint,
+    Kayu,
+    Beras,
+    Daging,
+    BumbuPewangi,
+    Santan,
+    BumbuRendang,
+    Air
+}
+
 public class PlayerInventory : MonoBehaviour
 {
     [Header("Player Stats")]
