@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
         type: 3}
       propertyPath: m_Name
-      value: Atta 1
+      value: Atta
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
         type: 3}
@@ -85,10 +85,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1341672211411103177}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7470452032663942293}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
         type: 3}
       insertIndex: -1
@@ -155,19 +151,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.13, z: 0}
---- !u!114 &7470452032663942293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3357095476702644679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75be104ff0c8d934384185e99e79b90f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currency: 100
 --- !u!54 &4675232510143441730
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -212,6 +195,7 @@ MonoBehaviour:
   jumpForce: 18
   jumpTime: 0.85
   gravity: 9.8
+  uiInventory: {fileID: 0}
 --- !u!114 &5103139474465284851
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,15 +20,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.adaptiveperformance.samsung.android": {
-      "version": "5.0.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.adaptiveperformance": "5.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.ai.navigation": {
       "version": "1.1.5",
       "depth": 0,
