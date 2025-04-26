@@ -14,20 +14,22 @@ public class ThirdPersonController : MonoBehaviour
     [Space]
     [Tooltip("Force that pulls the player down. Changing this value causes all movement, jumping and falling to be changed as well.")]
     public float gravity = 9.8f;
-
     float jumpElapsedTime = 0;
-
     bool isJumping = false;
     bool isSprinting = false;
     bool isCrouching = false;
-
-    Vector2 moveInput;  // Stores left stick movement
+    Vector2 moveInput;
     bool inputJump;
     bool inputSprint;
     bool inputCrouch;
-
     Animator animator;
     CharacterController cc;
+
+    private void Awake()
+    {
+
+
+    }
 
     void Start()
     {

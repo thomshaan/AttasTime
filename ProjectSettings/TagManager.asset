@@ -8,6 +8,8 @@ TagManager:
   - Market
   - CityCenter
   - Mosque
+  - NPC
+  - DroppedItem
   layers:
   - Default
   - TransparentFX
