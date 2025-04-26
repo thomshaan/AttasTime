@@ -66,7 +66,12 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 14ca5f87a476e9945be58c2f48a8d2a8,
         type: 3}
       propertyPath: m_Name
-      value: pohon3 1
+      value: pohon3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 14ca5f87a476e9945be58c2f48a8d2a8,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

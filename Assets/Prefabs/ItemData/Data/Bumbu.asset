@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75be104ff0c8d934384185e99e79b90f, type: 3}
-  m_Name: Money
+  m_Name: Bumbu
   m_EditorClassIdentifier: 
   id: money
   description: Off course, something we love.
