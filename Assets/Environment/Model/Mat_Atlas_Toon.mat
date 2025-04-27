@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_Atlas
+  m_Name: Mat_Atlas_Toon
   m_Shader: {fileID: -6465566751694194690, guid: 77b5f960a876e994ebb7ef2a575c54bc,
     type: 3}
   m_Parent: {fileID: 0}
