@@ -4,6 +4,7 @@ using UnityEngine;
 public class TimeDisplayUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField] private TextMeshProUGUI timePeriodText; // New TMP text for showing time of day period
 
     private void Update()
     {
@@ -18,6 +19,22 @@ public class TimeDisplayUI : MonoBehaviour
             // Format time as "HH:MM"
             string formattedTime = $"{hours:00}:{minutes:00}";
             timeText.text = formattedTime;
+
+            // Determine the time of day period
+            string period = GetTimePeriod(time);
+            timePeriodText.text = period;
         }
+    }
+
+    private string GetTimePeriod(float time)
+    {
+        if (time >= 5f && time < 7f)
+            return "Dawn";
+        else if (time >= 7f && time < 18f)
+            return "Daylight";
+        else if (time >= 18f && time < 19f)
+            return "Sunset";
+        else
+            return "Nighttime";
     }
 }
