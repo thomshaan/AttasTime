@@ -53,9 +53,9 @@ MonoBehaviour:
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 4241
+    ctime1: 10601
     ctime2: 32768
-    ctime3: 61680
+    ctime3: 57440
     ctime4: 65535
     ctime5: 0
     ctime6: 0
