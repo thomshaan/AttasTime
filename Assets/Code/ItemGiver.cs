@@ -1,50 +1,58 @@
 using UnityEngine;
 
-public class ItemGiver : MonoBehaviour
+public class ItemGiver : MonoBehaviour, IInteractable
 {
     [Header("Item to Give")]
     [SerializeField] private Item itemToGive;
 
     [Header("Optional")]
-    [SerializeField] private GameObject interactionUI; // "Press E" or custom button
+    [SerializeField] private GameObject interactionUI;
 
-    private bool playerInRange = false;
     private Inventory playerInventory;
 
-    void Update()
+    void Start()
     {
-        // Desktop / keyboard input
-        if (playerInRange && Input.GetButtonDown("Submit")) // Change to "Fire1" or custom if needed
-        {
-            GiveItem();
-        }
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
     }
 
-    public void GiveItem() // Can also be called from a mobile UI button
+    public void Interact()
     {
+        if (playerInventory == null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null) playerInventory = player.GetComponent<Inventory>();
+        }
+
         if (playerInventory != null && itemToGive != null)
         {
             playerInventory.SendMessage("AddItem", itemToGive);
+            Debug.Log($"Gave player item: {itemToGive.name}");
+
+            // Optional: hide UI after giving
+            if (interactionUI != null)
+                interactionUI.SetActive(false);
         }
+    }
+
+    public string GetInteractionPrompt()
+    {
+        return $"Take {itemToGive.name}";
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && interactionUI != null)
         {
-            playerInventory = other.GetComponent<Inventory>();
-            playerInRange = true;
-            if (interactionUI != null) interactionUI.SetActive(true);
+            interactionUI.SetActive(true);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && interactionUI != null)
         {
-            playerInRange = false;
-            playerInventory = null;
-            if (interactionUI != null) interactionUI.SetActive(false);
+            interactionUI.SetActive(false);
         }
     }
 }
