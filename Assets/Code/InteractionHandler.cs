@@ -11,7 +11,7 @@ public class InteractionHandler : MonoBehaviour
     [SerializeField] private Button interactBtn;
 
     [Header("Cinemachine Cameras")]
-    [SerializeField] private CinemachineVirtualCamera mainCam;
+    [SerializeField] private CinemachineFreeLook mainCam; // Changed to FreeLook
     [SerializeField] private CinemachineVirtualCamera interactionCam;
 
     private IInteractable currentInteractable;
@@ -74,7 +74,7 @@ public class InteractionHandler : MonoBehaviour
 
         if (interactionCam != null)
         {
-            interactionCam.gameObject.SetActive(true); // Enable it
+            interactionCam.gameObject.SetActive(true);
             interactionCam.Priority = 20;
         }
     }
@@ -89,7 +89,7 @@ public class InteractionHandler : MonoBehaviour
         if (interactionCam != null)
         {
             interactionCam.Priority = 10;
-            interactionCam.gameObject.SetActive(false); // Disable it to save performance
+            interactionCam.gameObject.SetActive(false);
         }
     }
 }
