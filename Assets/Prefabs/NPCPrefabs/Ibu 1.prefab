@@ -332,8 +332,9 @@ GameObject:
   - component: {fileID: 4989461265112295749}
   - component: {fileID: -4678025320767565380}
   - component: {fileID: 7562513017711377450}
+  - component: {fileID: -7764294184431360435}
   m_Layer: 0
-  m_Name: Ibu
+  m_Name: Ibu 1
   m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -472,6 +473,20 @@ MonoBehaviour:
   - {fileID: 1831466945023988264, guid: 37e366aaaeecb4a48b2d730fc3056057, type: 3}
   - {fileID: 1831466945023988264, guid: 87c10c86398cf5843b41a591977a0dfa, type: 3}
   AssignedHouseIndex: 0
+  morningDestination: 0
+--- !u!114 &-7764294184431360435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570389365736253323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f6822400d5f2c4998ee204471086eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcType: 2
 --- !u!1 &1623620163639534213
 GameObject:
   m_ObjectHideFlags: 0

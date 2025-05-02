@@ -1,13 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using Cinemachine;
 
 public class InteractionHandler : MonoBehaviour
 {
+    [Header("Interaction Settings")]
     [SerializeField] private float interactDistance = 3f;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private GameObject interactionUI;
-    [SerializeField] private Button interactBtn; // Reference to your UI button (optional for click setup)
+    [SerializeField] private Button interactBtn;
+
+    [Header("Cinemachine Cameras")]
+    [SerializeField] private CinemachineVirtualCamera mainCam;
+    [SerializeField] private CinemachineVirtualCamera interactionCam;
 
     private IInteractable currentInteractable;
 
@@ -15,10 +20,9 @@ public class InteractionHandler : MonoBehaviour
     {
         CheckForInteractables();
 
-        // Keyboard input (e.g. for desktop)
         if (currentInteractable != null && Input.GetButtonDown("Submit"))
         {
-            currentInteractable.Interact();
+            TriggerInteraction();
         }
     }
 
@@ -34,30 +38,58 @@ public class InteractionHandler : MonoBehaviour
             if (currentInteractable != null)
             {
                 interactionUI.SetActive(true);
+                SwitchToInteractionCam();
 
-                // Optional: If using button component, assign click event only once
                 if (interactBtn != null && interactBtn.onClick.GetPersistentEventCount() == 0)
                 {
                     interactBtn.onClick.AddListener(TriggerInteraction);
                 }
+
+                return;
             }
         }
-        else
-        {
-            currentInteractable = null;
-            interactionUI.SetActive(false);
 
-            if (interactBtn != null)
-                interactBtn.onClick.RemoveAllListeners();
-        }
+        currentInteractable = null;
+        interactionUI.SetActive(false);
+        SwitchToMainCam();
+
+        if (interactBtn != null)
+            interactBtn.onClick.RemoveAllListeners();
     }
 
-    // ✅ This is what you need for the button's OnClick event
     public void TriggerInteraction()
     {
         if (currentInteractable != null)
         {
             currentInteractable.Interact();
+        }
+    }
+
+    private void SwitchToInteractionCam()
+    {
+        if (mainCam != null)
+        {
+            mainCam.Priority = 10;
+        }
+
+        if (interactionCam != null)
+        {
+            interactionCam.gameObject.SetActive(true); // Enable it
+            interactionCam.Priority = 20;
+        }
+    }
+
+    private void SwitchToMainCam()
+    {
+        if (mainCam != null)
+        {
+            mainCam.Priority = 20;
+        }
+
+        if (interactionCam != null)
+        {
+            interactionCam.Priority = 10;
+            interactionCam.gameObject.SetActive(false); // Disable it to save performance
         }
     }
 }

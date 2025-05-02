@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
         type: 3}
       propertyPath: m_Name
-      value: Atta
+      value: Anak 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
         type: 3}
@@ -101,6 +101,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -405636605955794070}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3812054776931303862}
   m_SourcePrefab: {fileID: 100100000, guid: 56497203ac2c98f4e8a5ae2f7b35a46c, type: 3}
 --- !u!1 &3357095476702644679 stripped
 GameObject:
@@ -242,3 +246,17 @@ MonoBehaviour:
   - {fileID: 1831466945023988264, guid: 37e366aaaeecb4a48b2d730fc3056057, type: 3}
   - {fileID: 1831466945023988264, guid: 87c10c86398cf5843b41a591977a0dfa, type: 3}
   AssignedHouseIndex: 0
+  morningDestination: 0
+--- !u!114 &3812054776931303862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3357095476702644679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78f6822400d5f2c4998ee204471086eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcType: 1

@@ -1,11 +1,10 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-
 public class NPCSpawner : MonoBehaviour
 {
     [Header("NPC Prefabs")]
-    public GameObject[] npcPrefabs; // Assign different NPC prefabs if needed
+    public GameObject[] npcPrefabs;
 
     [Header("Spawn Settings")]
     public int totalNPCs = 15;
@@ -16,6 +15,9 @@ public class NPCSpawner : MonoBehaviour
     public Transform cityCenter;
     public Transform mosque;
     public Transform[] houses;
+
+    [Header("NPC Textures by Type")]
+    public NPCTextureSet[] npcTextureSets;
 
     private void Start()
     {
@@ -34,7 +36,6 @@ public class NPCSpawner : MonoBehaviour
 
         for (int i = 0; i < totalNPCs; i++)
         {
-            // Get available house index (with max cap)
             int houseIndex = GetAvailableHouseIndex(houseNPCCount);
             if (houseIndex == -1)
             {
@@ -49,6 +50,9 @@ public class NPCSpawner : MonoBehaviour
             GameObject npc = Instantiate(npcPrefab, spawnPos, Quaternion.identity);
 
             NPCSchedule schedule = npc.GetComponent<NPCSchedule>();
+            NPCTypeIdentifier typeIdentifier = npc.GetComponent<NPCTypeIdentifier>();
+            Renderer npcRenderer = npc.GetComponentInChildren<Renderer>();
+
             if (schedule != null)
             {
                 schedule.Market = market;
@@ -57,36 +61,33 @@ public class NPCSpawner : MonoBehaviour
                 schedule.Houses = houses;
                 schedule.AssignedHouseIndex = houseIndex;
                 npc.name = $"NPC_{i}_House{houseIndex}";
-
-                // Randomize their morning behavior
-                schedule.morningDestination = (MorningDestination)Random.Range(0, 3); // 0: Market, 1: CityCenter, 2: Home
+                schedule.morningDestination = (MorningDestination)Random.Range(0, 3);
             }
-            else
+
+            if (typeIdentifier != null && npcRenderer != null)
             {
-                Debug.LogError("NPC prefab missing NPCSchedule script!");
+                Texture newTexture = GetRandomTextureForType(typeIdentifier.npcType);
+                if (newTexture != null)
+                {
+                    npcRenderer.material.SetTexture("_Main_Texture", newTexture);;
+                }
             }
         }
     }
 
     int GetAvailableHouseIndex(int[] houseCounts)
     {
-        // Try random first
         for (int attempt = 0; attempt < 20; attempt++)
         {
             int index = Random.Range(0, houses.Length);
             if (houseCounts[index] < maxNPCsPerHouse)
-            {
                 return index;
-            }
         }
 
-        // Fallback to first available
         for (int i = 0; i < houseCounts.Length; i++)
         {
             if (houseCounts[i] < maxNPCsPerHouse)
-            {
                 return i;
-            }
         }
 
         return -1;
@@ -96,8 +97,8 @@ public class NPCSpawner : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            Vector2 randomOffset = Random.insideUnitCircle * radius;
-            Vector3 position = new Vector3(center.x + randomOffset.x, center.y, center.z + randomOffset.y);
+            Vector2 offset = Random.insideUnitCircle * radius;
+            Vector3 position = new Vector3(center.x + offset.x, center.y, center.z + offset.y);
 
             if (NavMesh.SamplePosition(position, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
             {
@@ -105,6 +106,19 @@ public class NPCSpawner : MonoBehaviour
             }
         }
 
-        return center; // fallback if NavMesh not found
+        return center;
+    }
+
+    Texture GetRandomTextureForType(NPCType type)
+    {
+        foreach (var set in npcTextureSets)
+        {
+            if (set.type == type && set.textures.Length > 0)
+            {
+                return set.textures[Random.Range(0, set.textures.Length)];
+            }
+        }
+
+        return null;
     }
 }
