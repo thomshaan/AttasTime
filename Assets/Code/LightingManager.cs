@@ -3,12 +3,12 @@ using UnityEngine;
 [ExecuteAlways]
 public class LightingManager : MonoBehaviour
 {
-    public static LightingManager Instance { get; private set; }  // Singleton access
+    public static LightingManager Instance { get; private set; } 
 
     [SerializeField] private Light DirectionalLight;
     [SerializeField] private LightingPreset Preset;
     [SerializeField] private float TimeMultiplier = 1f;
-    [SerializeField, Range(0, 24)] public float TimeOfDay; // Make TimeOfDay public so others can read it
+    [SerializeField, Range(0, 24)] public float TimeOfDay;
 
     private void Awake()
     {
@@ -75,7 +75,7 @@ public class LightingManager : MonoBehaviour
         }
     }
 
-    public float Day // New property for the current day
+    public float Day
     {
         get { return Mathf.Floor(TimeOfDay / 24f); }
     }
