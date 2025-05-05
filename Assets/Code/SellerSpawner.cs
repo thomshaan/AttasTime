@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 public class SellerSpawner : MonoBehaviour
 {
-    [Header("Spawn Points (Empty GameObjects)")]
+    [Header("Spawn Points (8 Empty GameObjects)")]
     [SerializeField] private Transform[] spawnPoints;
 
-    [Header("NPC Seller Prefabs (with different models)")]
+    [Header("Seller Prefabs (different models)")]
     [SerializeField] private GameObject[] sellerPrefabs;
 
     [Header("Textures by Seller Type")]
     [SerializeField] private List<SellerTextureSet> textureSets;
 
-    [Header("Item Pool (Premade Items)")]
+    [Header("Item Pool (premade)")]
     [SerializeField] private Item[] availableItems;
 
     void Start()
@@ -22,25 +22,24 @@ public class SellerSpawner : MonoBehaviour
 
     void SpawnSellers()
     {
-        int sellerCount = Mathf.Min(spawnPoints.Length, availableItems.Length / 2);
+        int sellerCount = spawnPoints.Length;
 
         for (int i = 0; i < sellerCount; i++)
         {
-            // Randomly select a seller prefab
             GameObject prefab = sellerPrefabs[Random.Range(0, sellerPrefabs.Length)];
-            GameObject seller = Instantiate(prefab, spawnPoints[i].position, Quaternion.identity);
+            GameObject seller = Instantiate(prefab, spawnPoints[i].position, Quaternion.Euler(0f, spawnPoints[i].eulerAngles.y, 0f));
 
-            // Get SellerNPC script
             SellerNPC npc = seller.GetComponent<SellerNPC>();
             if (npc != null)
             {
-                // Assign 2 items to this seller
-                Item[] itemsToSell = new Item[2];
-                itemsToSell[0] = availableItems[i * 2];
-                itemsToSell[1] = availableItems[i * 2 + 1];
-                npc.InitializeSeller(itemsToSell);
+                int randomStock = Random.Range(4, 6);
 
-                // Apply random texture based on seller type
+                Item selectedItem = (i < availableItems.Length)
+                    ? availableItems[i]
+                    : availableItems[Random.Range(0, availableItems.Length)];
+
+                npc.InitializeSeller(selectedItem, randomStock);
+
                 SellerTypeIdentifier typeId = seller.GetComponent<SellerTypeIdentifier>();
                 Renderer renderer = seller.GetComponentInChildren<Renderer>();
 
@@ -49,7 +48,7 @@ public class SellerSpawner : MonoBehaviour
                     Texture randomTexture = GetRandomTextureForType(typeId.sellerType);
                     if (randomTexture != null)
                     {
-                        renderer.material.SetTexture("_BaseMap", randomTexture); // adjust property if using custom shader
+                        renderer.material.SetTexture("_Main_Texture", randomTexture);
                     }
                 }
             }

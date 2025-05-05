@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75be104ff0c8d934384185e99e79b90f, type: 3}
   m_Name: Daging
   m_EditorClassIdentifier: 
-  id: meat
-  description: Meat, what else do you think?
-  icon: {fileID: 21300000, guid: 31e0eb57fe2933643b1bee410c53357a, type: 3}
-  prefab: {fileID: 6952050591578137443, guid: 506c2f50eaa29cf498741626e8d069db, type: 3}
+  id: daging
+  description: daging.
+  icon: {fileID: 21300000, guid: c9512fd7c493f0842affc07b23ad119f, type: 3}
+  prefab: {fileID: 1519310026736617569, guid: 22e72fdc375c9054fa4e07ddb6e958dc, type: 3}

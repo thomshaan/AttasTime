@@ -10,6 +10,7 @@ TagManager:
   - Mosque
   - NPC
   - DroppedItem
+  - InteractionButton
   layers:
   - Default
   - TransparentFX

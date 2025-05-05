@@ -7,13 +7,17 @@ public class InteractionHandler : MonoBehaviour
     [Header("Interaction Settings")]
     [SerializeField] private float interactDistance = 3f;
     [SerializeField] private LayerMask interactableLayer;
+
+    [Header("UI")]
     [SerializeField] private GameObject interactionUI;
-    [SerializeField] private Button interactBtn;
+    [SerializeField] private Button interactButton;
 
     [Header("Cinemachine Cameras")]
-    [SerializeField] private CinemachineFreeLook mainCam; // Changed to FreeLook
+    [SerializeField] private CinemachineFreeLook mainCam;
     [SerializeField] private CinemachineVirtualCamera interactionCam;
 
+    private float interactCooldown = 0.2f;
+    private float lastInteractTime = -1f;
     private IInteractable currentInteractable;
 
     void Update()
@@ -33,45 +37,54 @@ public class InteractionHandler : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactDistance, interactableLayer))
         {
-            currentInteractable = hit.collider.GetComponent<IInteractable>();
-
-            if (currentInteractable != null)
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+            if (interactable != null)
             {
-                interactionUI.SetActive(true);
-                SwitchToInteractionCam();
-
-                if (interactBtn != null && interactBtn.onClick.GetPersistentEventCount() == 0)
+                if (currentInteractable != interactable)
                 {
-                    interactBtn.onClick.AddListener(TriggerInteraction);
-                }
+                    currentInteractable = interactable;
 
+                    ShowInteractionUI(true);
+
+                    interactButton.onClick.RemoveAllListeners();
+                    interactButton.onClick.AddListener(TriggerInteraction);
+
+
+                    SwitchToInteractionCam();
+                }
                 return;
             }
         }
 
+        // No interactable
         currentInteractable = null;
-        interactionUI.SetActive(false);
+        ShowInteractionUI(false);
+        interactButton.onClick.RemoveAllListeners();
         SwitchToMainCam();
-
-        if (interactBtn != null)
-            interactBtn.onClick.RemoveAllListeners();
     }
 
     public void TriggerInteraction()
     {
+        if (Time.time - lastInteractTime < interactCooldown) return; // skip if too soon
+
         if (currentInteractable != null)
         {
+            lastInteractTime = Time.time;
             currentInteractable.Interact();
         }
     }
 
+    private void ShowInteractionUI(bool show)
+    {
+        if (interactionUI != null)
+            interactionUI.SetActive(show);
+        if (interactButton != null)
+            interactButton.gameObject.SetActive(show);
+    }
+
     private void SwitchToInteractionCam()
     {
-        if (mainCam != null)
-        {
-            mainCam.Priority = 10;
-        }
-
+        if (mainCam != null) mainCam.Priority = 10;
         if (interactionCam != null)
         {
             interactionCam.gameObject.SetActive(true);
@@ -81,11 +94,7 @@ public class InteractionHandler : MonoBehaviour
 
     private void SwitchToMainCam()
     {
-        if (mainCam != null)
-        {
-            mainCam.Priority = 20;
-        }
-
+        if (mainCam != null) mainCam.Priority = 20;
         if (interactionCam != null)
         {
             interactionCam.Priority = 10;
