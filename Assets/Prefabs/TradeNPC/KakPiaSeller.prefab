@@ -506,10 +506,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.2299576
-  m_Height: 2.6490479
+  m_Radius: 1.9940109
+  m_Height: 3.9880219
   m_Direction: 1
-  m_Center: {x: 0, y: 1.3436432, z: 0.7299576}
+  m_Center: {x: -0.07558441, y: 1.3436432, z: 0.81124115}
 --- !u!114 &-4646746967833681899
 MonoBehaviour:
   m_ObjectHideFlags: 0

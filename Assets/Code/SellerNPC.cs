@@ -12,6 +12,12 @@ public class SellerNPC : MonoBehaviour, IInteractable
         stock = stockAmount;
     }
 
+    public void ResetSeller(Item newItem, int newStock)
+    {
+        itemForSale = newItem;
+        stock = newStock;
+    }
+
     public void Interact()
     {
         if (itemForSale == null || stock <= 0) return;
@@ -36,4 +42,5 @@ public class SellerNPC : MonoBehaviour, IInteractable
             ? $"Buy {itemForSale.name} ({stock} left)"
             : "Sold Out";
     }
+
 }
