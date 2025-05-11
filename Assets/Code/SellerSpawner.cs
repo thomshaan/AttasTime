@@ -14,11 +14,27 @@ public class SellerSpawner : MonoBehaviour
 
     [Header("Item Pool (premade)")]
     [SerializeField] private Item[] availableItems;
+    private List<GameObject> spawnedSellers = new List<GameObject>();
+
+    void Update()
+    {
+        float time = LightingManager.Instance.TimeOfDay;
+
+        if (time >= 7f && time < 17f && spawnedSellers.Count == 0)
+        {
+            SpawnSellers();
+        }
+        else if ((time < 7f || time >= 17f) && spawnedSellers.Count > 0)
+        {
+            DespawnSellers();
+        }
+    }
 
     void Start()
     {
         SpawnSellers();
     }
+
 
     void SpawnSellers()
     {
@@ -28,35 +44,34 @@ public class SellerSpawner : MonoBehaviour
         {
             GameObject prefab = sellerPrefabs[Random.Range(0, sellerPrefabs.Length)];
             GameObject seller = Instantiate(prefab, spawnPoints[i].position, Quaternion.Euler(0f, spawnPoints[i].eulerAngles.y, 0f));
+            spawnedSellers.Add(seller);
 
             SellerNPC npc = seller.GetComponent<SellerNPC>();
             if (npc != null)
             {
-                int randomStock = Random.Range(4, 6);
+                int stock = Random.Range(4, 6);
+                Item selectedItem = (i < availableItems.Length) ? availableItems[i] : availableItems[Random.Range(0, availableItems.Length)];
+                npc.InitializeSeller(selectedItem, stock);
 
-                Item selectedItem = (i < availableItems.Length)
-                    ? availableItems[i]
-                    : availableItems[Random.Range(0, availableItems.Length)];
-
-                npc.InitializeSeller(selectedItem, randomStock);
-
-                SellerTypeIdentifier typeId = seller.GetComponent<SellerTypeIdentifier>();
-                Renderer renderer = seller.GetComponentInChildren<Renderer>();
-
+                var typeId = seller.GetComponent<SellerTypeIdentifier>();
+                var renderer = seller.GetComponentInChildren<Renderer>();
                 if (typeId != null && renderer != null)
                 {
-                    Texture randomTexture = GetRandomTextureForType(typeId.sellerType);
-                    if (randomTexture != null)
-                    {
-                        renderer.material.SetTexture("_Main_Texture", randomTexture);
-                    }
+                    Texture texture = GetRandomTextureForType(typeId.sellerType);
+                    if (texture != null)
+                        renderer.material.SetTexture("_Main_Texture", texture);
                 }
             }
-            else
-            {
-                Debug.LogError("Seller prefab missing SellerNPC component!");
-            }
         }
+    }
+
+    void DespawnSellers()
+    {
+        foreach (var seller in spawnedSellers)
+        {
+            Destroy(seller);
+        }
+        spawnedSellers.Clear();
     }
 
     Texture GetRandomTextureForType(SellerType type)

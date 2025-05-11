@@ -16,3 +16,4 @@ MonoBehaviour:
   description: daging.
   icon: {fileID: 21300000, guid: c9512fd7c493f0842affc07b23ad119f, type: 3}
   prefab: {fileID: 1519310026736617569, guid: 22e72fdc375c9054fa4e07ddb6e958dc, type: 3}
+  price: 20

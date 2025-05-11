@@ -3,6 +3,7 @@ using UnityEngine;
 public class SellerNPC : MonoBehaviour, IInteractable
 {
     private Inventory playerInventory;
+    private PlayerStats playerStats;
     private Item itemForSale;
     private int stock = 0;
 
@@ -22,25 +23,46 @@ public class SellerNPC : MonoBehaviour, IInteractable
     {
         if (itemForSale == null || stock <= 0) return;
 
+        // ✅ Always find references safely
+        playerInventory = FindObjectOfType<Inventory>();
+        playerStats = FindObjectOfType<PlayerStats>(); GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null) return;
+
+        if (playerInventory == null)
+            playerInventory = player.GetComponent<Inventory>();
+        if (playerStats == null)
+            playerStats = player.GetComponent<PlayerStats>();
+
         if (playerInventory == null)
         {
-            var player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null) playerInventory = player.GetComponent<Inventory>();
+            Debug.LogWarning("⚠️ PlayerInventory not found.");
+            return;
         }
 
-        if (playerInventory != null)
+        if (playerStats == null)
         {
+            Debug.LogWarning("⚠️ PlayerStats not found.");
+            return;
+        }
+
+        // ✅ Check coins
+        if (playerStats.GetCoins() >= itemForSale.price)
+        {
+            playerStats.SpendCoins(itemForSale.price);
             playerInventory.SendMessage("AddItem", itemForSale);
-            Debug.Log($"Player bought: {itemForSale.name} (Stock left: {stock - 1})");
             stock--;
+            Debug.Log($"✅ Bought {itemForSale.name} for {itemForSale.price}. Stock left: {stock}");
+        }
+        else
+        {
+            Debug.Log("❌ Not enough coins!");
         }
     }
 
     public string GetInteractionPrompt()
     {
         return (itemForSale != null && stock > 0)
-            ? $"Buy {itemForSale.name} ({stock} left)"
+            ? $"Buy {itemForSale.name} ({stock} left) - {itemForSale.price} coins"
             : "Sold Out";
     }
-
 }

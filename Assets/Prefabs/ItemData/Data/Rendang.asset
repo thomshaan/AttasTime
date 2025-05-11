@@ -16,3 +16,4 @@ MonoBehaviour:
   description: rendangnya lah.
   icon: {fileID: 21300000, guid: de699a07b57e43641b8032ff916a48f3, type: 3}
   prefab: {fileID: 2359840616164109714, guid: 061a5994f16f10f4aa4fc914e66e25b4, type: 3}
+  price: 30
