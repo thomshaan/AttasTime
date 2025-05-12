@@ -64,7 +64,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Amplitude: 11.94
-    - _Depth_Fade: 107.93
+    - _Depth_Fade: 20.1
     - _Fog_Height: 0.44
     - _QueueControl: 0
     - _QueueOffset: 13
