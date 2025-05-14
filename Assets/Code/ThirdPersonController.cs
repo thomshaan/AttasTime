@@ -120,7 +120,6 @@ public class ThirdPersonController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.15f);
         }
 
-        // Move the character
         Vector3 movement = Vector3.up * directionY + forward + right;
         cc.Move(movement);
     }
