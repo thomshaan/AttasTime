@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19e18b1e80cc8f347859f68ccb994e92, type: 3}
+  m_Name: Quest_MembantuPaman
+  m_EditorClassIdentifier: 
+  questName: Masak Rendang
+  description: Membantu Kakak untuk memasak rendang.
+  requiredItems:
+  - {fileID: 11400000, guid: 287a8235a3427114e90dfbd254a61fb8, type: 2}
+  requiredItemAmount: 2
+  rewardItem: {fileID: 11400000, guid: 5f70c233c4d2f524d8cf9fb3900c09c6, type: 2}
+  rewardCoins: 10
+  rewardXP: 5

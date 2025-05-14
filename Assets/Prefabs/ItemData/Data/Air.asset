@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: air
   description: Air.
-  icon: {fileID: 21300000, guid: b4e4461efe56ccc44ac5789a46410cf2, type: 3}
-  prefab: {fileID: 6952050591578137443, guid: 506c2f50eaa29cf498741626e8d069db, type: 3}
+  icon: {fileID: 21300000, guid: bc8387babad0ae149b43970c1c0a5c51, type: 3}
+  prefab: {fileID: 4669948630544105246, guid: fdfe8b7b1aa6286418cacafe87e4338a, type: 3}

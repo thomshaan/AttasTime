@@ -58,4 +58,28 @@ public class Inventory : MonoBehaviour
         ui.RemoveUIItem(inventoryId);
         audioSource.PlayOneShot(dropItemAudio);
     }
+
+    public bool Contains(Item item)
+    {
+        foreach (var pair in inventory)
+        {
+            if (pair.Value == item)
+                return true;
+        }
+        return false;
+    }
+
+    public int CountOf(Item item)
+    {
+        int count = 0;
+        foreach (var pair in inventory)
+        {
+            if (pair.Value == item)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
 }

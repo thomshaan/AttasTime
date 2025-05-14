@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75be104ff0c8d934384185e99e79b90f, type: 3}
+  m_Name: Bumbu Rempah
+  m_EditorClassIdentifier: 
+  id: bumburempah
+  description: Bumbu rempah.
+  icon: {fileID: 21300000, guid: 14e05b0c37596bc43900370b53970cce, type: 3}
+  prefab: {fileID: 1820183045614515839, guid: f1fed76841789414cae3891aa69b4955, type: 3}
+  price: 10

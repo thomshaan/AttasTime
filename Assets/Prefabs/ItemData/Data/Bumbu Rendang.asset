@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75be104ff0c8d934384185e99e79b90f, type: 3}
+  m_Name: Bumbu Rendang
+  m_EditorClassIdentifier: 
+  id: bumburendang
+  description: bumbu rendang lah.
+  icon: {fileID: 21300000, guid: 5acd15d898bc62648b256530add3de36, type: 3}
+  prefab: {fileID: 3100378129639640761, guid: 7df6d27cc6262514db5729097b51a285, type: 3}
+  price: 10
