@@ -44,10 +44,10 @@ MonoBehaviour:
   paintMask:
     serializedVersion: 2
     m_Bits: 1
-  brushSize: 1.6
+  brushSize: 3
   brushFalloffSize: 0.8
   Flow: 0.1
-  density: 1
-  normalLimit: 1
+  density: 0.44
+  normalLimit: 0.121
   grassAmountToGenerate: 200
   generationDensity: 0.153

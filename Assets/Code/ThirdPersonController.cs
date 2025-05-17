@@ -75,6 +75,16 @@ public class ThirdPersonController : MonoBehaviour
             isJumping = true;
         }
 
+        if (forceForwardInput)
+        {
+            moveInput.y = 1f; // Simulate pressing W / forward key
+        }
+        else
+        {
+            // Only override if no real input from keyboard/gamepad:
+            moveInput.y = moveInput.y != 0 ? moveInput.y : Input.GetAxis("Vertical");
+        }
+
         HeadHittingDetect();
     }
 
@@ -135,5 +145,13 @@ public class ThirdPersonController : MonoBehaviour
             jumpElapsedTime = 0;
             isJumping = false;
         }
+    }
+
+    private bool forceForwardInput = false;
+
+    // Add this public method to allow external scripts to set forward movement:
+    public void SetForceForward(bool enabled)
+    {
+        forceForwardInput = enabled;
     }
 }
