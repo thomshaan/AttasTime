@@ -61,14 +61,12 @@ public class ThirdPersonController : MonoBehaviour
         // Toggle crouch state
         if (inputCrouch)
             isCrouching = !isCrouching;
-
         // Handle animations
         if (cc.isGrounded && animator != null)
         {
             animator.SetBool("run", cc.velocity.magnitude > 0.9f);
             isSprinting = cc.velocity.magnitude > 0.9f && inputSprint;
         }
-
         // Jump logic
         if (inputJump && cc.isGrounded)
         {

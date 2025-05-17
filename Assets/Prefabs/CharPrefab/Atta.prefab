@@ -66,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
         type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 5961381352591041080, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
         type: 3}
@@ -195,7 +195,6 @@ MonoBehaviour:
   jumpForce: 18
   jumpTime: 0.85
   gravity: 9.8
-  uiInventory: {fileID: 0}
 --- !u!114 &5103139474465284851
 MonoBehaviour:
   m_ObjectHideFlags: 0

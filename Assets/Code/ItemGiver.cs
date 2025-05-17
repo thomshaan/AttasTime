@@ -18,20 +18,25 @@ public class ItemGiver : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        
+
         if (playerInventory == null)
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null) playerInventory = player.GetComponent<Inventory>();
+            playerInventory = FindObjectOfType<Inventory>();
+            
         }
 
         if (playerInventory != null && itemToGive != null)
         {
-            playerInventory.SendMessage("AddItem", itemToGive);
-            Debug.Log($"Gave player item: {itemToGive.name}");
+            playerInventory.AddItem(itemToGive);
+            
 
-            // Optional: hide UI after giving
             if (interactionUI != null)
                 interactionUI.SetActive(false);
+        }
+        else
+        {
+            
         }
     }
 
