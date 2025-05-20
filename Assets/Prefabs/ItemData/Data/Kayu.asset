@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: kayu
   description: kayu buat masak.
-  icon: {fileID: 21300000, guid: 958cb29bf751dee45919579d179fb3fa, type: 3}
+  icon: {fileID: 21300000, guid: 89d8512d04069c54a8e0d02999eb2f35, type: 3}
   prefab: {fileID: 2583552255733367498, guid: 02356f5f019cdeb4f88699bd40abce56, type: 3}
   price: 5
