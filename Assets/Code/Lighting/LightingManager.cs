@@ -3,7 +3,7 @@ using UnityEngine;
 [ExecuteAlways]
 public class LightingManager : MonoBehaviour
 {
-    public static LightingManager Instance { get; private set; } 
+    public static LightingManager Instance { get; private set; }
 
     [SerializeField] private Light DirectionalLight;
     [SerializeField] private LightingPreset Preset;
@@ -19,6 +19,12 @@ public class LightingManager : MonoBehaviour
             return;
         }
         Instance = this;
+    }
+
+    public void SetTimeOfDay(float newTime)
+    {
+        TimeOfDay = newTime;
+        UpdateLighting(TimeOfDay / 24f);
     }
 
     private void Update()

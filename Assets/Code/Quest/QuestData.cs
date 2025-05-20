@@ -8,6 +8,7 @@ public class QuestData : ScriptableObject
     [TextArea] public string description;
 
     public List<Item> requiredItems;
+    public string questId;
     public int requiredItemAmount = 1;
 
     public Item rewardItem;

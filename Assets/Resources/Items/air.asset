@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75be104ff0c8d934384185e99e79b90f, type: 3}
-  m_Name: Daging
+  m_Name: air
   m_EditorClassIdentifier: 
-  id: daging
-  description: daging.
-  icon: {fileID: 21300000, guid: abb792c3389eba64692cd5242cdb185e, type: 3}
-  prefab: {fileID: 1519310026736617569, guid: 22e72fdc375c9054fa4e07ddb6e958dc, type: 3}
-  price: 20
+  id: air
+  description: Air.
+  icon: {fileID: 21300000, guid: 57751f12ba8f41d44abf3e41134bb568, type: 3}
+  prefab: {fileID: 4669948630544105246, guid: fdfe8b7b1aa6286418cacafe87e4338a, type: 3}
+  price: 10

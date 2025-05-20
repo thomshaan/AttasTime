@@ -11,8 +11,8 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int startingCoins = 100;
     [SerializeField] private int startingXP = 0;
 
-    private int coins;
-    private int xp;
+    public int coins;
+    public int xp;
 
     void Start()
     {
