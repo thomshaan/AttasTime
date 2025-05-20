@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: bumburempah
   description: Bumbu rempah.
-  icon: {fileID: 21300000, guid: 14e05b0c37596bc43900370b53970cce, type: 3}
+  icon: {fileID: 21300000, guid: 35d91f29972dbf6409a9720bb04eb8e5, type: 3}
   prefab: {fileID: 1820183045614515839, guid: f1fed76841789414cae3891aa69b4955, type: 3}
   price: 10
