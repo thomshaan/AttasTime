@@ -10,9 +10,9 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("WorldMain");
     }
 
-    public void ButtonCredits()
+    public void ButtonOptions()
     {
-        SceneManager.LoadScene("Credits");
+        SceneManager.LoadScene("Options");
     }
 
     public void ButtonQuit()

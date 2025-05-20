@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMain.unity
     guid: c850ee8c3b14cc8459e7e186857cf567
   - enabled: 1
-    path: Assets/Scenes/Credits.unity
+    path: Assets/Scenes/Options.unity
     guid: 19e32a57f41257b4b80a99ffb718f529
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000,
