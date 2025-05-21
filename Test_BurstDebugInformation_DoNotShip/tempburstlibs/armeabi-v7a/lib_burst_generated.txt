@@ -1,7 +1,7 @@
-Library: D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
+Library: D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
 --platform=Android
 --backend=burst-llvm-16
---target=ARMV8A_AARCH64
+--target=ARMV7A_NEON32
 --global-safety-checks-setting=Off
 --meta-data-generation=False
 --dump=Function
@@ -41,7 +41,7 @@ Library: D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_b
 --debug=Full
 --key-folder=D:/Unity/2022.3.21f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\Atta's Time\AttasTime\Library\Burst
---output=D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
+--output=D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 
 --method=UnityEngine.Jobs.IJobParallelForTransformExtensions+TransformParallelForLoopStruct`1[[UnityEngine.Rendering.Universal.DecalUpdateCachedSystem+UpdateTransformsJob, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(UnityEngine.Rendering.Universal.DecalUpdateCachedSystem+UpdateTransformsJob&, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--670478f3fb3f285eeace534fbe61a03e
@@ -51,7 +51,7 @@ Library: D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_b
 --method=Unity.Jobs.IJobForExtensions+ForJobStruct`1[[UnityEngine.Rendering.Universal.LightMinMaxZJob, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(UnityEngine.Rendering.Universal.LightMinMaxZJob&, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--2230a143748f5ecbc3a89a75bf0ad747
 --platform=Android
 --backend=burst-llvm-16
---target=ARMV8A_AARCH64
+--target=ARMV7A_NEON32
 --global-safety-checks-setting=Off
 --disable-safety-checks
 --meta-data-generation=False
@@ -93,7 +93,7 @@ Library: D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_b
 --debug=Full
 --key-folder=D:/Unity/2022.3.21f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=D:\Atta's Time\AttasTime\Library\Burst
---output=D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
+--output=D:\Atta's Time\AttasTime\Temp\BurstOutput\tempburstlibs\armeabi-v7a\lib_burst_generated
 --pdb-search-paths=Temp/ManagedSymbols/
 
 --method=Unity.Jobs.IJobForExtensions+ForJobStruct`1[[UnityEngine.Rendering.Universal.ZBinningJob, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(UnityEngine.Rendering.Universal.ZBinningJob&, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--77fc393cb521ac129b1392d4eb94d29a

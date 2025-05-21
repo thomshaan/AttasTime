@@ -1,20 +1,29 @@
 using UnityEngine;
 using Mono.Data.Sqlite;
 using System.Data;
-using System.IO;
 using System.Collections.Generic;
+
+// Data structure for saving player metadata
+public struct PlayerSaveData
+{
+    public int coins;
+    public int xp;
+    public string scene;
+    public Vector3 position;
+    public float rotY;
+    public string lastPlayed;
+}
 
 public class SaveSystem : MonoBehaviour
 {
-    private string dbPath;
+    private static string dbPath => "URI=file:" + Application.persistentDataPath + "/GameSave.db";
 
     void Awake()
     {
-        dbPath = "URI=file:" + Application.persistentDataPath + "/GameSave.db";
         CreateTables();
     }
 
-    void CreateTables()
+    private void CreateTables()
     {
         using (var connection = new SqliteConnection(dbPath))
         {
@@ -28,7 +37,8 @@ public class SaveSystem : MonoBehaviour
             CREATE TABLE IF NOT EXISTS PlayerStats (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 coins INTEGER, xp INTEGER, currentScene TEXT,
-                posX REAL, posY REAL, posZ REAL, rotY REAL, saveSlot INTEGER);
+                posX REAL, posY REAL, posZ REAL, rotY REAL,
+                saveSlot INTEGER, lastPlayed TEXT);
             CREATE TABLE IF NOT EXISTS Quest (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 questId TEXT, questState TEXT, saveSlot INTEGER);
@@ -41,7 +51,7 @@ public class SaveSystem : MonoBehaviour
     }
 
     // ------------------- Inventory -------------------
-    public void SaveInventory(List<SimpleItemSlot> items, int saveSlot)
+    public static void SaveInventory(List<SimpleItemSlot> items, int saveSlot)
     {
         using (var connection = new SqliteConnection(dbPath))
         {
@@ -64,7 +74,7 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
-    public List<SimpleItemSlot> LoadInventory(int saveSlot)
+    public static List<SimpleItemSlot> LoadInventory(int saveSlot)
     {
         List<SimpleItemSlot> items = new List<SimpleItemSlot>();
         using (var connection = new SqliteConnection(dbPath))
@@ -90,60 +100,70 @@ public class SaveSystem : MonoBehaviour
     }
 
     // ------------------- Player Stats -------------------
-    public void SavePlayerStats(int coins, int xp, string sceneName, Vector3 pos, float rotY, int saveSlot)
+    public static void SavePlayerStats(int coins, int xp, string sceneName, Vector3 position, float rotationY, int saveSlot)
     {
-        using (var connection = new SqliteConnection(dbPath))
-        {
-            connection.Open();
-            var cmd = connection.CreateCommand();
+        using var conn = new SqliteConnection(dbPath);
+        conn.Open();
+        using var cmd = conn.CreateCommand();
 
-            cmd.CommandText = "DELETE FROM PlayerStats WHERE saveSlot = @slot;";
-            cmd.Parameters.AddWithValue("@slot", saveSlot);
-            cmd.ExecuteNonQuery();
+        cmd.CommandText = @"
+        INSERT OR REPLACE INTO PlayerStats 
+        (coins, xp, currentScene, posX, posY, posZ, rotY, saveSlot, lastPlayed)
+        VALUES 
+        (@coins, @xp, @scene, @x, @y, @z, @rotY, @slot, @lastPlayed);";
 
-            cmd.CommandText = @"
-                INSERT INTO PlayerStats (coins, xp, currentScene, posX, posY, posZ, rotY, saveSlot)
-                VALUES (@coins, @xp, @scene, @x, @y, @z, @rotY, @slot);";
-            cmd.Parameters.AddWithValue("@coins", coins);
-            cmd.Parameters.AddWithValue("@xp", xp);
-            cmd.Parameters.AddWithValue("@scene", sceneName);
-            cmd.Parameters.AddWithValue("@x", pos.x);
-            cmd.Parameters.AddWithValue("@y", pos.y);
-            cmd.Parameters.AddWithValue("@z", pos.z);
-            cmd.Parameters.AddWithValue("@rotY", rotY);
-            cmd.ExecuteNonQuery();
-        }
+        cmd.Parameters.AddWithValue("@coins", coins);
+        cmd.Parameters.AddWithValue("@xp", xp);
+        cmd.Parameters.AddWithValue("@scene", sceneName);
+        cmd.Parameters.AddWithValue("@x", position.x);
+        cmd.Parameters.AddWithValue("@y", position.y);
+        cmd.Parameters.AddWithValue("@z", position.z);
+        cmd.Parameters.AddWithValue("@rotY", rotationY);
+        cmd.Parameters.AddWithValue("@slot", saveSlot);
+        cmd.Parameters.AddWithValue("@lastPlayed", System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        cmd.ExecuteNonQuery();
     }
 
-    public (int coins, int xp, string scene, Vector3 position, float rotY) LoadPlayerStats(int saveSlot)
+    public static PlayerSaveData LoadPlayerStats(int saveSlot)
     {
         using (var connection = new SqliteConnection(dbPath))
         {
             connection.Open();
             var cmd = connection.CreateCommand();
 
-            cmd.CommandText = "SELECT coins, xp, currentScene, posX, posY, posZ, rotY FROM PlayerStats WHERE saveSlot = @slot;";
+            cmd.CommandText = "SELECT coins, xp, currentScene, posX, posY, posZ, rotY, lastPlayed FROM PlayerStats WHERE saveSlot = @slot;";
             cmd.Parameters.AddWithValue("@slot", saveSlot);
 
             using (var reader = cmd.ExecuteReader())
             {
                 if (reader.Read())
                 {
-                    return (
-                        reader.GetInt32(0),
-                        reader.GetInt32(1),
-                        reader.GetString(2),
-                        new Vector3(reader.GetFloat(3), reader.GetFloat(4), reader.GetFloat(5)),
-                        reader.GetFloat(6)
-                    );
+                    return new PlayerSaveData
+                    {
+                        coins = reader.GetInt32(0),
+                        xp = reader.GetInt32(1),
+                        scene = reader.GetString(2),
+                        position = new Vector3(reader.GetFloat(3), reader.GetFloat(4), reader.GetFloat(5)),
+                        rotY = reader.GetFloat(6),
+                        lastPlayed = reader.IsDBNull(7) ? "Never" : reader.GetString(7)
+                    };
                 }
             }
         }
-        return (0, 0, "WorldMain", Vector3.zero, 0f);
+
+        return new PlayerSaveData
+        {
+            coins = 0,
+            xp = 0,
+            scene = "WorldMain",
+            position = Vector3.zero,
+            rotY = 0f,
+            lastPlayed = "Never"
+        };
     }
 
     // ------------------- Quest -------------------
-    public void SaveQuests(string questId, string questState, int saveSlot)
+    public static void SaveQuests(string questId, string questState, int saveSlot)
     {
         using (var connection = new SqliteConnection(dbPath))
         {
@@ -161,7 +181,7 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
-    public (string questId, string questState) LoadQuests(int saveSlot)
+    public static (string questId, string questState) LoadQuests(int saveSlot)
     {
         using (var connection = new SqliteConnection(dbPath))
         {
@@ -183,7 +203,7 @@ public class SaveSystem : MonoBehaviour
     }
 
     // ------------------- Game Time -------------------
-    public void SaveGameTime(float timeOfDay, int slot)
+    public static void SaveGameTime(float timeOfDay, int saveSlot)
     {
         using (var connection = new SqliteConnection(dbPath))
         {
@@ -191,16 +211,17 @@ public class SaveSystem : MonoBehaviour
             var cmd = connection.CreateCommand();
 
             cmd.CommandText = "DELETE FROM GameTime WHERE saveSlot = @slot;";
-            cmd.Parameters.AddWithValue("@slot", slot);
+            cmd.Parameters.AddWithValue("@slot", saveSlot);
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = "INSERT INTO GameTime (timeOfDay, saveSlot) VALUES (@t, @slot);";
             cmd.Parameters.AddWithValue("@t", timeOfDay);
+            cmd.Parameters.AddWithValue("@slot", saveSlot);
             cmd.ExecuteNonQuery();
         }
     }
 
-    public float LoadGameTime(int slot)
+    public static float LoadGameTime(int slot)
     {
         using (var connection = new SqliteConnection(dbPath))
         {
@@ -216,6 +237,18 @@ public class SaveSystem : MonoBehaviour
             }
         }
 
-        return 6f; // default morning
+        return 6f; // default fallback time
+    }
+
+    public static void ClearInventory(int slot)
+    {
+        using (var conn = new SqliteConnection(dbPath))
+        {
+            conn.Open();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "DELETE FROM Inventory WHERE saveSlot = @slot;";
+            cmd.Parameters.AddWithValue("@slot", slot);
+            cmd.ExecuteNonQuery();
+        }
     }
 }

@@ -7,10 +7,11 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private TextMeshProUGUI xpText;
 
-    [Header("Values")]
+    [Header("Starting Values")]
     [SerializeField] private int startingCoins = 100;
     [SerializeField] private int startingXP = 0;
 
+    [Header("Runtime Stats")]
     public int coins;
     public int xp;
 
@@ -20,41 +21,49 @@ public class PlayerStats : MonoBehaviour
         xp = startingXP;
         UpdateUI();
     }
-    // Coin Method
+
+    // Add Coins
     public void AddCoins(int amount)
     {
         coins += amount;
+        Debug.Log($"[PlayerStats] 💰 Coins added: +{amount} → Total: {coins}");
         UpdateUI();
     }
+
     // Spend Coins
     public bool SpendCoins(int amount)
     {
         if (coins >= amount)
         {
             coins -= amount;
+            Debug.Log($"[PlayerStats] 💸 Coins spent: -{amount} → Remaining: {coins}");
             UpdateUI();
             return true;
         }
 
-        Debug.Log("Not enough coins!");
+        Debug.LogWarning("[PlayerStats] ❌ Not enough coins!");
         return false;
     }
 
-    // XP Addition
+    // Add XP
     public void AddXP(int amount)
     {
         xp += amount;
+        Debug.Log($"[PlayerStats] ✨ XP gained: +{amount} → Total: {xp}");
         UpdateUI();
     }
 
+    // Getters
     public int GetCoins() => coins;
     public int GetXP() => xp;
 
-
-    // Update UI 
+    // UI Sync
     private void UpdateUI()
     {
-        if (coinText != null) coinText.text = coins.ToString();
-        if (xpText != null) xpText.text = xp.ToString();
+        if (coinText != null)
+            coinText.text = coins.ToString();
+
+        if (xpText != null)
+            xpText.text = xp.ToString();
     }
 }
