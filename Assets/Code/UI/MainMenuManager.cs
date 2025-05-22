@@ -7,13 +7,12 @@ public class MainMenuManager : MonoBehaviour
 
     public void ButtonNewGame()
     {
-        SceneManager.LoadScene("SelectSave");
+        SceneManager.LoadScene("WorldMain");
     }
 
     public void ButtonLoadGame(int slot = 1)
     {
-        SaveManager.currentSaveSlot = slot;
-        SceneManager.LoadScene(worldSceneName);
+        SceneManager.LoadScene("WorldMain");
     }
 
     public void ButtonQuit()
