@@ -21,7 +21,7 @@ public class InventoryUI : MonoBehaviour
     public void AddUIItem(string inventoryId, Item item)
     {
         var itemUI = Instantiate(uiItemPrefab).GetComponent<ItemUI>();
-        itemUI.transform.SetParent(uiInventoryParent);
+        itemUI.transform.SetParent(uiInventoryParent, false);
         inventoryUI.Add(inventoryId, itemUI.gameObject);
         itemUI.Initialize(inventoryId, item, inventory.DropItem);
     }
@@ -31,5 +31,15 @@ public class InventoryUI : MonoBehaviour
         var itemUI = inventoryUI.GetValueOrDefault(inventoryId);
         inventoryUI.Remove(inventoryId);
         Destroy(itemUI);
+    }
+
+    public void ClearUI()
+    {
+        foreach (Transform child in uiInventoryParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        inventoryUI.Clear();
     }
 }

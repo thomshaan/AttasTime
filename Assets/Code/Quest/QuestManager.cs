@@ -67,4 +67,23 @@ public class QuestManager : MonoBehaviour
 
         OnQuestChanged?.Invoke();
     }
+
+    public (string questId, string questState) GetQuestStateData()
+    {
+        if (currentQuestData != null)
+            return (currentQuestData.questId, currentQuestState.ToString());
+        else
+            return ("", "NotStarted");
+    }
+
+    public void LoadQuestStateData(string questId, string questState)
+    {
+        if (string.IsNullOrEmpty(questId)) return;
+
+        QuestData loadedQuest = QuestDatabase.GetQuestById(questId); // You need this helper
+        currentQuestData = loadedQuest;
+        currentQuestState = (QuestState)System.Enum.Parse(typeof(QuestState), questState);
+        OnQuestChanged?.Invoke();
+    }
+
 }

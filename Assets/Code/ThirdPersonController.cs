@@ -61,18 +61,26 @@ public class ThirdPersonController : MonoBehaviour
         // Toggle crouch state
         if (inputCrouch)
             isCrouching = !isCrouching;
-
         // Handle animations
         if (cc.isGrounded && animator != null)
         {
             animator.SetBool("run", cc.velocity.magnitude > 0.9f);
             isSprinting = cc.velocity.magnitude > 0.9f && inputSprint;
         }
-
         // Jump logic
         if (inputJump && cc.isGrounded)
         {
             isJumping = true;
+        }
+
+        if (forceForwardInput)
+        {
+            moveInput.y = 1f; // Simulate pressing W / forward key
+        }
+        else
+        {
+            // Only override if no real input from keyboard/gamepad:
+            moveInput.y = moveInput.y != 0 ? moveInput.y : Input.GetAxis("Vertical");
         }
 
         HeadHittingDetect();
@@ -120,7 +128,6 @@ public class ThirdPersonController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.15f);
         }
 
-        // Move the character
         Vector3 movement = Vector3.up * directionY + forward + right;
         cc.Move(movement);
     }
@@ -136,5 +143,13 @@ public class ThirdPersonController : MonoBehaviour
             jumpElapsedTime = 0;
             isJumping = false;
         }
+    }
+
+    private bool forceForwardInput = false;
+
+    // Add this public method to allow external scripts to set forward movement:
+    public void SetForceForward(bool enabled)
+    {
+        forceForwardInput = enabled;
     }
 }
