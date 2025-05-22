@@ -1,24 +1,78 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Collections;
 
 public class SaveManager : MonoBehaviour
 {
-    public SaveSystem saveSystem;
+    public static SaveManager Instance { get; private set; }
+
     public Inventory inventory;
     public PlayerStats playerStats;
     public GameObject player;
     public QuestManager questManager;
+    public Transform playerSpawnPoint; // fallback spawn point for new game
 
     public static int currentSaveSlot = 1;
 
+    private bool hasLoaded = false;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "WorldMain" && !hasLoaded)
+        {
+            hasLoaded = true;
+
+            if (!SaveSystem.TryLoadPlayerStats(currentSaveSlot, out var data))
+            {
+                Debug.Log("[SaveManager] No save found, creating fresh save...");
+                NewGame();
+            }
+            else
+            {
+                Debug.Log("[SaveManager] Save found, loading...");
+                LoadGame();
+            }
+        }
+    }
+
+    // Kosongkan Start supaya tidak ada load game ganda
+    void Start()
+    {
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P)) // Debug: force reset posisi
+        {
+            player.transform.position = playerSpawnPoint.position + Vector3.up;
+            Debug.Log("[SaveManager] Forced player position to spawn point");
+        }
+    }
+
     public void SaveGame()
     {
-        // Save Inventory
         List<SimpleItemSlot> simpleInventory = inventory.ToSimpleItemList();
         SaveSystem.SaveInventory(simpleInventory, currentSaveSlot);
 
-        // Save Player Stats
         SaveSystem.SavePlayerStats(
             playerStats.coins,
             playerStats.xp,
@@ -28,50 +82,71 @@ public class SaveManager : MonoBehaviour
             currentSaveSlot
         );
 
-        // Save Quest
         (string questId, string questState) = questManager.GetQuestStateData();
         SaveSystem.SaveQuests(questId, questState, currentSaveSlot);
 
-        // Save Time (LightingManager TimeOfDay)
         float time = LightingManager.Instance.TimeOfDay;
         SaveSystem.SaveGameTime(time, currentSaveSlot);
 
         Debug.Log($"[SaveManager] Game saved to slot {currentSaveSlot}");
-        Debug.Log("[Save] Position: " + player.transform.position);
+        Debug.Log("[SaveManager] Player position saved: " + player.transform.position);
     }
 
     public void LoadGame()
     {
+        if (player == null)
+        {
+            Debug.LogError("[SaveManager] Player reference is null!");
+            return;
+        }
+
         // Load Inventory
         List<SimpleItemSlot> simpleInventory = SaveSystem.LoadInventory(currentSaveSlot);
         inventory.LoadFromSimpleItemList(simpleInventory);
 
-        // Load Player Stats
+        // Load Player Stats (including saved position)
         var stats = SaveSystem.LoadPlayerStats(currentSaveSlot);
         playerStats.coins = stats.coins;
         playerStats.xp = stats.xp;
 
-        Debug.Log("[Load] Loaded Position: " + stats.position);
-        Debug.Log("[Load] Player object: " + player?.name);
+        // Determine spawn position: saved pos if valid, else fallback spawn point
+        Vector3 spawnPos = stats.position;
+        if (spawnPos == Vector3.zero && playerSpawnPoint != null)
+        {
+            spawnPos = playerSpawnPoint.position;
+            Debug.LogWarning("[SaveManager] Using fallback spawn point position.");
+        }
 
-        // Move Player (supporting CharacterController)
-        CharacterController controller = player.GetComponent<CharacterController>();
+        // Raise Y slightly to avoid falling through ground on spawn
+        spawnPos.y += 1.0f;
+
+        Debug.Log($"[SaveManager] Spawn position used: {spawnPos}");
+
+        // Reset Rigidbody velocity if exists and non-kinematic
+        var rb = player.GetComponent<Rigidbody>();
+        if (rb != null && !rb.isKinematic)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        // Move player safely using CharacterController if present
+        var controller = player.GetComponent<CharacterController>();
         if (controller != null)
         {
-            controller.enabled = false; // prevent snap-back
-            player.transform.position = stats.position;
+            controller.enabled = false; // disable to prevent physics conflicts
+            player.transform.position = spawnPos;
             player.transform.rotation = Quaternion.Euler(0, stats.rotY, 0);
-            controller.enabled = true;
-            Debug.Log("[Load] Moved player using CharacterController-safe method.");
+            controller.enabled = true;  // re-enable after repositioning
         }
         else
         {
-            player.transform.position = stats.position;
+            // No CharacterController - set transform directly
+            player.transform.position = spawnPos;
             player.transform.rotation = Quaternion.Euler(0, stats.rotY, 0);
-            Debug.Log("[Load] Moved player directly (no CharacterController).");
         }
-
-        // Load Quest
+        StartCoroutine(UpdateStatsDelayed(stats.coins, stats.xp));
+        // Load Quest State
         var questData = SaveSystem.LoadQuests(currentSaveSlot);
         questManager.LoadQuestStateData(questData.questId, questData.questState);
 
@@ -80,5 +155,21 @@ public class SaveManager : MonoBehaviour
         LightingManager.Instance.SetTimeOfDay(timeOfDay);
 
         Debug.Log($"[SaveManager] Game loaded from slot {currentSaveSlot}");
+    }
+
+    private IEnumerator UpdateStatsDelayed(int coins, int xp)
+    {
+        yield return null; // tunda 1 frame supaya UI siap
+        playerStats.SetStats(coins, xp);
+    }
+
+    public void NewGame()
+    {
+        Vector3 startPos = NewGameData.startPosition;
+        float startRot = NewGameData.startRotationY;
+
+        NewGameData.CreateFreshSave(currentSaveSlot, startPos, startRot);
+
+        LoadGame();
     }
 }

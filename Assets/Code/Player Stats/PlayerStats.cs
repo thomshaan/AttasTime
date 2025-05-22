@@ -9,7 +9,7 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Starting Values")]
     [SerializeField] private int startingCoins = 100;
-    [SerializeField] private int startingXP = 0;
+    [SerializeField] private int startingXP = 50;
 
     [Header("Runtime Stats")]
     public int coins;
@@ -19,6 +19,14 @@ public class PlayerStats : MonoBehaviour
     {
         coins = startingCoins;
         xp = startingXP;
+        UpdateUI();
+    }
+
+    // New method for loading saved stats
+    public void SetStats(int loadedCoins, int loadedXP)
+    {
+        coins = loadedCoins;
+        xp = loadedXP;
         UpdateUI();
     }
 
