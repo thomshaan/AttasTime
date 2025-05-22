@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75be104ff0c8d934384185e99e79b90f, type: 3}
-  m_Name: Cabai
+  m_Name: bumburempah
   m_EditorClassIdentifier: 
-  id: cabai
-  description: cabai.
-  icon: {fileID: 21300000, guid: df80f763e85030c4c9bc4589a930c736, type: 3}
-  prefab: {fileID: 4730544939030896222, guid: cb380050026683f49a98ba7f33a47bb9, type: 3}
-  price: 20
+  id: bumburempah
+  description: Bumbu rempah.
+  icon: {fileID: 21300000, guid: 35d91f29972dbf6409a9720bb04eb8e5, type: 3}
+  prefab: {fileID: 1820183045614515839, guid: f1fed76841789414cae3891aa69b4955, type: 3}
+  price: 10

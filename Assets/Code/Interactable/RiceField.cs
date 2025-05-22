@@ -23,13 +23,26 @@ public class RiceField : MonoBehaviour, IInteractable
     [Header("Item to Give")]
     public Item riceItem;
 
+    [Header("Inventory References")]
+    public Inventory inventory; // Optional static assignment
+    private Inventory playerInventory;
+
     private RiceFieldState currentState = RiceFieldState.ReadyToSeed;
     private bool isGrowing = false;
     private float growthStartTime;
     private GameObject currentModel;
-    private Inventory playerInventory;
 
-    private void Update()
+    void Awake()
+    {
+        // Auto-assign fallback for inventory field
+        if (inventory == null)
+        {
+            inventory = FindObjectOfType<Inventory>();
+            Debug.Log("[RiceField] Auto-assigned 'inventory': " + inventory);
+        }
+    }
+
+    void Update()
     {
         if (isGrowing && LightingManager.Instance != null)
         {
@@ -48,7 +61,6 @@ public class RiceField : MonoBehaviour, IInteractable
 
     private float GetElapsedGameHours(float start, float now)
     {
-        // Handles day rollover (e.g. from 23 to 1)
         if (now >= start)
             return now - start;
         else
@@ -70,7 +82,12 @@ public class RiceField : MonoBehaviour, IInteractable
         if (playerInventory == null)
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null) playerInventory = player.GetComponent<Inventory>();
+            if (player != null)
+            {
+                playerInventory = player.GetComponent<Inventory>();
+                Debug.Log("[Interact] Found Player: " + player.name);
+                Debug.Log("[Interact] Assigned playerInventory: " + playerInventory);
+            }
         }
 
         switch (currentState)
@@ -96,10 +113,16 @@ public class RiceField : MonoBehaviour, IInteractable
 
     private void HarvestRice()
     {
+        if (playerInventory == null)
+        {
+            playerInventory = FindObjectOfType<Inventory>();
+            Debug.Log("[Harvest] Auto-reassigned Inventory: " + playerInventory);
+        }
+
         if (playerInventory != null && riceItem != null)
         {
             playerInventory.AddItem(riceItem);
-            Debug.Log("✅ Rice harvested and added directly to inventory!");
+            Debug.Log("✅ Rice harvested: " + riceItem.name);
         }
         else
         {
@@ -109,7 +132,6 @@ public class RiceField : MonoBehaviour, IInteractable
         currentState = RiceFieldState.ReadyToSeed;
         UpdateFieldModel(null);
     }
-
 
     private void UpdateFieldModel(GameObject prefab)
     {
