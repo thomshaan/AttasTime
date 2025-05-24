@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SaveManager : MonoBehaviour
 {
@@ -19,6 +19,7 @@ public class SaveManager : MonoBehaviour
 
     private void Awake()
     {
+        // Singleton pattern supaya hanya ada 1 instance SaveManager
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -37,39 +38,54 @@ public class SaveManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "WorldMain" && !hasLoaded)
+        if (scene.name == "WorldMain" || scene.name == "HouseInterior")
         {
-            hasLoaded = true;
-
-            if (!SaveSystem.TryLoadPlayerStats(currentSaveSlot, out var data))
+            // Gameplay scene logic
+            if (!hasLoaded)
             {
-                Debug.Log("[SaveManager] No save found, creating fresh save...");
-                NewGame();
+                hasLoaded = true;
+                if (!SaveSystem.TryLoadPlayerStats(currentSaveSlot, out var data))
+                    NewGame();
+                else
+                    LoadGame();
             }
-            else
-            {
-                Debug.Log("[SaveManager] Save found, loading...");
-                LoadGame();
-            }
+        }
+        else if (scene.name == "Mainmenu")  // Sesuaikan dengan case nama scene di Unity
+        {
+            Destroy(gameObject);
+            Debug.Log("[SaveManager] Destroyed SaveManager on scene " + scene.name);
+        }
+        else
+        {
+            // Scene lain selain gameplay dan mainmenu
+            Destroy(gameObject);
+            Debug.Log("[SaveManager] Destroyed SaveManager on scene " + scene.name);
         }
     }
 
-    // Kosongkan Start supaya tidak ada load game ganda
-    void Start()
-    {
-    }
+
+    void Start() { }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P)) // Debug: force reset posisi
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            player.transform.position = playerSpawnPoint.position + Vector3.up;
-            Debug.Log("[SaveManager] Forced player position to spawn point");
+            if (player != null && playerSpawnPoint != null)
+            {
+                player.transform.position = playerSpawnPoint.position + Vector3.up;
+                Debug.Log("[SaveManager] Forced player position to spawn point");
+            }
         }
     }
 
     public void SaveGame()
     {
+        if (inventory == null || playerStats == null || player == null || questManager == null)
+        {
+            Debug.LogError("[SaveManager] SaveGame failed: references not assigned!");
+            return;
+        }
+
         List<SimpleItemSlot> simpleInventory = inventory.ToSimpleItemList();
         SaveSystem.SaveInventory(simpleInventory, currentSaveSlot);
 
@@ -94,35 +110,27 @@ public class SaveManager : MonoBehaviour
 
     public void LoadGame()
     {
-        if (player == null)
+        if (player == null || inventory == null || playerStats == null || questManager == null || playerSpawnPoint == null)
         {
-            Debug.LogError("[SaveManager] Player reference is null!");
+            Debug.LogError("[SaveManager] LoadGame failed: references not assigned!");
             return;
         }
 
-        // Load Inventory
         List<SimpleItemSlot> simpleInventory = SaveSystem.LoadInventory(currentSaveSlot);
         inventory.LoadFromSimpleItemList(simpleInventory);
 
-        // Load Player Stats (including saved position)
         var stats = SaveSystem.LoadPlayerStats(currentSaveSlot);
         playerStats.coins = stats.coins;
         playerStats.xp = stats.xp;
 
-        // Determine spawn position: saved pos if valid, else fallback spawn point
         Vector3 spawnPos = stats.position;
-        if (spawnPos == Vector3.zero && playerSpawnPoint != null)
+        if (spawnPos == Vector3.zero)
         {
             spawnPos = playerSpawnPoint.position;
             Debug.LogWarning("[SaveManager] Using fallback spawn point position.");
         }
+        spawnPos.y += 1f;
 
-        // Raise Y slightly to avoid falling through ground on spawn
-        spawnPos.y += 1.0f;
-
-        Debug.Log($"[SaveManager] Spawn position used: {spawnPos}");
-
-        // Reset Rigidbody velocity if exists and non-kinematic
         var rb = player.GetComponent<Rigidbody>();
         if (rb != null && !rb.isKinematic)
         {
@@ -130,27 +138,25 @@ public class SaveManager : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        // Move player safely using CharacterController if present
         var controller = player.GetComponent<CharacterController>();
         if (controller != null)
         {
-            controller.enabled = false; // disable to prevent physics conflicts
+            controller.enabled = false;
             player.transform.position = spawnPos;
             player.transform.rotation = Quaternion.Euler(0, stats.rotY, 0);
-            controller.enabled = true;  // re-enable after repositioning
+            controller.enabled = true;
         }
         else
         {
-            // No CharacterController - set transform directly
             player.transform.position = spawnPos;
             player.transform.rotation = Quaternion.Euler(0, stats.rotY, 0);
         }
+
         StartCoroutine(UpdateStatsDelayed(stats.coins, stats.xp));
-        // Load Quest State
+
         var questData = SaveSystem.LoadQuests(currentSaveSlot);
         questManager.LoadQuestStateData(questData.questId, questData.questState);
 
-        // Load Time
         float timeOfDay = SaveSystem.LoadGameTime(currentSaveSlot);
         LightingManager.Instance.SetTimeOfDay(timeOfDay);
 
@@ -159,7 +165,7 @@ public class SaveManager : MonoBehaviour
 
     private IEnumerator UpdateStatsDelayed(int coins, int xp)
     {
-        yield return null; // tunda 1 frame supaya UI siap
+        yield return null; // delay satu frame supaya UI siap update
         playerStats.SetStats(coins, xp);
     }
 
