@@ -11,6 +11,7 @@ TagManager:
   - NPC
   - DroppedItem
   - InteractionButton
+  - PlayerSpawnPoint
   layers:
   - Default
   - TransparentFX

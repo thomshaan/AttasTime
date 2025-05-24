@@ -2,30 +2,27 @@ using UnityEngine;
 
 public static class NewGameData
 {
-    public static void CreateFreshSave()
+    public static Vector3 startPosition = new Vector3(0f, 1f, 0f);  // Your spawn position
+    public static float startRotationY = 0f;                        // Your spawn rotation Y (degrees)
+    public static int initialCoins = 100;
+    public static int initialXP = 50;
+    public static float initialTime = 6f;                           // 6 AM in your time system
+    public static string initialScene = "WorldMain";
+
+    public static void CreateFreshSave(int saveSlot, Vector3 position, float rotY = 0f)
     {
-        int saveSlot = 1; // or assign dynamically
-
-        // Position (default spawn)
-        Vector3 startPosition = new Vector3(0f, 0f, 0f); // Update to your spawn point
-        float startRotationY = 0f;
-
-        // Inventory (empty)
         SaveSystem.ClearInventory(saveSlot);
 
-        // Coins & XP
         SaveSystem.SavePlayerStats(
-            coins: 10,
-            xp: 5,
+            coins: 100,
+            xp: 50,
             sceneName: "WorldMain",
-            position: startPosition,
-            rotationY: startRotationY,
+            position: position,
+            rotationY: rotY,
             saveSlot: saveSlot
         );
 
-        // Optional: time, quests, etc.
-        SaveSystem.SaveGameTime(8f, saveSlot); // 8:00 AM start
-
-        Debug.Log("[NewGameData] New game save created.");
+        SaveSystem.SaveGameTime(6f, saveSlot);  // Simpan waktu awal (6 pagi)
+        SaveSystem.SaveQuests("starterQuest", "NotStarted", saveSlot);
     }
 }
