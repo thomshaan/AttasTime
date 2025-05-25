@@ -12,9 +12,15 @@ public class InteractionHandler : MonoBehaviour
     [SerializeField] private GameObject interactionUI;
     [SerializeField] private Button interactButton;
 
+
     [Header("Cinemachine Cameras")]
     [SerializeField] private CinemachineFreeLook mainCam;
     [SerializeField] private CinemachineVirtualCamera interactionCam;
+
+    public void SetInteractionUI(GameObject ui) => interactionUI = ui;
+    public void SetInteractButton(Button btn) => interactButton = btn;
+    public void SetMainCam(CinemachineFreeLook cam) => mainCam = cam;
+    public void SetInteractionCam(CinemachineVirtualCamera cam) => interactionCam = cam;
 
     private float interactCooldown = 0.2f;
     private float lastInteractTime = -1f;
