@@ -1,19 +1,15 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem; // Import Input System
+using UnityEngine.InputSystem;
+using System.Collections;
 
 public class ThirdPersonController : MonoBehaviour
 {
-    [Tooltip("Speed ​​at which the character moves. It is not affected by gravity or jumping.")]
     public float velocity = 5f;
-    [Tooltip("This value is added to the speed value while the character is sprinting.")]
     public float sprintAdittion = 3.5f;
-    [Tooltip("The higher the value, the higher the character will jump.")]
     public float jumpForce = 18f;
-    [Tooltip("Stay in the air. The higher the value, the longer the character floats before falling.")]
     public float jumpTime = 0.85f;
-    [Space]
-    [Tooltip("Force that pulls the player down. Changing this value causes all movement, jumping and falling to be changed as well.")]
     public float gravity = 9.8f;
+
     float jumpElapsedTime = 0;
     bool isJumping = false;
     bool isSprinting = false;
@@ -25,10 +21,12 @@ public class ThirdPersonController : MonoBehaviour
     Animator animator;
     CharacterController cc;
 
+    private bool forceForwardInput = false;
+    private bool canMove = true;
+    private bool skipNextFixedUpdate = false;
+
     private void Awake()
     {
-
-
     }
 
     void Start()
@@ -37,37 +35,43 @@ public class ThirdPersonController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         if (animator == null)
-            Debug.LogWarning("Hey buddy, you don't have the Animator component in your player. Without it, the animations won't work.");
+            Debug.LogWarning("Animator component not found on player.");
     }
 
     void Update()
     {
-        // Gamepad input handling
+        if (!canMove)
+        {
+            moveInput = Vector2.zero;
+            inputJump = false;
+            inputSprint = false;
+            inputCrouch = false;
+            return;
+        }
+
         if (Gamepad.current != null)
         {
             moveInput = Gamepad.current.leftStick.ReadValue();
-            inputJump = Gamepad.current.buttonSouth.wasPressedThisFrame; // A (Xbox) / X (PS)
-            inputSprint = Gamepad.current.buttonWest.isPressed; // X (Xbox) / Square (PS)
-            inputCrouch = Gamepad.current.buttonEast.wasPressedThisFrame; // B (Xbox) / Circle (PS)
+            inputJump = Gamepad.current.buttonSouth.wasPressedThisFrame;
+            inputSprint = Gamepad.current.buttonWest.isPressed;
+            inputCrouch = Gamepad.current.buttonEast.wasPressedThisFrame;
         }
 
-        // Keyboard inputs as fallback
         moveInput.x = moveInput.x != 0 ? moveInput.x : Input.GetAxis("Horizontal");
         moveInput.y = moveInput.y != 0 ? moveInput.y : Input.GetAxis("Vertical");
         inputJump |= Input.GetKeyDown(KeyCode.Space);
         inputSprint |= Input.GetKey(KeyCode.LeftShift);
         inputCrouch |= Input.GetKeyDown(KeyCode.LeftControl);
 
-        // Toggle crouch state
         if (inputCrouch)
             isCrouching = !isCrouching;
-        // Handle animations
+
         if (cc.isGrounded && animator != null)
         {
             animator.SetBool("run", cc.velocity.magnitude > 0.9f);
             isSprinting = cc.velocity.magnitude > 0.9f && inputSprint;
         }
-        // Jump logic
+
         if (inputJump && cc.isGrounded)
         {
             isJumping = true;
@@ -75,11 +79,10 @@ public class ThirdPersonController : MonoBehaviour
 
         if (forceForwardInput)
         {
-            moveInput.y = 1f; // Simulate pressing W / forward key
+            moveInput.y = 1f;
         }
         else
         {
-            // Only override if no real input from keyboard/gamepad:
             moveInput.y = moveInput.y != 0 ? moveInput.y : Input.GetAxis("Vertical");
         }
 
@@ -88,13 +91,19 @@ public class ThirdPersonController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (skipNextFixedUpdate)
+        {
+            skipNextFixedUpdate = false; // reset flag, skip movement sekali saja
+            return;
+        }
+
         float velocityAdittion = isSprinting ? sprintAdittion : (isCrouching ? -(velocity * 0.50f) : 0);
 
         float directionX = moveInput.x * (velocity + velocityAdittion) * Time.deltaTime;
         float directionZ = moveInput.y * (velocity + velocityAdittion) * Time.deltaTime;
         float directionY = 0;
 
-        // Jump logic
+        // Jump logic (sesuaikan sesuai kode asli mu)
         if (isJumping)
         {
             directionY = Mathf.SmoothStep(jumpForce, jumpForce * 0.30f, jumpElapsedTime / jumpTime) * Time.deltaTime;
@@ -132,6 +141,11 @@ public class ThirdPersonController : MonoBehaviour
         cc.Move(movement);
     }
 
+    public void SkipMovementNextFrame()
+    {
+        skipNextFixedUpdate = true;
+    }
+
     void HeadHittingDetect()
     {
         float headHitDistance = 1.1f;
@@ -145,9 +159,39 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    private bool forceForwardInput = false;
+    public void TeleportToPosition(Vector3 newPosition, float rotationY)
+    {
+        StartCoroutine(TeleportRoutine(newPosition, rotationY));
+    }
 
-    // Add this public method to allow external scripts to set forward movement:
+    private IEnumerator TeleportRoutine(Vector3 newPosition, float rotationY)
+    {
+        canMove = false;
+
+        var controller = GetComponent<CharacterController>();
+        if (controller != null)
+        {
+            controller.enabled = false;
+        }
+
+        transform.position = newPosition;
+        transform.rotation = Quaternion.Euler(0, rotationY, 0);
+
+        isJumping = false;
+        jumpElapsedTime = 0;
+
+        yield return null;
+
+        if (controller != null)
+        {
+            controller.enabled = true;
+        }
+
+        canMove = true;
+
+        yield break;
+    }
+
     public void SetForceForward(bool enabled)
     {
         forceForwardInput = enabled;

@@ -15,7 +15,49 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Runtime Stats")]
     public int coins;
-    public int xp;
+    private int xp;
+
+    // Properti publik untuk akses aman coins dan xp
+    public int Coins
+    {
+        get => coins;
+        private set
+        {
+            coins = value;
+            UpdateCoinUI();
+        }
+    }
+
+    public int XP
+    {
+        get => xp;
+        private set
+        {
+            xp = value;
+            UpdateXPUI();
+        }
+    }
+
+    // Public properties untuk UI agar bisa di-assign dari luar
+    public TextMeshProUGUI CoinText
+    {
+        get => coinText;
+        set
+        {
+            coinText = value;
+            UpdateCoinUI();
+        }
+    }
+
+    public TextMeshProUGUI XPText
+    {
+        get => xpText;
+        set
+        {
+            xpText = value;
+            UpdateXPUI();
+        }
+    }
 
     private void Awake()
     {
@@ -26,45 +68,42 @@ public class PlayerStats : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
+    private void Start()
     {
-        // Pastikan modal awal muncul saat game mulai
-        if (coins == 0 && xp == 0)
+        // Set nilai awal jika belum ada data (misal di new game)
+        if (Coins == 0 && XP == 0)
         {
-            coins = startingCoins;
-            xp = startingXP;
+            Coins = startingCoins;
+            XP = startingXP;
         }
-        UpdateUI();
+        else
+        {
+            UpdateUI();
+        }
     }
 
-    // Dipanggil saat load data save
+    // Fungsi untuk set data yang di-load dari save
     public void SetStats(int loadedCoins, int loadedXP)
     {
-        coins = loadedCoins;
-        xp = loadedXP;
-        Debug.Log($"[PlayerStats] SetStats called: coins={coins}, xp={xp}");
-        UpdateUI();
+        Coins = loadedCoins;
+        XP = loadedXP;
+        Debug.Log($"[PlayerStats] SetStats called: coins={Coins}, xp={XP}");
     }
 
-    // Add Coins
     public void AddCoins(int amount)
     {
-        coins += amount;
-        Debug.Log($"[PlayerStats] 💰 Coins added: +{amount} → Total: {coins}");
-        UpdateUI();
+        Coins += amount;
+        Debug.Log($"[PlayerStats] 💰 Coins added: +{amount} → Total: {Coins}");
     }
 
-    // Spend Coins
     public bool SpendCoins(int amount)
     {
-        if (coins >= amount)
+        if (Coins >= amount)
         {
-            coins -= amount;
-            Debug.Log($"[PlayerStats] 💸 Coins spent: -{amount} → Remaining: {coins}");
-            UpdateUI();
+            Coins -= amount;
+            Debug.Log($"[PlayerStats] 💸 Coins spent: -{amount} → Remaining: {Coins}");
             return true;
         }
 
@@ -72,39 +111,32 @@ public class PlayerStats : MonoBehaviour
         return false;
     }
 
-    // Add XP
     public void AddXP(int amount)
     {
-        xp += amount;
-        Debug.Log($"[PlayerStats] ✨ XP gained: +{amount} → Total: {xp}");
-        UpdateUI();
+        XP += amount;
+        Debug.Log($"[PlayerStats] ✨ XP gained: +{amount} → Total: {XP}");
     }
 
-    // Getters
-    public int GetCoins() => coins;
-    public int GetXP() => xp;
-
-    // Update UI Text
+    // Update semua UI
     private void UpdateUI()
+    {
+        UpdateCoinUI();
+        UpdateXPUI();
+    }
+
+    private void UpdateCoinUI()
     {
         if (coinText != null)
         {
-            coinText.text = coins.ToString();
-            Debug.Log($"[PlayerStats] Updated coin UI: {coinText.text}");
+            coinText.text = Coins.ToString();
         }
-        else
-        {
-            Debug.LogWarning("[PlayerStats] coinText UI reference is missing!");
-        }
+    }
 
+    private void UpdateXPUI()
+    {
         if (xpText != null)
         {
-            xpText.text = xp.ToString();
-            Debug.Log($"[PlayerStats] Updated XP UI: {xpText.text}");
-        }
-        else
-        {
-            Debug.LogWarning("[PlayerStats] xpText UI reference is missing!");
+            xpText.text = XP.ToString();
         }
     }
 }

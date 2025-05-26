@@ -5,7 +5,9 @@ public class SellerNPC : MonoBehaviour, IInteractable
     private Item item;
     private int stock;
     private Inventory inventory;
-    private PlayerStats playerStats;
+    public PlayerStats playerStats;
+    public GameObject iconUIPrefab;
+    private SellerIconUI iconUI;
 
     void Awake()
     {
@@ -26,10 +28,20 @@ public class SellerNPC : MonoBehaviour, IInteractable
         item = newItem;
         stock = newStock;
 
-        if (item != null)
-            Debug.Log($"[SellerNPC] Initialized with item: {item.name}, Stock: {stock}");
-        else
-            Debug.LogWarning("[SellerNPC] ❌ Initialized with NULL item!");
+        if (item != null && item.icon != null)
+        {
+            GameObject prefab = Resources.Load<GameObject>("UI/SellerIconUI");
+            if (prefab != null)
+            {
+                GameObject uiInstance = Instantiate(prefab);
+                iconUI = uiInstance.GetComponent<SellerIconUI>();
+                iconUI.Initialize(transform, item.icon);
+            }
+            else
+            {
+                Debug.LogWarning("[SellerNPC] ❌ SellerIconUI prefab not found in Resources/UI.");
+            }
+        }
     }
 
     public void Interact()

@@ -31,6 +31,8 @@ public class RiceField : MonoBehaviour, IInteractable
     private bool isGrowing = false;
     private float growthStartTime;
     private GameObject currentModel;
+    private FloatingIconController iconController;
+
 
     void Awake()
     {
@@ -40,6 +42,8 @@ public class RiceField : MonoBehaviour, IInteractable
             inventory = FindObjectOfType<Inventory>();
             Debug.Log("[RiceField] Auto-assigned 'inventory': " + inventory);
         }
+        iconController = gameObject.AddComponent<FloatingIconController>();
+        UpdateFloatingIcon();
     }
 
     void Update()
@@ -56,6 +60,18 @@ public class RiceField : MonoBehaviour, IInteractable
                 UpdateFieldModel(harvestPrefab);
                 Debug.Log("🌾 Rice is ready to harvest!");
             }
+        }
+    }
+
+    private void UpdateFloatingIcon()
+    {
+        if (currentState == RiceFieldState.ReadyToSeed || currentState == RiceFieldState.ReadyToHarvest)
+        {
+            iconController.ShowIconFromItem(riceItem, transform);
+        }
+        else
+        {
+            iconController.HideIcon();
         }
     }
 
