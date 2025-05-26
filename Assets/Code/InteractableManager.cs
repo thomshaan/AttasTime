@@ -8,6 +8,8 @@ public class InteractManager : MonoBehaviour
     public KeyCode interactKey = KeyCode.E;
     public GameObject interactionUIPrompt;
     public Text promptText;
+    public Button interactButton;      // InteractBtn dari Canvas
+    public Text interactButtonText;    // Text di dalam button
 
     private IInteractable currentTarget;
 
@@ -55,18 +57,25 @@ public class InteractManager : MonoBehaviour
 
     void ShowPrompt(string message)
     {
-        if (interactionUIPrompt != null && promptText != null)
+        if (interactButton != null && interactButtonText != null)
         {
-            interactionUIPrompt.SetActive(true);
-            promptText.text = message;
+            interactButton.gameObject.SetActive(true);
+            interactButtonText.text = message;
+
+            // Hapus listener lama agar tidak dobel
+            interactButton.onClick.RemoveAllListeners();
+
+            if (currentTarget != null)
+                interactButton.onClick.AddListener(() => currentTarget.Interact());
         }
     }
 
     void HidePrompt()
     {
-        if (interactionUIPrompt != null)
+        if (interactButton != null)
         {
-            interactionUIPrompt.SetActive(false);
+            interactButton.gameObject.SetActive(false);
+            interactButton.onClick.RemoveAllListeners();
         }
     }
 }

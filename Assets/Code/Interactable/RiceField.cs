@@ -58,7 +58,7 @@ public class RiceField : MonoBehaviour, IInteractable
                 isGrowing = false;
                 currentState = RiceFieldState.ReadyToHarvest;
                 UpdateFieldModel(harvestPrefab);
-                Debug.Log("🌾 Rice is ready to harvest!");
+                Debug.Log(riceItem.name + " is ready to harvest!");
             }
         }
     }
