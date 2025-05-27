@@ -242,4 +242,27 @@ public class SaveManager : MonoBehaviour
         Debug.Log($"[SaveManager] Game saved to slot {currentSaveSlot}");
         Debug.Log("[SaveManager] Player position saved: " + player.transform.position);
     }
+
+    public void DeleteSaveSlot(int slot)
+    {
+        Debug.Log($"[SaveManager] Deleting save slot {slot}");
+
+        // Set spawnTargetID default untuk new save
+        spawnTargetID = "SpawnRumah";
+
+        // Set posisi awal berdasarkan spawn point SpawnRumah
+        NewGameData.InitializeStartPosition(spawnTargetID);
+
+        // Buat save baru fresh (reset data slot ke default)
+        NewGameData.CreateFreshSave(slot, NewGameData.startPosition, NewGameData.startRotationY);
+
+        // Jika slot yang dihapus adalah slot saat ini, load ulang game agar UI dan posisi update
+        if (slot == currentSaveSlot)
+        {
+            LoadGame();
+        }
+
+        // Opsional: jika ada UI save slot, panggil method refresh UI di sini
+    }
+
 }

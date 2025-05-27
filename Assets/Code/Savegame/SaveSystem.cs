@@ -347,6 +347,39 @@ public class SaveSystem : MonoBehaviour
         Debug.Log($"[SaveSystem] Created empty save for slot {slot} at position {startPosition}");
     }
 
+    public static void DeleteSaveSlot(int slot)
+    {
+        // Hapus data dari tabel PlayerStats, Inventory, Quest, GameTime sesuai slot
+        using var connection = new SqliteConnection(dbPath);
+        connection.Open();
+
+        // Delete PlayerStats
+        using var cmd = connection.CreateCommand();
+        cmd.CommandText = "DELETE FROM PlayerStats WHERE saveSlot = @slot;";
+        cmd.Parameters.AddWithValue("@slot", slot);
+        cmd.ExecuteNonQuery();
+
+        // Delete Inventory
+        using var cmdInv = connection.CreateCommand();
+        cmdInv.CommandText = "DELETE FROM Inventory WHERE saveSlot = @slot;";
+        cmdInv.Parameters.AddWithValue("@slot", slot);
+        cmdInv.ExecuteNonQuery();
+
+        // Delete Quest
+        using var cmdQuest = connection.CreateCommand();
+        cmdQuest.CommandText = "DELETE FROM Quest WHERE saveSlot = @slot;";
+        cmdQuest.Parameters.AddWithValue("@slot", slot);
+        cmdQuest.ExecuteNonQuery();
+
+        // Delete GameTime
+        using var cmdTime = connection.CreateCommand();
+        cmdTime.CommandText = "DELETE FROM GameTime WHERE saveSlot = @slot;";
+        cmdTime.Parameters.AddWithValue("@slot", slot);
+        cmdTime.ExecuteNonQuery();
+
+        Debug.Log($"[SaveSystem] Deleted save slot {slot}");
+    }
+
 
 
 }

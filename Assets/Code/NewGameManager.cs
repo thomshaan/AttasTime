@@ -17,4 +17,11 @@ public class NewGameManager : MonoBehaviour
         // 3. Load scene utama dengan fresh data
         SceneManager.LoadScene(NewGameData.initialScene);
     }
+
+    public void BackToMenu()
+    {
+
+        // 3. Load scene utama dengan fresh data
+        SceneManager.LoadScene("MainMenu");
+    }
 }
