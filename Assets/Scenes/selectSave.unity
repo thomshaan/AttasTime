@@ -610,7 +610,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1914205253}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SelectSaveManager, Assembly-CSharp
         m_MethodName: OnBackButtonClicked
         m_Mode: 1
@@ -746,8 +746,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1914205253}
-        m_TargetAssemblyTypeName: SelectSaveManager, Assembly-CSharp
-        m_MethodName: OnSlotClicked
+        m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
+        m_MethodName: StartNewGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1791,8 +1791,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1914205253}
-        m_TargetAssemblyTypeName: SelectSaveManager, Assembly-CSharp
-        m_MethodName: OnSlotClicked
+        m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
+        m_MethodName: StartNewGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2637,10 +2637,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1914205250}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ce5fe2e5cd840e44b6422c9b8c4cf0e, type: 3}
+  m_Script: {fileID: 11500000, guid: c7d24d2b21598bd43bfa7f45e359d027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  popup: {fileID: 682197662}
 --- !u!1 &1952206291
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,8 +2801,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1914205253}
-        m_TargetAssemblyTypeName: SelectSaveManager, Assembly-CSharp
-        m_MethodName: OnSlotClicked
+        m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
+        m_MethodName: StartNewGame
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -9,6 +9,7 @@ public struct PlayerSaveData
     public string scene;
     public Vector3 position;
     public float rotY;
+    public string spawnTargetID;  // <-- Add this field
     public string lastPlayed;
 }
 
@@ -27,35 +28,38 @@ public class SaveSystem : MonoBehaviour
         connection.Open();
         using var command = connection.CreateCommand();
 
+
         command.CommandText = @"
-            CREATE TABLE IF NOT EXISTS Inventory (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                itemId TEXT,
-                quantity INTEGER,
-                saveSlot INTEGER);
+    CREATE TABLE IF NOT EXISTS Inventory (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        itemId TEXT,
+        quantity INTEGER,
+        saveSlot INTEGER);
 
-            CREATE TABLE IF NOT EXISTS PlayerStats (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                coins INTEGER,
-                xp INTEGER,
-                currentScene TEXT,
-                posX REAL,
-                posY REAL,
-                posZ REAL,
-                rotY REAL,
-                saveSlot INTEGER UNIQUE,
-                lastPlayed TEXT);
+    CREATE TABLE IF NOT EXISTS PlayerStats (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        coins INTEGER,
+        xp INTEGER,
+        currentScene TEXT,
+        posX REAL,
+        posY REAL,
+        posZ REAL,
+        rotY REAL,
+        spawnTargetID TEXT,
+        saveSlot INTEGER UNIQUE,
+        lastPlayed TEXT);
 
-            CREATE TABLE IF NOT EXISTS Quest (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                questId TEXT,
-                questState TEXT,
-                saveSlot INTEGER);
+    CREATE TABLE IF NOT EXISTS Quest (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        questId TEXT,
+        questState TEXT,
+        saveSlot INTEGER);
 
-            CREATE TABLE IF NOT EXISTS GameTime (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timeOfDay REAL,
-                saveSlot INTEGER);";
+    CREATE TABLE IF NOT EXISTS GameTime (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        timeOfDay REAL,
+        saveSlot INTEGER);
+";
 
         command.ExecuteNonQuery();
     }
@@ -111,56 +115,58 @@ public class SaveSystem : MonoBehaviour
     }
 
     // --------------- Player Stats ---------------
-    public static void SavePlayerStats(int coins, int xp, string sceneName, Vector3 position, float rotationY, int saveSlot)
-{
-    using var connection = new SqliteConnection(dbPath);
-    connection.Open();
-
-    // Check if saveSlot exists
-    using (var checkCmd = connection.CreateCommand())
+    public static void SavePlayerStats(int coins, int xp, string sceneName, Vector3 position, float rotationY, int saveSlot, string spawnTargetID)
     {
-        checkCmd.CommandText = "SELECT COUNT(*) FROM PlayerStats WHERE saveSlot = @slot;";
-        checkCmd.Parameters.AddWithValue("@slot", saveSlot);
-        long count = (long)checkCmd.ExecuteScalar();
+        using var connection = new SqliteConnection(dbPath);
+        connection.Open();
 
-        using var command = connection.CreateCommand();
-
-        if (count > 0)
+        // Check if saveSlot exists
+        using (var checkCmd = connection.CreateCommand())
         {
-            // UPDATE existing record
-            command.CommandText = @"
-                UPDATE PlayerStats SET 
-                    coins = @coins,
-                    xp = @xp,
-                    currentScene = @scene,
-                    posX = @x,
-                    posY = @y,
-                    posZ = @z,
-                    rotY = @rotY,
-                    lastPlayed = @lastPlayed
-                WHERE saveSlot = @slot;";
-        }
-        else
-        {
-            // INSERT new record
-            command.CommandText = @"
-                INSERT INTO PlayerStats (coins, xp, currentScene, posX, posY, posZ, rotY, saveSlot, lastPlayed)
-                VALUES (@coins, @xp, @scene, @x, @y, @z, @rotY, @slot, @lastPlayed);";
-        }
+            checkCmd.CommandText = "SELECT COUNT(*) FROM PlayerStats WHERE saveSlot = @slot;";
+            checkCmd.Parameters.AddWithValue("@slot", saveSlot);
+            long count = (long)checkCmd.ExecuteScalar();
 
-        command.Parameters.AddWithValue("@coins", coins);
-        command.Parameters.AddWithValue("@xp", xp);
-        command.Parameters.AddWithValue("@scene", sceneName);
-        command.Parameters.AddWithValue("@x", position.x);
-        command.Parameters.AddWithValue("@y", position.y);
-        command.Parameters.AddWithValue("@z", position.z);
-        command.Parameters.AddWithValue("@rotY", rotationY);
-        command.Parameters.AddWithValue("@slot", saveSlot);
-        command.Parameters.AddWithValue("@lastPlayed", System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            using var command = connection.CreateCommand();
 
-        command.ExecuteNonQuery();
+            if (count > 0)
+            {
+                // UPDATE existing record with spawnTargetID
+                command.CommandText = @"
+            UPDATE PlayerStats SET 
+                coins = @coins,
+                xp = @xp,
+                currentScene = @scene,
+                posX = @x,
+                posY = @y,
+                posZ = @z,
+                rotY = @rotY,
+                spawnTargetID = @spawnTargetID,
+                lastPlayed = @lastPlayed
+            WHERE saveSlot = @slot;";
+            }
+            else
+            {
+                // INSERT new record with spawnTargetID
+                command.CommandText = @"
+            INSERT INTO PlayerStats (coins, xp, currentScene, posX, posY, posZ, rotY, spawnTargetID, saveSlot, lastPlayed)
+            VALUES (@coins, @xp, @scene, @x, @y, @z, @rotY, @spawnTargetID, @slot, @lastPlayed);";
+            }
+
+            command.Parameters.AddWithValue("@coins", coins);
+            command.Parameters.AddWithValue("@xp", xp);
+            command.Parameters.AddWithValue("@scene", sceneName);
+            command.Parameters.AddWithValue("@x", position.x);
+            command.Parameters.AddWithValue("@y", position.y);
+            command.Parameters.AddWithValue("@z", position.z);
+            command.Parameters.AddWithValue("@rotY", rotationY);
+            command.Parameters.AddWithValue("@spawnTargetID", spawnTargetID);
+            command.Parameters.AddWithValue("@slot", saveSlot);
+            command.Parameters.AddWithValue("@lastPlayed", System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+            command.ExecuteNonQuery();
+        }
     }
-}
 
 
     public static PlayerSaveData LoadPlayerStats(int saveSlot)
@@ -169,7 +175,7 @@ public class SaveSystem : MonoBehaviour
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT coins, xp, currentScene, posX, posY, posZ, rotY, lastPlayed FROM PlayerStats WHERE saveSlot = @slot;";
+        command.CommandText = "SELECT coins, xp, currentScene, posX, posY, posZ, rotY, spawnTargetID, lastPlayed FROM PlayerStats WHERE saveSlot = @slot;";
         command.Parameters.AddWithValue("@slot", saveSlot);
 
         using var reader = command.ExecuteReader();
@@ -182,7 +188,8 @@ public class SaveSystem : MonoBehaviour
                 scene = reader.GetString(2),
                 position = new Vector3(reader.GetFloat(3), reader.GetFloat(4), reader.GetFloat(5)),
                 rotY = reader.GetFloat(6),
-                lastPlayed = reader.IsDBNull(7) ? "Never" : reader.GetString(7)
+                spawnTargetID = reader.IsDBNull(7) ? "DefaultSpawn" : reader.GetString(7),  // read spawnTargetID or default
+                lastPlayed = reader.IsDBNull(8) ? "Never" : reader.GetString(8)
             };
         }
 
@@ -193,9 +200,11 @@ public class SaveSystem : MonoBehaviour
             scene = "WorldMain",
             position = Vector3.zero,
             rotY = 0f,
+            spawnTargetID = "DefaultSpawn",
             lastPlayed = "Never"
         };
     }
+
 
     // --------------- Quest ---------------
     public static void SaveQuests(string questId, string questState, int saveSlot)
@@ -287,4 +296,57 @@ public class SaveSystem : MonoBehaviour
         bool isEmpty = data.scene == "WorldMain" && data.position == Vector3.zero && data.coins == 0 && data.xp == 0;
         return !isEmpty;
     }
+
+    public static void CreateEmptySave(int slot, Vector3 startPosition, float startRotationY)
+    {
+        ClearInventory(slot);
+
+        using var connection = new SqliteConnection(dbPath);
+        connection.Open();
+
+        using var cmdStats = connection.CreateCommand();
+        cmdStats.CommandText = @"
+            INSERT OR REPLACE INTO PlayerStats 
+            (coins, xp, currentScene, posX, posY, posZ, rotY, spawnTargetID, saveSlot, lastPlayed)
+            VALUES (@coins, @xp, @scene, @x, @y, @z, @rotY, @spawnTargetID, @slot, @lastPlayed);";
+
+        cmdStats.Parameters.AddWithValue("@coins", 100);
+        cmdStats.Parameters.AddWithValue("@xp", 50);
+        cmdStats.Parameters.AddWithValue("@scene", "WorldMain");
+        cmdStats.Parameters.AddWithValue("@x", startPosition.x);
+        cmdStats.Parameters.AddWithValue("@y", startPosition.y);
+        cmdStats.Parameters.AddWithValue("@z", startPosition.z);
+        cmdStats.Parameters.AddWithValue("@rotY", startRotationY);
+        cmdStats.Parameters.AddWithValue("@spawnTargetID", "SpawnRumah"); // Simpan spawnTargetID default new game
+        cmdStats.Parameters.AddWithValue("@slot", slot);
+        cmdStats.Parameters.AddWithValue("@lastPlayed", System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        cmdStats.ExecuteNonQuery();
+
+        // Bersihkan dan reset quest di slot ini
+        using var cmdQuestDelete = connection.CreateCommand();
+        cmdQuestDelete.CommandText = "DELETE FROM Quest WHERE saveSlot = @slot;";
+        cmdQuestDelete.Parameters.AddWithValue("@slot", slot);
+        cmdQuestDelete.ExecuteNonQuery();
+
+        using var cmdQuestInsert = connection.CreateCommand();
+        cmdQuestInsert.CommandText = "INSERT INTO Quest (questId, questState, saveSlot) VALUES ('', 'NotStarted', @slot);";
+        cmdQuestInsert.Parameters.AddWithValue("@slot", slot);
+        cmdQuestInsert.ExecuteNonQuery();
+
+        // Reset waktu game ke 6 pagi misalnya
+        using var cmdTimeDelete = connection.CreateCommand();
+        cmdTimeDelete.CommandText = "DELETE FROM GameTime WHERE saveSlot = @slot;";
+        cmdTimeDelete.Parameters.AddWithValue("@slot", slot);
+        cmdTimeDelete.ExecuteNonQuery();
+
+        using var cmdTimeInsert = connection.CreateCommand();
+        cmdTimeInsert.CommandText = "INSERT INTO GameTime (timeOfDay, saveSlot) VALUES (6.0, @slot);";
+        cmdTimeInsert.Parameters.AddWithValue("@slot", slot);
+        cmdTimeInsert.ExecuteNonQuery();
+
+        Debug.Log($"[SaveSystem] Created empty save for slot {slot} at position {startPosition}");
+    }
+
+
+
 }

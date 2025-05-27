@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,12 +17,18 @@ public class DialogManager : MonoBehaviour
     public GameObject choicePanel;
     public Button yesButton;
     public Button noButton;
+    public GameObject interactButton;      // GameObject dari interact button
+    public UIFader joystickFader;
+    public UIFader interactButtonFader;
+    public DialogUIAnimator dialogAnimator;
 
     private DialogData currentDialog;
     private int currentLineIndex;
 
     private Action yesCallback;
     private Action noCallback;
+
+    private bool isAnimating = false;
 
     private void Awake()
     {
@@ -43,17 +50,53 @@ public class DialogManager : MonoBehaviour
 
     public void StartDialog(DialogData dialogData)
     {
+        if (isAnimating)
+        {
+            Debug.LogWarning("[DialogManager] Animasi sedang berjalan, abaikan StartDialog");
+            return;
+        }
+
         if (dialogData == null || dialogData.lines.Count == 0) return;
-
-
 
         currentDialog = dialogData;
         currentLineIndex = 0;
+
+
         dialogBox.SetActive(true);
         choicePanel.SetActive(false);
         nextButton.gameObject.SetActive(true);
 
+        StartCoroutine(StartDialogRoutine());
+    }
+
+    private IEnumerator StartDialogRoutine()
+    {
+        isAnimating = true;
+
+        // Tampilkan dialog box dengan animasi slide
+        dialogAnimator.Show();
+
+        // Slide out joystick dan interact button secara bersamaan
+        joystickFader.SlideOut(true);
+        yield return StartCoroutine(SlideOutInteractButton());
+
         ShowLine();
+
+        isAnimating = false;
+    }
+
+    private IEnumerator SlideOutInteractButton()
+    {
+        interactButtonFader.SlideOut(false);  // Slide keluar ke kanan
+        yield return new WaitForSeconds(interactButtonFader.slideDuration);
+        interactButton.SetActive(false);
+    }
+
+    private IEnumerator SlideInInteractButton()
+    {
+        interactButton.SetActive(true);
+        interactButtonFader.SlideIn();
+        yield return new WaitForSeconds(interactButtonFader.slideDuration);
     }
 
     public void StartSimpleDialog(string text, string speaker = "NPC")
@@ -68,17 +111,14 @@ public class DialogManager : MonoBehaviour
 
     public void StartChoiceDialog(string text, Action onYes, Action onNo, string speaker = "NPC")
     {
-        Debug.Log($"StartChoiceDialog dipanggil, onYes null? {onYes == null}");
-        Debug.Log($"StartChoiceDialog dipanggil, onNo null? {onNo == null}");
-
         yesCallback = onYes;
         noCallback = onNo;
 
         var choiceDialog = ScriptableObject.CreateInstance<DialogData>();
         choiceDialog.lines = new List<DialogLine>()
-    {
-        new DialogLine { speakerName = speaker, text = text, isChoice = true }
-    };
+        {
+            new DialogLine { speakerName = speaker, text = text, isChoice = true }
+        };
 
         StartDialog(choiceDialog);
     }
@@ -103,8 +143,10 @@ public class DialogManager : MonoBehaviour
 
     private void OnNextClicked()
     {
+        if (isAnimating) return;
+
         currentLineIndex++;
-        if (currentLineIndex >= currentDialog.lines.Count)
+        if (currentDialog == null || currentLineIndex >= currentDialog.lines.Count)
         {
             EndDialog();
         }
@@ -116,10 +158,11 @@ public class DialogManager : MonoBehaviour
 
     private void OnYesClicked()
     {
+        if (isAnimating) return;
+
         Debug.Log("Yes button clicked");
         if (yesCallback != null)
         {
-            Debug.Log("Memanggil yesCallback...");
             yesCallback.Invoke();
         }
         else
@@ -131,25 +174,47 @@ public class DialogManager : MonoBehaviour
 
     private void OnNoClicked()
     {
+        if (isAnimating) return;
+
         Debug.Log("No button clicked");
         if (noCallback != null)
         {
             noCallback.Invoke();
-            // Jangan langsung EndDialog(), biarkan callback yang mengatur dialog berikutnya
+            // Callback diharapkan mengatur dialog berikutnya jika perlu
         }
         else
         {
-            EndDialog(); // Kalau tidak ada callback, tutup dialog
+            EndDialog();
         }
     }
 
     private void EndDialog()
     {
+        if (isAnimating) return;
+        StartCoroutine(EndDialogRoutine());
+    }
+
+    private IEnumerator EndDialogRoutine()
+    {
+        isAnimating = true;
+
+        // Animasi hide dialog box
+        dialogAnimator.Hide();
+
+        // Slide in joystick dan interact button secara bersamaan
+        joystickFader.SlideIn();
+        yield return StartCoroutine(SlideInInteractButton());
+
+        // Tunggu animasi dialog selesai
+        yield return new WaitForSeconds(dialogAnimator.animationDuration);
+
         dialogBox.SetActive(false);
         choicePanel.SetActive(false);
 
         yesCallback = null;
         noCallback = null;
         currentDialog = null;
+
+        isAnimating = false;
     }
 }

@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class SellerNPC : MonoBehaviour, IInteractable
 {
     private Item item;
@@ -8,6 +7,7 @@ public class SellerNPC : MonoBehaviour, IInteractable
     private Inventory inventory;
     public PlayerStats playerStats;
     private SellerIconUI iconUI;
+    private GameObject iconGO;
     public DialogData dialogData;
 
     private void Awake()
@@ -28,21 +28,17 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
         if (item != null && item.icon != null)
         {
-            GameObject prefab = Resources.Load<GameObject>("UI/SellerIconUI");
-            if (prefab != null)
+            GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/FloatingIconUI");
+            if (floatingIconPrefab != null)
             {
-                GameObject uiInstance = Instantiate(prefab);
-                iconUI = uiInstance.GetComponent<SellerIconUI>();
+                iconGO = Instantiate(floatingIconPrefab);
+                iconUI = iconGO.GetComponentInChildren<SellerIconUI>();
                 iconUI.Initialize(transform, item.icon);
             }
             else
             {
-                Debug.LogWarning("[SellerNPC] SellerIconUI prefab tidak ditemukan di Resources/UI.");
+                Debug.LogWarning("[SellerNPC] ❌ FloatingIconUI prefab tidak ditemukan.");
             }
-        }
-        else
-        {
-            Debug.LogWarning("[SellerNPC] Item atau icon item kosong saat InitializeSeller.");
         }
     }
 
@@ -121,4 +117,13 @@ public class SellerNPC : MonoBehaviour, IInteractable
     {
         return item != null ? $"Buy {item.name} ({stock} left)" : "Seller";
     }
+
+    private void OnDestroy()
+    {
+        if (iconGO != null)
+        {
+            Destroy(iconGO);
+        }
+    }
+
 }
