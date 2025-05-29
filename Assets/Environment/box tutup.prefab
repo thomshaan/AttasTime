@@ -10,18 +10,28 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: c00487ded7e15dd498a73af8b67ea5fb,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c00487ded7e15dd498a73af8b67ea5fb,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c00487ded7e15dd498a73af8b67ea5fb,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 178.835
+      value: -95.22774
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c00487ded7e15dd498a73af8b67ea5fb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 84.93717
+      value: -1.1607056
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c00487ded7e15dd498a73af8b67ea5fb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 42.863
+      value: -124.76769
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c00487ded7e15dd498a73af8b67ea5fb,
         type: 3}
@@ -31,7 +41,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c00487ded7e15dd498a73af8b67ea5fb,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c00487ded7e15dd498a73af8b67ea5fb,
         type: 3}
@@ -85,6 +95,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 769571358798851735}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c00487ded7e15dd498a73af8b67ea5fb,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2164701444285353333}
   m_SourcePrefab: {fileID: 100100000, guid: c00487ded7e15dd498a73af8b67ea5fb, type: 3}
 --- !u!1 &6722554451360434953 stripped
 GameObject:
@@ -140,3 +154,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.93998337, y: 0.42232066, z: 0.49887085}
   m_Center: {x: -0.00042675436, y: 0.14855596, z: 0.027501993}
+--- !u!114 &2164701444285353333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6722554451360434953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0507066b63f4b94ba80fa9364589725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Box barang

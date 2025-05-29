@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1339114464751713712}
-  serializedVersion: 2
   m_LocalRotation: {x: 0.71251005, y: -0, z: -0, w: 0.7016619}
   m_LocalPosition: {x: -0.002, y: 3.715, z: 0.765}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6069874364476601031}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 90.879, y: 0, z: 0}
 --- !u!108 &3185160771384668051
 Light:
@@ -128,38 +128,43 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: 273.70267
+      value: -34.065155
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 84.712875
+      value: -1.9486237
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 155.7183
+      value: -38.44574
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.959123
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.28298953
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
@@ -169,7 +174,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -32.877
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
         type: 3}
@@ -208,7 +213,15 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6864003676687818889}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7014986470605612394}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7708678459845069220}
   m_SourcePrefab: {fileID: 100100000, guid: 9921ba8cd2bb35a4cb8486ca182b72a3, type: 3}
 --- !u!4 &6069874364476601031 stripped
 Transform:
@@ -216,3 +229,43 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6032079043742782764}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6879061787490183293 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9921ba8cd2bb35a4cb8486ca182b72a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 6032079043742782764}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &7014986470605612394
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6879061787490183293}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 5.68, z: 1.29}
+  m_Center: {x: 0, y: 1.6, z: 0.42}
+--- !u!114 &7708678459845069220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6879061787490183293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0507066b63f4b94ba80fa9364589725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Lampu jalan

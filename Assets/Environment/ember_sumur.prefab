@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6348c7d1e30b03b44af4a99a4749867b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 168.61568
+      value: -127.61685
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6348c7d1e30b03b44af4a99a4749867b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 85.27326
+      value: -0.8246155
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6348c7d1e30b03b44af4a99a4749867b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 53.992355
+      value: -114.79322
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6348c7d1e30b03b44af4a99a4749867b,
         type: 3}
@@ -31,7 +31,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6348c7d1e30b03b44af4a99a4749867b,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6348c7d1e30b03b44af4a99a4749867b,
         type: 3}
@@ -81,6 +81,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5748421062497401242}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6348c7d1e30b03b44af4a99a4749867b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1431470777807358497}
   m_SourcePrefab: {fileID: 100100000, guid: 6348c7d1e30b03b44af4a99a4749867b, type: 3}
 --- !u!1 &8040523077967380786 stripped
 GameObject:
@@ -111,3 +115,16 @@ CapsuleCollider:
   m_Height: 0.5228758
   m_Direction: 1
   m_Center: {x: 0.00000040233135, y: -0.04197207, z: 0}
+--- !u!114 &1431470777807358497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8040523077967380786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0507066b63f4b94ba80fa9364589725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Ember
