@@ -141,6 +141,73 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 13.370697, y: 2.5565968, z: 1.2498052}
   m_Center: {x: 2.1453705, y: 0.7782974, z: -49.54777}
+--- !u!1 &6032559438631614112
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1197468714987816763}
+  - component: {fileID: 309601676661981912}
+  - component: {fileID: 3457147678613711963}
+  m_Layer: 0
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1197468714987816763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6032559438631614112}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 49.999996, y: 49.999996, z: 49.999996}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8387934721347463985}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &309601676661981912
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6032559438631614112}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14, y: 14.24, z: 13.26}
+  m_Center: {x: 0, y: 8, z: 0}
+--- !u!114 &3457147678613711963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6032559438631614112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0507066b63f4b94ba80fa9364589725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Rumah Atta
 --- !u!1 &6273462892321496118
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,6 +685,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6261951557053453258}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9e6417406544f0944a994ddd712df66f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1197468714987816763}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9e6417406544f0944a994ddd712df66f,
         type: 3}
