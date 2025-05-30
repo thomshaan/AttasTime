@@ -6,4 +6,5 @@ using UnityEngine;
 public class ObjectName : MonoBehaviour
 {
     public string objectName = "Nama Objek";
+    public string objectArti = "Arti";
 }

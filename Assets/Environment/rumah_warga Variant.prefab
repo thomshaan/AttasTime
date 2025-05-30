@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Rumah warga
+  objectArti: 
 --- !u!1001 &3596420730275672021
 PrefabInstance:
   m_ObjectHideFlags: 0

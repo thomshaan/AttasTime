@@ -67,7 +67,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0507066b63f4b94ba80fa9364589725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectName: Pasar
+  objectName: Pasa
+  objectArti: Pasar
 --- !u!1001 &4726292996552025393
 PrefabInstance:
   m_ObjectHideFlags: 0

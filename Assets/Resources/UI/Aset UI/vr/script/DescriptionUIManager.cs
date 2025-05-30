@@ -8,6 +8,7 @@ public class DescriptionUIManager : MonoBehaviour
     public XRRayInteractor rayInteractor;
     public Canvas popupCanvas;
     public TextMeshProUGUI objectNameText;
+    public TextMeshProUGUI objectArtiText;
 
     void Update()
     {
@@ -20,6 +21,7 @@ public class DescriptionUIManager : MonoBehaviour
             {
                 Debug.Log("Objek punya ObjectInfo: " + info.objectName);
                 objectNameText.text = info.objectName;
+                objectArtiText.text = info.objectArti;
                 popupCanvas.enabled = true;
                 return;
             }

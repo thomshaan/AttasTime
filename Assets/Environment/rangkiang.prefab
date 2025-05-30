@@ -195,22 +195,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -44.402588
+      value: -67.9926
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.7421036
+      value: -2.5039139
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 24.84
+      value: -67.40618
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.49357966
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
@@ -220,7 +220,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.8697007
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
@@ -235,7 +235,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -120.848
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
         type: 3}
@@ -353,7 +353,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -519,6 +519,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Rangkiang
+  objectArti: Rangkiang
 --- !u!4 &2019497963682636702 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 350fe90781ca9244c82b8927102f6caf,
