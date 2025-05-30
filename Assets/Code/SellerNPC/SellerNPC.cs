@@ -98,12 +98,13 @@ public class SellerNPC : MonoBehaviour, IInteractable
         {
             inventory.AddItem(item);
             stock--;
-            Debug.Log($"[SellerNPC] Item {item.name} berhasil dibeli. Stok tersisa: {stock}");
+            DebugLogManager.Instance.ShowLog($"[SellerNPC] Item {item.name} berhasil dibeli. Stok tersisa: {stock}");
             DialogManager.Instance.StartSimpleDialog("Terima kasih!", "Penjual");
+            
         }
         else
         {
-            Debug.Log("[SellerNPC] Transaksi gagal saat SpendCoins.");
+            DebugLogManager.Instance.ShowLog("[SellerNPC] Transaksi gagal saat SpendCoins.");
             DialogManager.Instance.StartSimpleDialog("Transaksi gagal.", "Penjual");
         }
     }

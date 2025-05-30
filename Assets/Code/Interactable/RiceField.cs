@@ -58,7 +58,7 @@ public class RiceField : MonoBehaviour, IInteractable
                 isGrowing = false;
                 currentState = RiceFieldState.ReadyToHarvest;
                 UpdateFieldModel(harvestPrefab);
-                Debug.Log(riceItem.name + " is ready to harvest!");
+                DebugLogManager.Instance.ShowLog(riceItem.name + " is ready to harvest!");
             }
         }
     }
@@ -124,7 +124,7 @@ public class RiceField : MonoBehaviour, IInteractable
         growthStartTime = LightingManager.Instance.TimeOfDay;
         isGrowing = true;
         UpdateFieldModel(growPrefab);
-        Debug.Log("🌱 Rice planted!");
+        DebugLogManager.Instance.ShowLog(riceItem.name + " is planted!");
     }
 
     private void HarvestRice()
@@ -138,7 +138,7 @@ public class RiceField : MonoBehaviour, IInteractable
         if (playerInventory != null && riceItem != null)
         {
             playerInventory.AddItem(riceItem);
-            Debug.Log("✅ Rice harvested: " + riceItem.name);
+            DebugLogManager.Instance.ShowLog(riceItem.name + " is ready to harvest!");
         }
         else
         {

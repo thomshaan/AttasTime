@@ -17,9 +17,8 @@ public class DialogManager : MonoBehaviour
     public GameObject choicePanel;
     public Button yesButton;
     public Button noButton;
-    public GameObject interactButton;      // GameObject dari interact button
+    public GameObject interactButton;
     public UIFader joystickFader;
-    public UIFader interactButtonFader;
     public DialogUIAnimator dialogAnimator;
 
     private DialogData currentDialog;
@@ -61,7 +60,6 @@ public class DialogManager : MonoBehaviour
         currentDialog = dialogData;
         currentLineIndex = 0;
 
-
         dialogBox.SetActive(true);
         choicePanel.SetActive(false);
         nextButton.gameObject.SetActive(true);
@@ -73,30 +71,22 @@ public class DialogManager : MonoBehaviour
     {
         isAnimating = true;
 
-        // Tampilkan dialog box dengan animasi slide
         dialogAnimator.Show();
 
-        // Slide out joystick dan interact button secara bersamaan
         joystickFader.SlideOut(true);
-        yield return StartCoroutine(SlideOutInteractButton());
+        interactButton.SetActive(false);
+
+        yield return new WaitForSeconds(joystickFader.slideDuration);
 
         ShowLine();
 
         isAnimating = false;
     }
 
-    private IEnumerator SlideOutInteractButton()
-    {
-        interactButtonFader.SlideOut(false);  // Slide keluar ke kanan
-        yield return new WaitForSeconds(interactButtonFader.slideDuration);
-        interactButton.SetActive(false);
-    }
-
     private IEnumerator SlideInInteractButton()
     {
         interactButton.SetActive(true);
-        interactButtonFader.SlideIn();
-        yield return new WaitForSeconds(interactButtonFader.slideDuration);
+        yield return null;
     }
 
     public void StartSimpleDialog(string text, string speaker = "NPC")
@@ -161,14 +151,7 @@ public class DialogManager : MonoBehaviour
         if (isAnimating) return;
 
         Debug.Log("Yes button clicked");
-        if (yesCallback != null)
-        {
-            yesCallback.Invoke();
-        }
-        else
-        {
-            Debug.LogWarning("yesCallback bernilai null!");
-        }
+        yesCallback?.Invoke();
         EndDialog();
     }
 
@@ -178,14 +161,9 @@ public class DialogManager : MonoBehaviour
 
         Debug.Log("No button clicked");
         if (noCallback != null)
-        {
             noCallback.Invoke();
-            // Callback diharapkan mengatur dialog berikutnya jika perlu
-        }
         else
-        {
             EndDialog();
-        }
     }
 
     private void EndDialog()
@@ -198,14 +176,11 @@ public class DialogManager : MonoBehaviour
     {
         isAnimating = true;
 
-        // Animasi hide dialog box
         dialogAnimator.Hide();
 
-        // Slide in joystick dan interact button secara bersamaan
         joystickFader.SlideIn();
-        yield return StartCoroutine(SlideInInteractButton());
+        yield return SlideInInteractButton();
 
-        // Tunggu animasi dialog selesai
         yield return new WaitForSeconds(dialogAnimator.animationDuration);
 
         dialogBox.SetActive(false);
