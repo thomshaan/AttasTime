@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19e18b1e80cc8f347859f68ccb994e92, type: 3}
   m_Name: Quest_MembantuPaman
   m_EditorClassIdentifier: 
-  questName: Masak Rendang
-  description: Membantu Kakak untuk memasak rendang.
+  questName: Bertani.
+  description: Help uncle to get 3 rice bag.
   requiredItems:
-  - {fileID: 11400000, guid: 287a8235a3427114e90dfbd254a61fb8, type: 2}
-  requiredItemAmount: 2
-  rewardItem: {fileID: 11400000, guid: 5f70c233c4d2f524d8cf9fb3900c09c6, type: 2}
-  rewardCoins: 10
+  - {fileID: 11400000, guid: 8e6a88c72205d2a42afbab59c4d2d426, type: 2}
+  questId: quest_membantu_paman
+  requiredItemAmount: 3
+  rewardItem: {fileID: 0}
+  rewardCoins: 20
   rewardXP: 5

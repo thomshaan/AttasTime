@@ -6,18 +6,20 @@ public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; }
 
-    private readonly string[] gameplayScenes = { "WorldMain", "House2" };
+    private readonly string[] gameplayScenes = { "WorldMain", "House2", "RumahGadang" };
 
     public Inventory inventory;
     public PlayerStats playerStats;
     public GameObject player;
     public QuestManager questManager;
     public Transform playerSpawnPoint;
+    private int loadGameCallCount = 0;
 
     public static int currentSaveSlot = 1;
     public static string spawnTargetID = "DefaultSpawn"; // default spawn ID
 
     private bool hasLoaded = false;
+    public static bool isSceneTriggerSpawn = false;
 
     private void Awake()
     {
@@ -45,7 +47,6 @@ public class SaveManager : MonoBehaviour
             {
                 hasLoaded = true;
 
-                // Spawn player prefab if not exists
                 if (player == null)
                 {
                     GameObject playerPrefab = Resources.Load<GameObject>("Atta");
@@ -61,7 +62,6 @@ public class SaveManager : MonoBehaviour
                     }
                 }
 
-                // Re-assign references
                 inventory = player.GetComponent<Inventory>();
                 playerStats = player.GetComponent<PlayerStats>();
                 questManager = FindObjectOfType<QuestManager>();
@@ -73,25 +73,25 @@ public class SaveManager : MonoBehaviour
                     return;
                 }
 
-                // Try load player stats from DB
                 if (!SaveSystem.TryLoadPlayerStats(currentSaveSlot, out var data))
                 {
-                    // No existing save: create new save at SpawnRumah
-                    Debug.Log("[SaveManager] No existing save found, creating new save.");
-
-                    NewGameData.InitializeStartPosition("SpawnRumah");
                     spawnTargetID = "SpawnRumah";
-
-                    NewGameData.CreateFreshSave(currentSaveSlot, NewGameData.startPosition, NewGameData.startRotationY);
-                    LoadGame();
+                    Debug.Log("[SaveManager] No existing save found, using default spawn: SpawnRumah");
                 }
                 else
                 {
-                    // Existing save found: assign spawnTargetID loaded from DB
-                    spawnTargetID = data.spawnTargetID;
-                    Debug.Log("[SaveManager] Loaded spawnTargetID: " + spawnTargetID);
-                    LoadGame();
+                    if (!isSceneTriggerSpawn)
+                    {
+                        spawnTargetID = data.spawnTargetID;
+                        Debug.Log("[SaveManager] Loaded spawnTargetID from DB: " + spawnTargetID);
+                    }
+                    else
+                    {
+                        Debug.Log("[SaveManager] Using spawnTargetID from SceneTrigger: " + spawnTargetID);
+                    }
                 }
+
+                LoadGame();
             }
         }
         else
@@ -103,31 +103,66 @@ public class SaveManager : MonoBehaviour
 
     public void LoadGame()
     {
+        loadGameCallCount++;
+        Debug.Log($"[SaveManager] LoadGame called #{loadGameCallCount}");
+        if (loadGameCallCount > 1)
+        {
+            Debug.LogWarning("[SaveManager] LoadGame called more than once! Aborting redundant call.");
+            return;
+        }
         if (player == null || inventory == null || playerStats == null || questManager == null)
         {
             Debug.LogError("[SaveManager] LoadGame failed: references not assigned!");
             return;
         }
 
-        // Load inventory
         var simpleInventory = SaveSystem.LoadInventory(currentSaveSlot);
         inventory.LoadFromSimpleItemList(simpleInventory);
 
-        // Load player stats
         var stats = SaveSystem.LoadPlayerStats(currentSaveSlot);
         playerStats.SetStats(stats.coins, stats.xp);
 
-        // Determine spawn position & rotation
-        Vector3 spawnPos = stats.position;
-        float spawnRotY = stats.rotY;
+        string currentScene = SceneManager.GetActiveScene().name;
 
-        bool useSpawnPointPosition = false;
+        Debug.Log($"[SaveManager] LoadGame start - spawnTargetID: {spawnTargetID}, isSceneTriggerSpawn: {isSceneTriggerSpawn}");
 
-        // Use spawnTargetID to find the correct spawn point
-        if (!string.IsNullOrEmpty(spawnTargetID) && spawnTargetID != "DefaultSpawn")
+        Vector3 spawnPos = Vector3.zero;
+        float spawnRotY = 0f;
+        bool foundSpawnPoint = false;
+
+        if (currentScene == "RumahGadang")
         {
-            // Jika posisi yang disimpan nol, pakai spawn point posisi
-            if (spawnPos == Vector3.zero)
+            SpawnPoint[] spawns = GameObject.FindObjectsOfType<SpawnPoint>();
+            foreach (var sp in spawns)
+            {
+                if (sp.spawnID == "SpawnGadang")
+                {
+                    spawnPos = sp.transform.position;
+                    spawnRotY = sp.transform.eulerAngles.y;
+                    foundSpawnPoint = true;
+                    Debug.Log("[SaveManager] Spawn point set to SpawnGadang for scene RumahGadang");
+                    break;
+                }
+            }
+        }
+        else if (currentScene == "House2")
+        {
+            SpawnPoint[] spawns = GameObject.FindObjectsOfType<SpawnPoint>();
+            foreach (var sp in spawns)
+            {
+                if (sp.spawnID == "SpawnInterior")
+                {
+                    spawnPos = sp.transform.position;
+                    spawnRotY = sp.transform.eulerAngles.y;
+                    foundSpawnPoint = true;
+                    Debug.Log("[SaveManager] Spawn point set to SpawnInterior for scene House2");
+                    break;
+                }
+            }
+        }
+        else if (isSceneTriggerSpawn)
+        {
+            if (!string.IsNullOrEmpty(spawnTargetID) && spawnTargetID != "DefaultSpawn")
             {
                 SpawnPoint[] spawns = GameObject.FindObjectsOfType<SpawnPoint>();
                 foreach (var sp in spawns)
@@ -136,24 +171,49 @@ public class SaveManager : MonoBehaviour
                     {
                         spawnPos = sp.transform.position;
                         spawnRotY = sp.transform.eulerAngles.y;
-                        useSpawnPointPosition = true;
-                        Debug.Log("[SaveManager] Using spawn point position for spawnTargetID: " + spawnTargetID);
+                        foundSpawnPoint = true;
+                        Debug.Log("[SaveManager] Spawn point set by SceneTrigger: " + spawnTargetID);
+                        break;
+                    }
+                }
+            }
+            // jangan reset flag disini
+        }
+        else if (stats.position != Vector3.zero && currentScene == stats.sceneName)
+        {
+            spawnPos = stats.position;
+            spawnRotY = stats.rotY;
+            foundSpawnPoint = true;
+            Debug.Log("[SaveManager] Spawn position from saved data used");
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(spawnTargetID) && spawnTargetID != "DefaultSpawn")
+            {
+                SpawnPoint[] spawns = GameObject.FindObjectsOfType<SpawnPoint>();
+                foreach (var sp in spawns)
+                {
+                    if (sp.spawnID == spawnTargetID)
+                    {
+                        spawnPos = sp.transform.position;
+                        spawnRotY = sp.transform.eulerAngles.y;
+                        foundSpawnPoint = true;
+                        Debug.Log("[SaveManager] Spawn point set by spawnTargetID: " + spawnTargetID);
                         break;
                     }
                 }
             }
         }
 
-        // Fallback to default spawn point in scene if position is zero
-        if (spawnPos == Vector3.zero && !useSpawnPointPosition && playerSpawnPoint != null)
+        if (!foundSpawnPoint && playerSpawnPoint != null)
         {
             spawnPos = playerSpawnPoint.position;
             spawnRotY = playerSpawnPoint.eulerAngles.y;
+            Debug.Log("[SaveManager] Spawn point fallback to default PlayerSpawn");
         }
 
-        spawnPos.y += 1f; // Offset above ground
+        spawnPos.y += 1f;
 
-        // Reset physics velocity to avoid glitches
         var rb = player.GetComponent<Rigidbody>();
         if (rb != null && !rb.isKinematic)
         {
@@ -161,7 +221,6 @@ public class SaveManager : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        // Teleport player to spawn position
         var controller = player.GetComponent<CharacterController>();
         if (controller != null)
         {
@@ -176,24 +235,25 @@ public class SaveManager : MonoBehaviour
             player.transform.rotation = Quaternion.Euler(0, spawnRotY, 0);
         }
 
-        // Fix input drift next frame for smooth movement
         var tpController = player.GetComponent<ThirdPersonController>();
         if (tpController != null)
         {
             tpController.SkipMovementNextFrame();
         }
 
-        StartCoroutine(UpdateStatsDelayed(stats.coins, stats.xp));
+        if (isSceneTriggerSpawn)
+        {
+            isSceneTriggerSpawn = false;
+            Debug.Log("[SaveManager] isSceneTriggerSpawn flag reset");
+        }
 
-        // Load quests
         var questData = SaveSystem.LoadQuests(currentSaveSlot);
         questManager.LoadQuestStateData(questData.questId, questData.questState);
 
-        // Load time of day
         float timeOfDay = SaveSystem.LoadGameTime(currentSaveSlot);
         LightingManager.Instance.SetTimeOfDay(timeOfDay);
 
-        Debug.Log($"[SaveManager] Game loaded from slot {currentSaveSlot} at spawn '{spawnTargetID}'");
+        Debug.Log($"[SaveManager] Game loaded from slot {currentSaveSlot} at scene {currentScene}");
     }
 
     private IEnumerator UpdateStatsDelayed(int coins, int xp)
@@ -205,7 +265,7 @@ public class SaveManager : MonoBehaviour
     public void NewGame()
     {
         NewGameData.InitializeStartPosition("SpawnRumah");
-        spawnTargetID = "SpawnRumah";  // Always set spawnTargetID when new game starts
+        spawnTargetID = "SpawnRumah";
 
         Vector3 startPos = NewGameData.startPosition;
         float startRot = NewGameData.startRotationY;
@@ -231,7 +291,7 @@ public class SaveManager : MonoBehaviour
             player.transform.position,
             player.transform.eulerAngles.y,
             currentSaveSlot,
-            spawnTargetID  // Save current spawnTargetID to DB
+            spawnTargetID
         );
 
         var (questId, questState) = questManager.GetQuestStateData();
@@ -247,22 +307,15 @@ public class SaveManager : MonoBehaviour
     {
         Debug.Log($"[SaveManager] Deleting save slot {slot}");
 
-        // Set spawnTargetID default untuk new save
         spawnTargetID = "SpawnRumah";
 
-        // Set posisi awal berdasarkan spawn point SpawnRumah
         NewGameData.InitializeStartPosition(spawnTargetID);
 
-        // Buat save baru fresh (reset data slot ke default)
         NewGameData.CreateFreshSave(slot, NewGameData.startPosition, NewGameData.startRotationY);
 
-        // Jika slot yang dihapus adalah slot saat ini, load ulang game agar UI dan posisi update
         if (slot == currentSaveSlot)
         {
             LoadGame();
         }
-
-        // Opsional: jika ada UI save slot, panggil method refresh UI di sini
     }
-
 }

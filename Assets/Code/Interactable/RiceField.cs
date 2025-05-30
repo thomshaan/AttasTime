@@ -67,7 +67,7 @@ public class RiceField : MonoBehaviour, IInteractable
     {
         if (currentState == RiceFieldState.ReadyToSeed || currentState == RiceFieldState.ReadyToHarvest)
         {
-            iconController.ShowIconFromItem(riceItem, transform);
+            iconController.ShowIcon(riceItem.icon, transform);
         }
         else
         {

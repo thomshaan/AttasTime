@@ -9,6 +9,7 @@ public struct PlayerSaveData
     public string scene;
     public Vector3 position;
     public float rotY;
+    public string sceneName;
     public string spawnTargetID;  // <-- Add this field
     public string lastPlayed;
 }
@@ -185,7 +186,7 @@ public class SaveSystem : MonoBehaviour
             {
                 coins = reader.GetInt32(0),
                 xp = reader.GetInt32(1),
-                scene = reader.GetString(2),
+                sceneName = reader.GetString(2),
                 position = new Vector3(reader.GetFloat(3), reader.GetFloat(4), reader.GetFloat(5)),
                 rotY = reader.GetFloat(6),
                 spawnTargetID = reader.IsDBNull(7) ? "DefaultSpawn" : reader.GetString(7),  // read spawnTargetID or default

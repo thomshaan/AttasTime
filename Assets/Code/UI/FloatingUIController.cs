@@ -8,26 +8,34 @@ public class FloatingIconController : MonoBehaviour
     private Transform target;
     public Vector3 offset = new Vector3(0, 2.2f, 0);
 
-    public void ShowIconFromItem(Item item, Transform targetTransform)
+    public void ShowIcon(Sprite iconSprite, Transform targetTransform)
     {
-        if (item == null || item.icon == null) return;
+        if (iconSprite == null) return;
 
-        GameObject prefab = Resources.Load<GameObject>("UI/FloatingIconUI");
-        if (prefab != null && iconUIInstance == null)
+        if (iconUIInstance == null)
         {
-            iconUIInstance = Instantiate(prefab);
-            iconImage = iconUIInstance.GetComponentInChildren<Image>();
-            iconImage.sprite = item.icon;
-            target = targetTransform;
+            GameObject prefab = Resources.Load<GameObject>("UI/FloatingIconUI");
+            if (prefab != null)
+            {
+                iconUIInstance = Instantiate(prefab);
+                iconImage = iconUIInstance.GetComponentInChildren<Image>();
+            }
         }
+
+        if (iconImage != null)
+        {
+            iconImage.sprite = iconSprite;
+        }
+        target = targetTransform;
+        iconUIInstance.SetActive(true);
     }
 
     public void HideIcon()
     {
         if (iconUIInstance != null)
         {
-            Destroy(iconUIInstance);
-            iconUIInstance = null;
+            iconUIInstance.SetActive(false);
+            // atau Destroy(iconUIInstance); tergantung kebutuhan
         }
     }
 

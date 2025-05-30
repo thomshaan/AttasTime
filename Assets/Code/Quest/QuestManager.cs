@@ -28,6 +28,15 @@ public class QuestManager : MonoBehaviour
         OnQuestChanged?.Invoke();
     }
 
+    public void StartQuestById(string questId)
+    {
+        QuestData quest = QuestDatabase.GetQuestById(questId);
+        if (quest != null)
+        {
+            StartQuest(quest);
+        }
+    }
+
     public bool IsQuestInProgress()
     {
         return currentQuestData != null && currentQuestState == QuestState.InProgress;
@@ -51,18 +60,28 @@ public class QuestManager : MonoBehaviour
         if (currentQuestData == null || currentQuestState != QuestState.InProgress)
             return;
 
+        if (!HasRequiredItems())
+            return; // Pastikan cukup item
+
+        // Kurangi item yang diminta sesuai jumlah quest
+        foreach (var requiredItem in currentQuestData.requiredItems)
+        {
+            inventory.RemoveItem(requiredItem, currentQuestData.requiredItemAmount);
+        }
+
         currentQuestState = QuestState.Completed;
 
-        // Grant rewards
+        // Berikan reward coins dan XP
         if (playerStats != null)
         {
             playerStats.AddCoins(currentQuestData.rewardCoins);
             playerStats.AddXP(currentQuestData.rewardXP);
         }
 
+        // Berikan reward item jika ada
         if (currentQuestData.rewardItem != null)
         {
-            inventory.SendMessage("AddItem", currentQuestData.rewardItem);
+            inventory.AddItem(currentQuestData.rewardItem);
         }
 
         OnQuestChanged?.Invoke();
@@ -84,6 +103,25 @@ public class QuestManager : MonoBehaviour
         currentQuestData = loadedQuest;
         currentQuestState = (QuestState)System.Enum.Parse(typeof(QuestState), questState);
         OnQuestChanged?.Invoke();
+    }
+
+    public void UpdateQuestProgress(Item item)
+    {
+        if (currentQuestData == null || currentQuestState != QuestState.InProgress) return;
+
+        if (currentQuestData.requiredItems.Contains(item))
+        {
+            int count = inventory.CountOf(item);
+            Debug.Log($"Progress quest {currentQuestData.questName}: {count}/{currentQuestData.requiredItemAmount} {item.name}");
+
+
+            OnQuestChanged?.Invoke();
+
+            if (count >= currentQuestData.requiredItemAmount)
+            {
+                Debug.Log("Quest selesai, item terkumpul!");
+            }
+        }
     }
 
 }

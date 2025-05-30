@@ -17,7 +17,7 @@ public class ItemGiver : MonoBehaviour, IInteractable
             interactionUI.SetActive(false);
         iconController = gameObject.AddComponent<FloatingIconController>();
         if (itemToGive != null)
-            iconController.ShowIconFromItem(itemToGive, transform);
+            iconController.ShowIcon(itemToGive.icon, transform);
     }
 
     public void Interact()

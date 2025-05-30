@@ -23,6 +23,7 @@ public class LogFilter : MonoBehaviour
 
         // Jika kamu punya log UI custom, tampilkan di sini.
         // Contoh: Debug.Log biasa tetap jalan
+        
         Debug.unityLogger.Log(type, logString);
     }
 }

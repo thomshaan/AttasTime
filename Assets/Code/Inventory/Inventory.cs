@@ -47,6 +47,15 @@ public class Inventory : MonoBehaviour
         var inventoryId = Guid.NewGuid().ToString();
         inventory.Add(inventoryId, item);
         ui.AddUIItem(inventoryId, item);
+
+        if (QuestManager.Instance.IsQuestInProgress())
+        {
+            var quest = QuestManager.Instance.currentQuestData;
+            if (quest.requiredItems.Contains(item))
+            {
+                QuestManager.Instance.UpdateQuestProgress(item);
+            }
+        }
     }
 
     public void DropItem(string inventoryId)
@@ -118,6 +127,40 @@ public class Inventory : MonoBehaviour
                 AddItem(item);
             }
         }
+    }
+
+    public bool RemoveItem(Item item, int amount)
+    {
+        int totalCount = CountOf(item);
+        if (totalCount < amount)
+            return false; // jumlah item tidak cukup
+
+        int remainingToRemove = amount;
+        List<string> keysToRemove = new List<string>();
+
+        // Cari dan hapus item sesuai jumlah yang diminta
+        foreach (var pair in inventory)
+        {
+            if (pair.Value == item)
+            {
+                if (remainingToRemove <= 0) break;
+
+                keysToRemove.Add(pair.Key);
+                remainingToRemove--;
+            }
+        }
+
+        // Hapus dari dictionary dan UI inventory
+        foreach (var key in keysToRemove)
+        {
+            inventory.Remove(key);
+            ui.RemoveUIItem(key);
+        }
+
+        // Mainkan suara drop item (opsional)
+        audioSource.PlayOneShot(dropItemAudio);
+
+        return true;
     }
 
 

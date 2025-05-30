@@ -13,24 +13,17 @@ public class SceneTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (!string.IsNullOrEmpty(targetSceneName))
-            {
-                Debug.Log($"Player entered trigger, loading scene: {targetSceneName} with spawn ID: {targetSpawnID}");
+            Debug.Log($"[SceneTrigger] Player entered trigger, loading scene: {targetSceneName} with spawn ID: {targetSpawnID}");
 
-                // Simpan spawn ID
-                SaveManager.spawnTargetID = targetSpawnID;
+            // Set spawn target dan flag perpindahan via trigger
+            SaveManager.spawnTargetID = targetSpawnID;
+            SaveManager.isSceneTriggerSpawn = true;
 
-                // Hancurkan player sebelum load scene
-                Destroy(other.gameObject); // penting agar tidak ikut ke DontDestroyOnLoad
+            // Hancurkan player agar SaveManager spawn ulang di scene baru
+            Destroy(other.gameObject);
 
-                // Load scene baru
-                SceneManager.LoadScene(targetSceneName);
-            }
-            else
-            {
-                Debug.LogWarning("Target scene name belum di-set di " + gameObject.name);
-            }
+            // Load scene tujuan
+            SceneManager.LoadScene(targetSceneName);
         }
     }
-
 }
