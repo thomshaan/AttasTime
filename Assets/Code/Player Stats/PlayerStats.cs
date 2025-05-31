@@ -3,6 +3,8 @@ using TMPro;
 
 public class PlayerStats : MonoBehaviour
 {
+    public static PlayerStats Instance { get; private set; }
+
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private TextMeshProUGUI xpText;
@@ -13,39 +15,95 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Runtime Stats")]
     public int coins;
-    public int xp;
+    private int xp;
 
-    void Start()
+    // Properti publik untuk akses aman coins dan xp
+    public int Coins
     {
-        coins = startingCoins;
-        xp = startingXP;
-        UpdateUI();
+        get => coins;
+        private set
+        {
+            coins = value;
+            UpdateCoinUI();
+        }
     }
 
-    // New method for loading saved stats
+    public int XP
+    {
+        get => xp;
+        private set
+        {
+            xp = value;
+            UpdateXPUI();
+        }
+    }
+
+    // Public properties untuk UI agar bisa di-assign dari luar
+    public TextMeshProUGUI CoinText
+    {
+        get => coinText;
+        set
+        {
+            coinText = value;
+            UpdateCoinUI();
+        }
+    }
+
+    public TextMeshProUGUI XPText
+    {
+        get => xpText;
+        set
+        {
+            xpText = value;
+            UpdateXPUI();
+        }
+    }
+
+    private void Awake()
+    {
+        // Singleton pattern
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        // Set nilai awal jika belum ada data (misal di new game)
+        if (Coins == 0 && XP == 0)
+        {
+            Coins = startingCoins;
+            XP = startingXP;
+        }
+        else
+        {
+            UpdateUI();
+        }
+    }
+
+    // Fungsi untuk set data yang di-load dari save
     public void SetStats(int loadedCoins, int loadedXP)
     {
-        coins = loadedCoins;
-        xp = loadedXP;
-        UpdateUI();
+        Coins = loadedCoins;
+        XP = loadedXP;
+        Debug.Log($"[PlayerStats] SetStats called: coins={Coins}, xp={XP}");
     }
 
-    // Add Coins
     public void AddCoins(int amount)
     {
-        coins += amount;
-        Debug.Log($"[PlayerStats] 💰 Coins added: +{amount} → Total: {coins}");
-        UpdateUI();
+        Coins += amount;
+        Debug.Log($"[PlayerStats] 💰 Coins added: +{amount} → Total: {Coins}");
     }
 
-    // Spend Coins
     public bool SpendCoins(int amount)
     {
-        if (coins >= amount)
+        if (Coins >= amount)
         {
-            coins -= amount;
-            Debug.Log($"[PlayerStats] 💸 Coins spent: -{amount} → Remaining: {coins}");
-            UpdateUI();
+            Coins -= amount;
+            Debug.Log($"[PlayerStats] 💸 Coins spent: -{amount} → Remaining: {Coins}");
             return true;
         }
 
@@ -53,25 +111,32 @@ public class PlayerStats : MonoBehaviour
         return false;
     }
 
-    // Add XP
     public void AddXP(int amount)
     {
-        xp += amount;
-        Debug.Log($"[PlayerStats] ✨ XP gained: +{amount} → Total: {xp}");
-        UpdateUI();
+        XP += amount;
+        Debug.Log($"[PlayerStats] ✨ XP gained: +{amount} → Total: {XP}");
     }
 
-    // Getters
-    public int GetCoins() => coins;
-    public int GetXP() => xp;
-
-    // UI Sync
+    // Update semua UI
     private void UpdateUI()
     {
-        if (coinText != null)
-            coinText.text = coins.ToString();
+        UpdateCoinUI();
+        UpdateXPUI();
+    }
 
+    private void UpdateCoinUI()
+    {
+        if (coinText != null)
+        {
+            coinText.text = Coins.ToString();
+        }
+    }
+
+    private void UpdateXPUI()
+    {
         if (xpText != null)
-            xpText.text = xp.ToString();
+        {
+            xpText.text = XP.ToString();
+        }
     }
 }

@@ -31,6 +31,8 @@ public class RiceField : MonoBehaviour, IInteractable
     private bool isGrowing = false;
     private float growthStartTime;
     private GameObject currentModel;
+    private FloatingIconController iconController;
+
 
     void Awake()
     {
@@ -40,6 +42,8 @@ public class RiceField : MonoBehaviour, IInteractable
             inventory = FindObjectOfType<Inventory>();
             Debug.Log("[RiceField] Auto-assigned 'inventory': " + inventory);
         }
+        iconController = gameObject.AddComponent<FloatingIconController>();
+        UpdateFloatingIcon();
     }
 
     void Update()
@@ -54,8 +58,20 @@ public class RiceField : MonoBehaviour, IInteractable
                 isGrowing = false;
                 currentState = RiceFieldState.ReadyToHarvest;
                 UpdateFieldModel(harvestPrefab);
-                Debug.Log("🌾 Rice is ready to harvest!");
+                DebugLogManager.Instance.ShowLog(riceItem.name + " is ready to harvest!");
             }
+        }
+    }
+
+    private void UpdateFloatingIcon()
+    {
+        if (currentState == RiceFieldState.ReadyToSeed || currentState == RiceFieldState.ReadyToHarvest)
+        {
+            iconController.ShowIcon(riceItem.icon, transform);
+        }
+        else
+        {
+            iconController.HideIcon();
         }
     }
 
@@ -108,7 +124,7 @@ public class RiceField : MonoBehaviour, IInteractable
         growthStartTime = LightingManager.Instance.TimeOfDay;
         isGrowing = true;
         UpdateFieldModel(growPrefab);
-        Debug.Log("🌱 Rice planted!");
+        DebugLogManager.Instance.ShowLog(riceItem.name + " is planted!");
     }
 
     private void HarvestRice()
@@ -122,7 +138,7 @@ public class RiceField : MonoBehaviour, IInteractable
         if (playerInventory != null && riceItem != null)
         {
             playerInventory.AddItem(riceItem);
-            Debug.Log("✅ Rice harvested: " + riceItem.name);
+            DebugLogManager.Instance.ShowLog(riceItem.name + " is ready to harvest!");
         }
         else
         {

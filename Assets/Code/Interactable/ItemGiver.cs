@@ -9,34 +9,38 @@ public class ItemGiver : MonoBehaviour, IInteractable
     [SerializeField] private GameObject interactionUI;
 
     private Inventory playerInventory;
+    private FloatingIconController iconController;
 
     void Start()
     {
         if (interactionUI != null)
             interactionUI.SetActive(false);
+        iconController = gameObject.AddComponent<FloatingIconController>();
+        if (itemToGive != null)
+            iconController.ShowIcon(itemToGive.icon, transform);
     }
 
     public void Interact()
     {
-        
+
 
         if (playerInventory == null)
         {
             playerInventory = FindObjectOfType<Inventory>();
-            
+
         }
 
         if (playerInventory != null && itemToGive != null)
         {
             playerInventory.AddItem(itemToGive);
-            
+
 
             if (interactionUI != null)
                 interactionUI.SetActive(false);
         }
         else
         {
-            
+
         }
     }
 

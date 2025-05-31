@@ -12,7 +12,6 @@ public class CameraDragController : MonoBehaviour
     public float recenterSpeed = 2f;
 
     private bool isDragging = false;
-    private float targetHeading = 0f;
     private float currentHeading = 0f;
     private float lastDragTime = 0f;
 
@@ -45,8 +44,9 @@ public class CameraDragController : MonoBehaviour
         if (isDragging && Input.GetMouseButton(0))
         {
             float mouseX = Input.GetAxis("Mouse X");
-            freeLookCam.m_XAxis.Value += mouseX * dragSensitivity;
-            currentHeading = freeLookCam.m_XAxis.Value;
+            currentHeading += mouseX * dragSensitivity;
+            freeLookCam.m_XAxis.Value = currentHeading;
+            lastDragTime = Time.time;
         }
     }
 
@@ -68,7 +68,6 @@ public class CameraDragController : MonoBehaviour
             float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
             return angle;
         }
-
-        return 0f; // default to Z+
+        return 0f;
     }
 }
