@@ -6,21 +6,19 @@ public class SellerNPC : MonoBehaviour, IInteractable
     private int stock;
     private Inventory inventory;
     public PlayerStats playerStats;
-    public GameObject iconUIPrefab;
     private SellerIconUI iconUI;
+    private GameObject iconGO;
+    public DialogData dialogData;
 
-    void Awake()
+    private void Awake()
     {
         inventory = FindObjectOfType<Inventory>();
-        if (inventory != null)
-            Debug.Log("[SellerNPC] Inventory found: " + inventory.name);
-        else
-            Debug.LogWarning("[SellerNPC] ❌ Inventory not found at Awake.");
+        if (inventory == null)
+            Debug.LogWarning("[SellerNPC] Inventory tidak ditemukan.");
+
         playerStats = FindObjectOfType<PlayerStats>();
-        if (playerStats != null)
-            Debug.Log("[SellerNPC] Found PlayerStats: " + playerStats.name);
-        else
-            Debug.LogWarning("[SellerNPC] ❌ PlayerStats not found.");
+        if (playerStats == null)
+            Debug.LogWarning("[SellerNPC] PlayerStats tidak ditemukan.");
     }
 
     public void InitializeSeller(Item newItem, int newStock)
@@ -30,71 +28,103 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
         if (item != null && item.icon != null)
         {
-            GameObject prefab = Resources.Load<GameObject>("UI/SellerIconUI");
-            if (prefab != null)
+            GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/FloatingIconUI");
+            if (floatingIconPrefab != null)
             {
-                GameObject uiInstance = Instantiate(prefab);
-                iconUI = uiInstance.GetComponent<SellerIconUI>();
+                iconGO = Instantiate(floatingIconPrefab);
+                iconUI = iconGO.GetComponentInChildren<SellerIconUI>();
                 iconUI.Initialize(transform, item.icon);
             }
             else
             {
-                Debug.LogWarning("[SellerNPC] ❌ SellerIconUI prefab not found in Resources/UI.");
+                Debug.LogWarning("[SellerNPC] ❌ FloatingIconUI prefab tidak ditemukan.");
             }
         }
     }
 
     public void Interact()
     {
-        Debug.Log("[SellerNPC] Interact called");
-
-        if (inventory == null)
-            inventory = FindObjectOfType<Inventory>();
-
-        if (playerStats == null)
-            playerStats = FindObjectOfType<PlayerStats>();
-
         if (item == null)
         {
-            Debug.LogWarning("[SellerNPC] ❌ Item is null.");
+            Debug.LogWarning("[SellerNPC] Item belum di-set.");
             return;
         }
 
         if (stock <= 0)
         {
-            Debug.LogWarning("[SellerNPC] ❌ Out of stock.");
+            DialogManager.Instance.StartSimpleDialog("Maaf, stok sudah habis.", "Penjual");
             return;
         }
 
-        if (inventory == null || playerStats == null)
+        if (dialogData != null)
         {
-            Debug.LogWarning("[SellerNPC] ❌ Missing Inventory or PlayerStats.");
+            DialogManager.Instance.StartChoiceDialog(
+                $"Aku menjual {item.name}, mau beli?",
+                OnBuyConfirmed,
+                OnBuyDeclined,
+                "Penjual");
+        }
+        else
+        {
+            Debug.LogWarning("[SellerNPC] DialogData belum di-set.");
+        }
+    }
+
+    private void OnBuyConfirmed()
+    {
+        Debug.Log("OnBuyConfirmed triggered");
+
+        if (playerStats == null || inventory == null)
+        {
+            Debug.LogWarning("[SellerNPC] PlayerStats atau Inventory belum di-assign.");
+            return;
+        }
+
+        if (item == null)
+        {
+            Debug.LogWarning("[SellerNPC] Item null saat beli.");
             return;
         }
 
         if (playerStats.coins < item.price)
         {
-            Debug.LogWarning($"[SellerNPC] ❌ Not enough coins. Need {item.price}, have {playerStats.coins}");
+            Debug.Log("[SellerNPC] Koin kurang untuk beli item.");
+            DialogManager.Instance.StartSimpleDialog("Koin kamu kurang.", "Penjual");
             return;
         }
 
-        // Perform transaction
         bool success = playerStats.SpendCoins(item.price);
-
         if (success)
         {
             inventory.AddItem(item);
             stock--;
-            Debug.Log($"[SellerNPC] ✅ Sold {item.name} for {item.price} coins. Remaining: {playerStats.coins}");
+            DebugLogManager.Instance.ShowLog($"[SellerNPC] Item {item.name} berhasil dibeli. Stok tersisa: {stock}");
+            DialogManager.Instance.StartSimpleDialog("Terima kasih!", "Penjual");
+            
         }
-        inventory.AddItem(item);
-        stock--;
+        else
+        {
+            DebugLogManager.Instance.ShowLog("[SellerNPC] Transaksi gagal saat SpendCoins.");
+            DialogManager.Instance.StartSimpleDialog("Transaksi gagal.", "Penjual");
+        }
+    }
 
-        Debug.Log($"[SellerNPC] ✅ Sold {item.name} for {item.price} coins. Remaining coins: {playerStats.coins}");
+    private void OnBuyDeclined()
+    {
+        DialogManager.Instance.StartSimpleDialog("Baiklah, semoga harimu menyenangkan.", "Penjual");
     }
 
     public string GetInteractionPrompt()
     {
         return item != null ? $"Buy {item.name} ({stock} left)" : "Seller";
     }
+
+    private void OnDestroy()
+    {
+        if (iconGO != null)
+        {
+            Destroy(iconGO);
+        }
+    }
+
 }

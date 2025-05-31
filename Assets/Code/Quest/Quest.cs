@@ -4,12 +4,13 @@ using UnityEngine;
 [System.Serializable]
 public class Quest
 {
-    public string questName;
+    public string questID;
     public string description;
-    public QuestState state = QuestState.NotStarted;
-
-    public List<Item> requiredItems = new List<Item>();
-    public Item rewardItem;
-    public int rewardCoins;
-    public int rewardXP;
+    public int targetItemID; // ID beras
+    public int targetAmount;
+    public int currentAmount;
+    public float timeLimit; // 1 hari waktu dalam game (misal dalam jam atau detik)
+    public float startTime; // waktu mulai quest
+    public bool isActive;
+    public bool isCompleted;
 }

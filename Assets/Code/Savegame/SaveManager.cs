@@ -1,24 +1,25 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; }
 
-    private readonly string[] gameplayScenes = { "WorldMain", "House2" };
+    private readonly string[] gameplayScenes = { "WorldMain", "House2", "RumahGadang" };
 
     public Inventory inventory;
     public PlayerStats playerStats;
     public GameObject player;
     public QuestManager questManager;
     public Transform playerSpawnPoint;
+    private int loadGameCallCount = 0;
 
     public static int currentSaveSlot = 1;
-    public static string spawnTargetID = "DefaultSpawn";
+    public static string spawnTargetID = "DefaultSpawn"; // default spawn ID
 
     private bool hasLoaded = false;
+    public static bool isSceneTriggerSpawn = false;
 
     private void Awake()
     {
@@ -29,7 +30,7 @@ public class SaveManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // Simpan SaveManager antar scene
+        DontDestroyOnLoad(gameObject); // Keep SaveManager across scenes
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -46,7 +47,6 @@ public class SaveManager : MonoBehaviour
             {
                 hasLoaded = true;
 
-                // ⏬ Spawn Player dari Resources
                 if (player == null)
                 {
                     GameObject playerPrefab = Resources.Load<GameObject>("Atta");
@@ -62,7 +62,6 @@ public class SaveManager : MonoBehaviour
                     }
                 }
 
-                // ⏬ Re-assign all references
                 inventory = player.GetComponent<Inventory>();
                 playerStats = player.GetComponent<PlayerStats>();
                 questManager = FindObjectOfType<QuestManager>();
@@ -74,11 +73,25 @@ public class SaveManager : MonoBehaviour
                     return;
                 }
 
-                // ⏬ Load or start new game
                 if (!SaveSystem.TryLoadPlayerStats(currentSaveSlot, out var data))
-                    NewGame();
+                {
+                    spawnTargetID = "SpawnRumah";
+                    Debug.Log("[SaveManager] No existing save found, using default spawn: SpawnRumah");
+                }
                 else
-                    LoadGame();
+                {
+                    if (!isSceneTriggerSpawn)
+                    {
+                        spawnTargetID = data.spawnTargetID;
+                        Debug.Log("[SaveManager] Loaded spawnTargetID from DB: " + spawnTargetID);
+                    }
+                    else
+                    {
+                        Debug.Log("[SaveManager] Using spawnTargetID from SceneTrigger: " + spawnTargetID);
+                    }
+                }
+
+                LoadGame();
             }
         }
         else
@@ -90,55 +103,117 @@ public class SaveManager : MonoBehaviour
 
     public void LoadGame()
     {
+        loadGameCallCount++;
+        Debug.Log($"[SaveManager] LoadGame called #{loadGameCallCount}");
+        if (loadGameCallCount > 1)
+        {
+            Debug.LogWarning("[SaveManager] LoadGame called more than once! Aborting redundant call.");
+            return;
+        }
         if (player == null || inventory == null || playerStats == null || questManager == null)
         {
             Debug.LogError("[SaveManager] LoadGame failed: references not assigned!");
             return;
         }
 
-        // ⏬ Load inventory
         var simpleInventory = SaveSystem.LoadInventory(currentSaveSlot);
         inventory.LoadFromSimpleItemList(simpleInventory);
 
-        // ⏬ Load player stats
         var stats = SaveSystem.LoadPlayerStats(currentSaveSlot);
         playerStats.SetStats(stats.coins, stats.xp);
 
-        // ⏬ Load spawn position
-        Vector3 spawnPos = stats.position;
-        float spawnRotY = stats.rotY;
+        string currentScene = SceneManager.GetActiveScene().name;
 
-        if (!string.IsNullOrEmpty(spawnTargetID) && spawnTargetID != "DefaultSpawn")
+        Debug.Log($"[SaveManager] LoadGame start - spawnTargetID: {spawnTargetID}, isSceneTriggerSpawn: {isSceneTriggerSpawn}");
+
+        Vector3 spawnPos = Vector3.zero;
+        float spawnRotY = 0f;
+        bool foundSpawnPoint = false;
+
+        if (currentScene == "RumahGadang")
         {
             SpawnPoint[] spawns = GameObject.FindObjectsOfType<SpawnPoint>();
-            bool foundSpawn = false;
             foreach (var sp in spawns)
             {
-                Debug.Log($"[SaveManager] Checking spawn point: {sp.spawnID}");
-                if (sp.spawnID == spawnTargetID)
+                if (sp.spawnID == "SpawnGadang")
                 {
                     spawnPos = sp.transform.position;
                     spawnRotY = sp.transform.eulerAngles.y;
-                    foundSpawn = true;
-                    Debug.Log($"[SaveManager] Spawn point matched: {spawnTargetID}");
+                    foundSpawnPoint = true;
+                    Debug.Log("[SaveManager] Spawn point set to SpawnGadang for scene RumahGadang");
                     break;
                 }
             }
-            if (!foundSpawn)
+        }
+        else if (currentScene == "House2")
+        {
+            SpawnPoint[] spawns = GameObject.FindObjectsOfType<SpawnPoint>();
+            foreach (var sp in spawns)
             {
-                Debug.LogWarning($"[SaveManager] Spawn point with ID '{spawnTargetID}' not found. Using fallback spawn.");
+                if (sp.spawnID == "SpawnInterior")
+                {
+                    spawnPos = sp.transform.position;
+                    spawnRotY = sp.transform.eulerAngles.y;
+                    foundSpawnPoint = true;
+                    Debug.Log("[SaveManager] Spawn point set to SpawnInterior for scene House2");
+                    break;
+                }
+            }
+        }
+        else if (isSceneTriggerSpawn)
+        {
+            if (!string.IsNullOrEmpty(spawnTargetID) && spawnTargetID != "DefaultSpawn")
+            {
+                SpawnPoint[] spawns = GameObject.FindObjectsOfType<SpawnPoint>();
+                foreach (var sp in spawns)
+                {
+                    if (sp.spawnID == spawnTargetID)
+                    {
+                        spawnPos = sp.transform.position;
+                        spawnRotY = sp.transform.eulerAngles.y;
+                        foundSpawnPoint = true;
+                        Debug.Log("[SaveManager] Spawn point set by SceneTrigger: " + spawnTargetID);
+                        break;
+                    }
+                }
+            }
+            // jangan reset flag disini
+        }
+        else if (stats.position != Vector3.zero && currentScene == stats.sceneName)
+        {
+            spawnPos = stats.position;
+            spawnRotY = stats.rotY;
+            foundSpawnPoint = true;
+            Debug.Log("[SaveManager] Spawn position from saved data used");
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(spawnTargetID) && spawnTargetID != "DefaultSpawn")
+            {
+                SpawnPoint[] spawns = GameObject.FindObjectsOfType<SpawnPoint>();
+                foreach (var sp in spawns)
+                {
+                    if (sp.spawnID == spawnTargetID)
+                    {
+                        spawnPos = sp.transform.position;
+                        spawnRotY = sp.transform.eulerAngles.y;
+                        foundSpawnPoint = true;
+                        Debug.Log("[SaveManager] Spawn point set by spawnTargetID: " + spawnTargetID);
+                        break;
+                    }
+                }
             }
         }
 
-        if (spawnPos == Vector3.zero && playerSpawnPoint != null)
+        if (!foundSpawnPoint && playerSpawnPoint != null)
         {
             spawnPos = playerSpawnPoint.position;
             spawnRotY = playerSpawnPoint.eulerAngles.y;
+            Debug.Log("[SaveManager] Spawn point fallback to default PlayerSpawn");
         }
 
-        spawnPos.y += 1f; // offset sedikit dari tanah
+        spawnPos.y += 1f;
 
-        // ⏬ Reset physics (Rigidbody)
         var rb = player.GetComponent<Rigidbody>();
         if (rb != null && !rb.isKinematic)
         {
@@ -146,7 +221,6 @@ public class SaveManager : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        // ⏬ Teleport player
         var controller = player.GetComponent<CharacterController>();
         if (controller != null)
         {
@@ -161,23 +235,25 @@ public class SaveManager : MonoBehaviour
             player.transform.rotation = Quaternion.Euler(0, spawnRotY, 0);
         }
 
-        // ⏬ Skip input drift bug
         var tpController = player.GetComponent<ThirdPersonController>();
         if (tpController != null)
         {
             tpController.SkipMovementNextFrame();
         }
 
-        StartCoroutine(UpdateStatsDelayed(stats.coins, stats.xp));
+        if (isSceneTriggerSpawn)
+        {
+            isSceneTriggerSpawn = false;
+            Debug.Log("[SaveManager] isSceneTriggerSpawn flag reset");
+        }
 
-        // ⏬ Quest and time
         var questData = SaveSystem.LoadQuests(currentSaveSlot);
         questManager.LoadQuestStateData(questData.questId, questData.questState);
 
         float timeOfDay = SaveSystem.LoadGameTime(currentSaveSlot);
         LightingManager.Instance.SetTimeOfDay(timeOfDay);
 
-        Debug.Log($"[SaveManager] Game loaded from slot {currentSaveSlot} at spawn '{spawnTargetID}'");
+        Debug.Log($"[SaveManager] Game loaded from slot {currentSaveSlot} at scene {currentScene}");
     }
 
     private IEnumerator UpdateStatsDelayed(int coins, int xp)
@@ -188,6 +264,9 @@ public class SaveManager : MonoBehaviour
 
     public void NewGame()
     {
+        NewGameData.InitializeStartPosition("SpawnRumah");
+        spawnTargetID = "SpawnRumah";
+
         Vector3 startPos = NewGameData.startPosition;
         float startRot = NewGameData.startRotationY;
 
@@ -204,13 +283,15 @@ public class SaveManager : MonoBehaviour
         }
 
         SaveSystem.SaveInventory(inventory.ToSimpleItemList(), currentSaveSlot);
+
         SaveSystem.SavePlayerStats(
             playerStats.Coins,
             playerStats.XP,
             SceneManager.GetActiveScene().name,
             player.transform.position,
             player.transform.eulerAngles.y,
-            currentSaveSlot
+            currentSaveSlot,
+            spawnTargetID
         );
 
         var (questId, questState) = questManager.GetQuestStateData();
@@ -220,5 +301,21 @@ public class SaveManager : MonoBehaviour
 
         Debug.Log($"[SaveManager] Game saved to slot {currentSaveSlot}");
         Debug.Log("[SaveManager] Player position saved: " + player.transform.position);
+    }
+
+    public void DeleteSaveSlot(int slot)
+    {
+        Debug.Log($"[SaveManager] Deleting save slot {slot}");
+
+        spawnTargetID = "SpawnRumah";
+
+        NewGameData.InitializeStartPosition(spawnTargetID);
+
+        NewGameData.CreateFreshSave(slot, NewGameData.startPosition, NewGameData.startRotationY);
+
+        if (slot == currentSaveSlot)
+        {
+            LoadGame();
+        }
     }
 }

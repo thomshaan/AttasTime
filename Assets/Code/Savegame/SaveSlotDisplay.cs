@@ -12,6 +12,7 @@ public class SaveSlotDisplay : MonoBehaviour
         UpdateSlotDisplay();
     }
 
+    // Update tampilan info save slot berdasarkan data dari SaveSystem
     public void UpdateSlotDisplay()
     {
         PlayerSaveData data = SaveSystem.LoadPlayerStats(slot);
@@ -27,4 +28,6 @@ public class SaveSlotDisplay : MonoBehaviour
             metaText.text = $"Coins: {data.coins} | XP: {data.xp}\nLast Played: {data.lastPlayed}";
         }
     }
+
+    
 }
