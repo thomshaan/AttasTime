@@ -10,6 +10,10 @@ public class RUmahAttaManager : MonoBehaviour
 
     private bool isPaused = false;
 
+    public enum RumahType { Atta, Gadang }
+    public RumahType rumahType;
+
+
     void Start()
     {
         gameplayCanvas.SetActive(true);
@@ -35,17 +39,16 @@ public class RUmahAttaManager : MonoBehaviour
     {
         Time.timeScale = 1;
 
-        // Simpan posisi XR saat keluar dari rumah jika perlu
-        if (playerXR != null)
+        if (rumahType == RumahType.Atta)
         {
-            Vector3 pos = playerXR.position;
-            PlayerPrefs.SetFloat("PrevPosX", pos.x);
-            PlayerPrefs.SetFloat("PrevPosY", pos.y);
-            PlayerPrefs.SetFloat("PrevPosZ", pos.z);
+            PlayerPrefs.SetInt("BackFromHouse", 1);
         }
-
-        PlayerPrefs.SetInt("BackFromHouse", 1);
+        else if (rumahType == RumahType.Gadang)
+        {
+            PlayerPrefs.SetInt("BackFromGadang", 1);
+        }
 
         SceneManager.LoadScene(sceneName);
     }
+
 }

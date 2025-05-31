@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2511986220594587966}
   m_LocalRotation: {x: -0, y: -0, z: 4.6566123e-10, w: 1}
-  m_LocalPosition: {x: 0.000000072466, y: -0.0000012750174, z: -0.0000014548123}
+  m_LocalPosition: {x: 0.000000072466, y: 0, z: -0.688}
   m_LocalScale: {x: 1.6011, y: 1.6011, z: 1.6011}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -62,52 +62,52 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -114.9173
+      value: -96.777985
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.089
+      value: 1.169
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -39
+      value: -39.426
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.91048795
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.41294938
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.018278448
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.012267114
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -48.722
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 3.773
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -3.253
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
@@ -139,10 +139,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4454008149210341083}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44292ac2480465b48a73e3efbb673d8c,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5490905036190943047}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 44292ac2480465b48a73e3efbb673d8c,
         type: 3}
       insertIndex: -1
@@ -191,7 +187,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.17181514, y: 0.17336486, z: 0.16185488}
+  m_Size: {x: 0.13, y: 0.17336486, z: 0.1}
   m_Center: {x: 0.044717383, y: -0.0011364481, z: 0.029337065}
 --- !u!114 &4454008149210341083
 MonoBehaviour:
@@ -206,28 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Cabe
-  objectArti: Arti
---- !u!65 &5490905036190943047
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4730544939030896222}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.17181516, y: 0.17336488, z: 0.1618549}
-  m_Center: {x: 0.044725016, y: -0.0011364482, z: 0.029337067}
+  objectArti: 
 --- !u!54 &8038237175592167896
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -236,7 +211,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4730544939030896222}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -251,10 +226,10 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
+  m_IsKinematic: 1
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &4578378465081207037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,12 +243,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 6704529479688289217}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 4294967295
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_CustomReticle: {fileID: 0}
@@ -307,7 +283,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8038237175592167896}
+        m_TargetAssemblyTypeName: UnityEngine.Rigidbody, UnityEngine
+        m_MethodName: set_isKinematic
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -344,7 +332,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  m_AttachTransform: {fileID: 0}
+  m_AttachTransform: {fileID: 5273828329633884122}
   m_SecondaryAttachTransform: {fileID: 0}
   m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
@@ -352,7 +340,7 @@ MonoBehaviour:
   m_SnapToColliderVolume: 1
   m_ReinitializeDynamicAttachEverySingleGrab: 1
   m_AttachEaseInTime: 0.15
-  m_MovementType: 0
+  m_MovementType: 1
   m_VelocityDamping: 1
   m_VelocityScale: 1
   m_AngularVelocityDamping: 1

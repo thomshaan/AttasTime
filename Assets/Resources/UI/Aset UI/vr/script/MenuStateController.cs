@@ -8,6 +8,7 @@ public class MenuStateController : MonoBehaviour
     public GameObject popupName;
     public GameObject popupPause;
     public GameObject rumahAttaCanvas;
+    public GameObject rumahGadangCanvas;
     public Transform playerXR;       // XR Origin
     public Transform cameraOffset;   // Camera Offset in XR Rig
 
@@ -17,17 +18,20 @@ public class MenuStateController : MonoBehaviour
     {
         // Cek apakah kembali dari rumah
         bool backFromHouse = PlayerPrefs.GetInt("BackFromHouse", 0) == 1;
+        bool backFromGadang = PlayerPrefs.GetInt("BackFromGadang", 0) == 1;
 
-        if (backFromHouse)
+        if (backFromHouse || backFromGadang)
         {
             menuCanvas.SetActive(false);
             gameplayCanvas.SetActive(true);
             popupName.SetActive(true);
             popupPause.SetActive(false);
             rumahAttaCanvas.SetActive(true);
+            rumahGadangCanvas.SetActive(true);
 
             // Reset flag agar tidak terus-menerus
             PlayerPrefs.DeleteKey("BackFromHouse");
+            PlayerPrefs.DeleteKey("BackFromGadang");
         }
         else
         {
@@ -36,6 +40,7 @@ public class MenuStateController : MonoBehaviour
             popupName.SetActive(false);
             popupPause.SetActive(false);
             rumahAttaCanvas.SetActive(false);
+            rumahGadangCanvas.SetActive(false);
         }
 
         // Set posisi karakter kalau ada yang disimpan
@@ -61,6 +66,7 @@ public class MenuStateController : MonoBehaviour
         popupName.SetActive(true);
         popupPause.SetActive(false);
         rumahAttaCanvas.SetActive(true);
+        rumahGadangCanvas.SetActive(true);
     }
 
     public void PauseGame()
