@@ -10,6 +10,7 @@ public class SellerNPC : MonoBehaviour, IInteractable
     private GameObject iconGO;
     public DialogData dialogData;
 
+
     private void Awake()
     {
         inventory = FindObjectOfType<Inventory>();
@@ -28,7 +29,7 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
         if (item != null && item.icon != null)
         {
-            GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/FloatingIconUI");
+            GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/SellerIconUI");
             if (floatingIconPrefab != null)
             {
                 iconGO = Instantiate(floatingIconPrefab);
@@ -39,6 +40,7 @@ public class SellerNPC : MonoBehaviour, IInteractable
             {
                 Debug.LogWarning("[SellerNPC] ❌ FloatingIconUI prefab tidak ditemukan.");
             }
+            
         }
     }
 
@@ -100,7 +102,7 @@ public class SellerNPC : MonoBehaviour, IInteractable
             stock--;
             DebugLogManager.Instance.ShowLog($"[SellerNPC] Item {item.name} berhasil dibeli. Stok tersisa: {stock}");
             DialogManager.Instance.StartSimpleDialog("Terima kasih!", "Penjual");
-            
+
         }
         else
         {

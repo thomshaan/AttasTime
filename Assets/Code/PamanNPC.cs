@@ -3,42 +3,57 @@ using UnityEngine;
 public class PamanNPC : MonoBehaviour, IInteractable
 {
     public QuestData questData;
-
     private QuestManager questManager;
     private Inventory inventory;
     private UIObjective uiObjective;
     private DialogManager dialogManager;
-    private FloatingIconController iconController;
-    public Sprite questAvailableIcon;
-    public Sprite questInProgressIcon;
+    private QuestIconController questIcon;
+    private PamanAnimator pamanAnimator;
 
     private void Start()
     {
-        iconController = GetComponent<FloatingIconController>();
         questManager = FindObjectOfType<QuestManager>();
         inventory = FindObjectOfType<Inventory>();
         uiObjective = FindObjectOfType<UIObjective>();
         dialogManager = DialogManager.Instance;
+        questIcon = GetComponent<QuestIconController>();
+        pamanAnimator = GetComponent<PamanAnimator>();
+
+        UpdateQuestIcon();
     }
 
     public void UpdateQuestIcon()
     {
-        if (questManager.currentQuestData == questData && questManager.currentQuestState == QuestState.InProgress)
+        if (questIcon == null || questManager == null) return;
+
+        if (questManager.currentQuestData == questData)
         {
-            iconController.ShowIcon(questInProgressIcon, transform);
-        }
-        else if (questManager.currentQuestData != questData || questManager.currentQuestState == QuestState.NotStarted)
-        {
-            iconController.ShowIcon(questAvailableIcon, transform);
+            switch (questManager.currentQuestState)
+            {
+                case QuestState.NotStarted:
+                    questIcon.ShowNotStarted();
+                    break;
+                case QuestState.InProgress:
+                    questIcon.ShowInProgress();
+                    break;
+                case QuestState.Completed:
+                    questIcon.ShowCompleted();
+                    break;
+            }
         }
         else
         {
-            iconController.HideIcon();
+            questIcon.ShowNotStarted();
         }
     }
 
     public void Interact()
     {
+        if (questManager == null || dialogManager == null) return;
+
+        if (pamanAnimator != null)
+            pamanAnimator.PlayAnim("jualBeli", 2f); // animasi saat mulai interaksi
+
         if (questManager.IsQuestInProgress() && questManager.currentQuestData == questData)
         {
             if (questManager.HasRequiredItems())
@@ -46,10 +61,16 @@ public class PamanNPC : MonoBehaviour, IInteractable
                 dialogManager.StartSimpleDialog("Kamu sudah mengumpulkan beras. Terima kasih, misi selesai!", "Paman");
                 questManager.CompleteQuest();
                 uiObjective.Hide();
+                UpdateQuestIcon();
+
+                if (pamanAnimator != null)
+                    pamanAnimator.PlayAnim("bawaBarang", 2f); // animasi beri item
             }
             else
             {
+                pamanAnimator.PlayAnim("jualBeli", 2f);
                 dialogManager.StartSimpleDialog("Kamu belum cukup beras, ayo lanjutkan mengumpulkan!", "Paman");
+                
             }
         }
         else if (!questManager.IsQuestInProgress())
@@ -60,9 +81,14 @@ public class PamanNPC : MonoBehaviour, IInteractable
                 {
                     questManager.StartQuest(questData);
                     uiObjective.ShowQuest(questData);
+                    UpdateQuestIcon();
+
+                    if (pamanAnimator != null)
+                        pamanAnimator.PlayAnim("jualBeli", 3f); // animasi tanam saat mulai quest
                 },
                 () =>
                 {
+                    pamanAnimator.PlayAnim("jualBeli", 2f);
                     dialogManager.StartSimpleDialog("Paman: Baiklah, kalau berubah pikiran bilang ya!", "Paman");
                 },
                 "Paman"
@@ -70,11 +96,11 @@ public class PamanNPC : MonoBehaviour, IInteractable
         }
         else
         {
+            pamanAnimator.PlayAnim("jualBeli", 2f);
             dialogManager.StartSimpleDialog("Sedang ada quest lain yang harus diselesaikan dulu.", "Paman");
         }
     }
 
-    // Optional: implement GetInteractionPrompt jika diperlukan oleh IInteractable
     public string GetInteractionPrompt()
     {
         return "Tekan [E] untuk berbicara dengan Paman";
