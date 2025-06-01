@@ -8,7 +8,7 @@ public class PamanNPC : MonoBehaviour, IInteractable
     private UIObjective uiObjective;
     private DialogManager dialogManager;
     private QuestIconController questIcon;
-    private PamanAnimator pamanAnimator; // integrasi animator
+    private PamanAnimator pamanAnimator;
 
     private void Start()
     {
@@ -17,7 +17,7 @@ public class PamanNPC : MonoBehaviour, IInteractable
         uiObjective = FindObjectOfType<UIObjective>();
         dialogManager = DialogManager.Instance;
         questIcon = GetComponent<QuestIconController>();
-        pamanAnimator = GetComponent<PamanAnimator>(); // ambil komponen animator
+        pamanAnimator = GetComponent<PamanAnimator>();
 
         UpdateQuestIcon();
     }
