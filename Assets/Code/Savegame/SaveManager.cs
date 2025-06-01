@@ -30,8 +30,20 @@ public class SaveManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // Keep SaveManager across scenes
+        DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // Coba auto-assign komponen player jika sudah ada
+        if (player == null)
+            player = GameObject.FindWithTag("Player");
+
+        if (player != null)
+        {
+            inventory = player.GetComponent<Inventory>();
+            playerStats = player.GetComponent<PlayerStats>();
+        }
+
+        questManager = FindObjectOfType<QuestManager>();
     }
 
     private void OnDestroy()
@@ -41,64 +53,21 @@ public class SaveManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (System.Array.Exists(gameplayScenes, name => name == scene.name))
-        {
-            if (!hasLoaded)
-            {
-                hasLoaded = true;
+        StartCoroutine(DelayedLoadGame());
+    }
 
-                if (player == null)
-                {
-                    GameObject playerPrefab = Resources.Load<GameObject>("Atta");
-                    if (playerPrefab != null)
-                    {
-                        player = Instantiate(playerPrefab);
-                        Debug.Log("[SaveManager] Player spawned from prefab.");
-                    }
-                    else
-                    {
-                        Debug.LogError("Player prefab not found in Resources/Prefab folder.");
-                        return;
-                    }
-                }
+    private IEnumerator DelayedLoadGame()
+    {
+        // Tunggu sampai player dan komponen penting lainnya sudah ada
+        yield return new WaitUntil(() =>
+            player != null &&
+            inventory != null &&
+            playerStats != null &&
+            questManager != null);
 
-                inventory = player.GetComponent<Inventory>();
-                playerStats = player.GetComponent<PlayerStats>();
-                questManager = FindObjectOfType<QuestManager>();
-                playerSpawnPoint = GameObject.FindWithTag("PlayerSpawn")?.transform;
+        yield return new WaitForSeconds(0.1f); // ekstra delay agar benar-benar stabil
 
-                if (inventory == null || playerStats == null || questManager == null)
-                {
-                    Debug.LogError("[SaveManager] LoadGame failed: references not assigned!");
-                    return;
-                }
-
-                if (!SaveSystem.TryLoadPlayerStats(currentSaveSlot, out var data))
-                {
-                    spawnTargetID = "SpawnRumah";
-                    Debug.Log("[SaveManager] No existing save found, using default spawn: SpawnRumah");
-                }
-                else
-                {
-                    if (!isSceneTriggerSpawn)
-                    {
-                        spawnTargetID = data.spawnTargetID;
-                        Debug.Log("[SaveManager] Loaded spawnTargetID from DB: " + spawnTargetID);
-                    }
-                    else
-                    {
-                        Debug.Log("[SaveManager] Using spawnTargetID from SceneTrigger: " + spawnTargetID);
-                    }
-                }
-
-                LoadGame();
-            }
-        }
-        else
-        {
-            Destroy(gameObject);
-            Debug.Log("[SaveManager] Destroyed SaveManager on scene " + scene.name);
-        }
+        LoadGame();
     }
 
     public void LoadGame()
@@ -317,5 +286,17 @@ public class SaveManager : MonoBehaviour
         {
             LoadGame();
         }
+    }
+
+    public void SaveBeforeSceneChange(string nextSceneName)
+    {
+        SaveGame(); // Simpan data dulu
+        StartCoroutine(LoadSceneDelayed(nextSceneName));
+    }
+
+    private IEnumerator LoadSceneDelayed(string sceneName)
+    {
+        yield return new WaitForSeconds(0.1f); // delay kecil agar save selesai
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }

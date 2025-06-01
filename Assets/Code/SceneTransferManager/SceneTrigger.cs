@@ -23,7 +23,7 @@ public class SceneTrigger : MonoBehaviour
             Destroy(other.gameObject);
 
             // Load scene tujuan
-            SceneManager.LoadScene(targetSceneName);
+            SaveManager.Instance.SaveBeforeSceneChange(targetSceneName);
         }
     }
 }

@@ -17,8 +17,11 @@ public class DialogManager : MonoBehaviour
     public GameObject choicePanel;
     public Button yesButton;
     public Button noButton;
-    public GameObject interactButton;
-    public UIFader joystickFader;
+
+    [Header("Modular UI Manager")]
+    public UIOnOffManager uiManager;
+
+    [Header("Animation and Dialog")]
     public DialogUIAnimator dialogAnimator;
 
     private DialogData currentDialog;
@@ -73,20 +76,15 @@ public class DialogManager : MonoBehaviour
 
         dialogAnimator.Show();
 
-        joystickFader.SlideOut(true);
-        interactButton.SetActive(false);
+        uiManager.Hide("InteractButton");
+        uiManager.Hide("Joystick");
+        uiManager.Hide("Inventory");
 
-        yield return new WaitForSeconds(joystickFader.slideDuration);
+        yield return new WaitForSeconds(0.1f); // wait a bit to ensure everything shown
 
         ShowLine();
 
         isAnimating = false;
-    }
-
-    private IEnumerator SlideInInteractButton()
-    {
-        interactButton.SetActive(true);
-        yield return null;
     }
 
     public void StartSimpleDialog(string text, string speaker = "NPC")
@@ -160,10 +158,8 @@ public class DialogManager : MonoBehaviour
         if (isAnimating) return;
 
         Debug.Log("No button clicked");
-        if (noCallback != null)
-            noCallback.Invoke();
-        else
-            EndDialog();
+        noCallback?.Invoke();
+        EndDialog();
     }
 
     private void EndDialog()
@@ -178,10 +174,11 @@ public class DialogManager : MonoBehaviour
 
         dialogAnimator.Hide();
 
-        joystickFader.SlideIn();
-        yield return SlideInInteractButton();
-
         yield return new WaitForSeconds(dialogAnimator.animationDuration);
+
+        uiManager.Show("InteractButton");
+        uiManager.Show("Joystick");
+        uiManager.Show("Inventory");
 
         dialogBox.SetActive(false);
         choicePanel.SetActive(false);

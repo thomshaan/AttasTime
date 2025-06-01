@@ -1,35 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SellerIconUI : MonoBehaviour
+public class SellerIconController : MonoBehaviour
 {
     private GameObject iconUIInstance;
     private Image iconImage;
     private Transform target;
     public Vector3 offset = new Vector3(0, 2.2f, 0);
-
-    public void Initialize(Transform targetTransform, Sprite itemIcon)
-    {
-        target = targetTransform;
-
-        if (iconUIInstance == null)
-        {
-            GameObject prefab = Resources.Load<GameObject>("UI/SellerIconUI");
-            if (prefab != null)
-            {
-                iconUIInstance = Instantiate(prefab);
-                iconImage = iconUIInstance.GetComponentInChildren<Image>();
-            }
-        }
-
-        if (iconImage != null)
-        {
-            iconImage.sprite = itemIcon;
-        }
-
-        iconUIInstance.SetActive(true);
-    }
-
 
     public void ShowIcon(Sprite iconSprite, Transform targetTransform)
     {
@@ -37,7 +14,7 @@ public class SellerIconUI : MonoBehaviour
 
         if (iconUIInstance == null)
         {
-            GameObject prefab = Resources.Load<GameObject>("UI/SellerIconUI"); // gunakan prefab sama
+            GameObject prefab = Resources.Load<GameObject>("UI/FloatingIconUI"); // gunakan prefab sama
             if (prefab != null)
             {
                 iconUIInstance = Instantiate(prefab);
