@@ -4,17 +4,30 @@ using UnityEngine;
 public static class ItemDatabase
 {
     private static Dictionary<string, Item> itemDict;
+    private static List<Item> allItems;
 
     static ItemDatabase()
     {
+        allItems = new List<Item>(Resources.LoadAll<Item>("Items"));
         itemDict = new Dictionary<string, Item>();
-        foreach (var item in Resources.LoadAll<Item>("Items"))
+        foreach (var item in allItems)
         {
             if (!itemDict.ContainsKey(item.id))
             {
                 itemDict[item.id] = item;
             }
         }
+    }
+
+    public static Item GetItemByName(string name)
+    {
+        foreach (var item in allItems)
+        {
+            if (item.name == name)
+                return item;
+        }
+        Debug.LogWarning($"[ItemDatabase] Item with name '{name}' not found!");
+        return null;
     }
 
     public static Item GetItemById(string id)

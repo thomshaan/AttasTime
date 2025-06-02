@@ -10,16 +10,17 @@ public class SellerNPC : MonoBehaviour, IInteractable
     private GameObject iconGO;
     public DialogData dialogData;
 
+    private BaseCharacterAnimatorHandler animHandler;
 
     private void Awake()
     {
         inventory = FindObjectOfType<Inventory>();
-        if (inventory == null)
-            Debug.LogWarning("[SellerNPC] Inventory tidak ditemukan.");
-
         playerStats = FindObjectOfType<PlayerStats>();
-        if (playerStats == null)
-            Debug.LogWarning("[SellerNPC] PlayerStats tidak ditemukan.");
+        animHandler = GetComponent<BaseCharacterAnimatorHandler>();
+
+        if (inventory == null) Debug.LogWarning("[SellerNPC] Inventory tidak ditemukan.");
+        if (playerStats == null) Debug.LogWarning("[SellerNPC] PlayerStats tidak ditemukan.");
+        if (animHandler == null) Debug.LogWarning("[SellerNPC] SellerAnimatorHandler tidak ditemukan.");
     }
 
     public void InitializeSeller(Item newItem, int newStock)
@@ -29,18 +30,24 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
         if (item != null && item.icon != null)
         {
-            GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/SellerIconUI");
-            if (floatingIconPrefab != null)
+            if (iconUI == null)
             {
-                iconGO = Instantiate(floatingIconPrefab);
-                iconUI = iconGO.GetComponentInChildren<SellerIconUI>();
+                GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/SellerIconUI");
+                if (floatingIconPrefab != null)
+                {
+                    iconGO = Instantiate(floatingIconPrefab);
+                    iconUI = iconGO.GetComponentInChildren<SellerIconUI>();
+                }
+                else
+                {
+                    Debug.LogWarning("[SellerNPC] ❌ FloatingIconUI prefab tidak ditemukan.");
+                }
+            }
+
+            if (iconUI != null)
+            {
                 iconUI.Initialize(transform, item.icon);
             }
-            else
-            {
-                Debug.LogWarning("[SellerNPC] ❌ FloatingIconUI prefab tidak ditemukan.");
-            }
-            
         }
     }
 
@@ -60,6 +67,8 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
         if (dialogData != null)
         {
+            animHandler?.PlayAnim("jualBeli", 2f);
+
             DialogManager.Instance.StartChoiceDialog(
                 $"Aku menjual {item.name}, mau beli?",
                 OnBuyConfirmed,
@@ -74,23 +83,13 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
     private void OnBuyConfirmed()
     {
-        Debug.Log("OnBuyConfirmed triggered");
+        animHandler?.PlayAnim("bawaBarang", 2f);
 
-        if (playerStats == null || inventory == null)
-        {
-            Debug.LogWarning("[SellerNPC] PlayerStats atau Inventory belum di-assign.");
-            return;
-        }
-
-        if (item == null)
-        {
-            Debug.LogWarning("[SellerNPC] Item null saat beli.");
-            return;
-        }
+        if (playerStats == null || inventory == null) return;
+        if (item == null) return;
 
         if (playerStats.coins < item.price)
         {
-            Debug.Log("[SellerNPC] Koin kurang untuk beli item.");
             DialogManager.Instance.StartSimpleDialog("Koin kamu kurang.", "Penjual");
             return;
         }
@@ -102,7 +101,6 @@ public class SellerNPC : MonoBehaviour, IInteractable
             stock--;
             DebugLogManager.Instance.ShowLog($"[SellerNPC] Item {item.name} berhasil dibeli. Stok tersisa: {stock}");
             DialogManager.Instance.StartSimpleDialog("Terima kasih!", "Penjual");
-
         }
         else
         {
@@ -123,10 +121,16 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
     private void OnDestroy()
     {
+        if (iconUI != null)
+        {
+            iconUI.HideIcon();
+            iconUI = null;
+        }
+
         if (iconGO != null)
         {
             Destroy(iconGO);
+            iconGO = null;
         }
     }
-
 }

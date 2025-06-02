@@ -30,14 +30,13 @@ public class SellerIconUI : MonoBehaviour
         iconUIInstance.SetActive(true);
     }
 
-
     public void ShowIcon(Sprite iconSprite, Transform targetTransform)
     {
         if (iconSprite == null) return;
 
         if (iconUIInstance == null)
         {
-            GameObject prefab = Resources.Load<GameObject>("UI/SellerIconUI"); // gunakan prefab sama
+            GameObject prefab = Resources.Load<GameObject>("UI/SellerIconUI");
             if (prefab != null)
             {
                 iconUIInstance = Instantiate(prefab);
@@ -59,13 +58,20 @@ public class SellerIconUI : MonoBehaviour
         if (iconUIInstance != null)
         {
             iconUIInstance.SetActive(false);
+            target = null; // Lepaskan referensi target agar icon tidak update lagi
         }
     }
 
     void LateUpdate()
     {
-        if (iconUIInstance != null && target != null)
+        if (iconUIInstance != null)
         {
+            if (target == null)
+            {
+                iconUIInstance.SetActive(false);
+                return;
+            }
+
             iconUIInstance.transform.position = target.position + offset;
             iconUIInstance.transform.forward = Camera.main.transform.forward;
         }
