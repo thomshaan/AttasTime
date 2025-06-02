@@ -1,13 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseCharacterAnimatorHandler : MonoBehaviour
 {
     public Animator animator;
-
     protected string[] allParams;
-    protected Dictionary<string, string> paramMap;
 
     private Coroutine currentRoutine;
 
@@ -16,24 +13,14 @@ public class BaseCharacterAnimatorHandler : MonoBehaviour
         InitParams();
     }
 
-
     protected virtual void InitParams()
     {
+        // Default kosong, akan di-override oleh turunan
         allParams = new string[0];
-        paramMap = new Dictionary<string, string>();
     }
 
-
-    public void PlayAnim(string alias, float duration)
+    public void PlayAnim(string paramName, float duration)
     {
-        if (paramMap == null || !paramMap.ContainsKey(alias))
-        {
-            Debug.LogWarning($"[{name}] Tidak punya animasi untuk alias: {alias}");
-            return; // Tidak melakukan apapun
-        }
-
-        string paramName = paramMap[alias];
-
         if (currentRoutine != null)
             StopCoroutine(currentRoutine);
         currentRoutine = StartCoroutine(PlayAnimRoutine(paramName, duration));
@@ -47,13 +34,8 @@ public class BaseCharacterAnimatorHandler : MonoBehaviour
         animator.SetBool(paramName, false);
     }
 
-    /// <summary>
-    /// Reset semua parameter animator yang ada di allParams.
-    /// </summary>
     private void ResetAllBools()
     {
-        if (allParams == null) return;
-
         foreach (var param in allParams)
         {
             animator.SetBool(param, false);

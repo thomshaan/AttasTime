@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class PamanNPC : MonoBehaviour, IInteractable
@@ -9,7 +8,7 @@ public class PamanNPC : MonoBehaviour, IInteractable
     private UIObjective uiObjective;
     private DialogManager dialogManager;
     private QuestIconController questIcon;
-    private PamanAnimator pamanAnimator;
+    private PamanAnimator pamanAnimator; // integrasi animator
 
     private void Start()
     {
@@ -18,7 +17,7 @@ public class PamanNPC : MonoBehaviour, IInteractable
         uiObjective = FindObjectOfType<UIObjective>();
         dialogManager = DialogManager.Instance;
         questIcon = GetComponent<QuestIconController>();
-        pamanAnimator = GetComponent<PamanAnimator>();
+        pamanAnimator = GetComponent<PamanAnimator>(); // ambil komponen animator
 
         UpdateQuestIcon();
     }
@@ -39,8 +38,6 @@ public class PamanNPC : MonoBehaviour, IInteractable
                     break;
                 case QuestState.Completed:
                     questIcon.ShowCompleted();
-                    // Mulai coroutine reset quest setelah delay 2 detik
-                    StartCoroutine(ResetQuestAfterDelay(2f));
                     break;
             }
         }
@@ -48,23 +45,6 @@ public class PamanNPC : MonoBehaviour, IInteractable
         {
             questIcon.ShowNotStarted();
         }
-    }
-
-    private IEnumerator ResetQuestAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        ResetQuest();
-    }
-
-    private void ResetQuest()
-    {
-        // Reset status quest di QuestManager
-        questManager.currentQuestState = QuestState.NotStarted;
-        questManager.currentQuestData = null;
-
-        // Update ikon quest kembali ke awal
-        if (questIcon != null)
-            questIcon.ShowNotStarted();
     }
 
     public void Interact()
@@ -90,6 +70,7 @@ public class PamanNPC : MonoBehaviour, IInteractable
             {
                 pamanAnimator.PlayAnim("jualBeli", 2f);
                 dialogManager.StartSimpleDialog("Kamu belum cukup beras, ayo lanjutkan mengumpulkan!", "Paman");
+                
             }
         }
         else if (!questManager.IsQuestInProgress())
