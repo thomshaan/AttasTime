@@ -10,6 +10,8 @@ public class SellerNPC : MonoBehaviour, IInteractable
     private GameObject iconGO;
     public DialogData dialogData;
 
+    private BaseCharacterAnimatorHandler animatorHandler;
+
     private void Awake()
     {
         inventory = FindObjectOfType<Inventory>();
@@ -19,6 +21,8 @@ public class SellerNPC : MonoBehaviour, IInteractable
         playerStats = FindObjectOfType<PlayerStats>();
         if (playerStats == null)
             Debug.LogWarning("[SellerNPC] PlayerStats tidak ditemukan.");
+
+        animatorHandler = GetComponent<BaseCharacterAnimatorHandler>();
     }
 
     public void InitializeSeller(Item newItem, int newStock)
@@ -28,7 +32,7 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
         if (item != null && item.icon != null)
         {
-            GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/FloatingIconUI");
+            GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/SellerIconUI");
             if (floatingIconPrefab != null)
             {
                 iconGO = Instantiate(floatingIconPrefab);
@@ -54,6 +58,12 @@ public class SellerNPC : MonoBehaviour, IInteractable
         {
             DialogManager.Instance.StartSimpleDialog("Maaf, stok sudah habis.", "Penjual");
             return;
+        }
+
+        // 🔁 Panggil animasi jualBeli (jika animatorHandler ada dan param tersedia)
+        if (animatorHandler != null)
+        {
+            animatorHandler.PlayAnim("jualBeli", 2f); // durasi disesuaikan
         }
 
         if (dialogData != null)
@@ -100,7 +110,6 @@ public class SellerNPC : MonoBehaviour, IInteractable
             stock--;
             DebugLogManager.Instance.ShowLog($"[SellerNPC] Item {item.name} berhasil dibeli. Stok tersisa: {stock}");
             DialogManager.Instance.StartSimpleDialog("Terima kasih!", "Penjual");
-            
         }
         else
         {
@@ -126,5 +135,4 @@ public class SellerNPC : MonoBehaviour, IInteractable
             Destroy(iconGO);
         }
     }
-
 }

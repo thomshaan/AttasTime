@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SplashScene.unity
     guid: b02feb4368d93c84e9124db6757261f0
   - enabled: 1
-    path: Assets/Scenes/Options.unity
+    path: Assets/Scenes/Credits.unity
     guid: 19e32a57f41257b4b80a99ffb718f529
   - enabled: 1
     path: Assets/Legacy/House.unity
@@ -30,7 +30,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Settings.unity
     guid: 324ae93d2146c5149b2bad25c72b863c
   - enabled: 1
-    path: Assets/Scenes/SelectSave.unity
+    path: Assets/Scenes/selectSave.unity
     guid: e8341d95ce39bab438927c9609b63f03
   - enabled: 1
     path: Assets/Scenes/RumahGadang.unity
