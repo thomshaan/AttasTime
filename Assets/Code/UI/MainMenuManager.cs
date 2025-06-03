@@ -19,4 +19,15 @@ public class MainMenuManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void ButtonSettingsGame()
+    {
+        SceneManager.LoadScene("Settings");
+    }
+
+    public void ButtonCreditsGame()
+    {
+        SceneManager.LoadScene("Credits");
+    }
+
 }
