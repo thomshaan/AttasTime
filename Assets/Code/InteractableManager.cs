@@ -4,18 +4,15 @@ using Cinemachine;
 
 public class InteractManager : MonoBehaviour
 {
-    [Header("Interaksi")]
     public float interactRadius = 2.5f;
     public LayerMask interactableLayer;
     public KeyCode interactKey = KeyCode.E;
 
-    [Header("UI")]
     public GameObject interactionUIPrompt;
     public Text promptText;
-    public Button interactButton;      // Button interaksi
-    public Text interactButtonText;    // Text tombol
+    public Button interactButton;
+    public Text interactButtonText;
 
-    [Header("Kamera Cinemachine")]
     public CinemachineFreeLook mainCam;
     public CinemachineVirtualCamera interactionCam;
 
@@ -91,7 +88,6 @@ public class InteractManager : MonoBehaviour
         }
     }
 
-    // --- Kamera Cinemachine switch ---
     void SwitchToInteractionCam()
     {
         if (mainCam != null) mainCam.Priority = 10;
@@ -111,11 +107,5 @@ public class InteractManager : MonoBehaviour
             interactionCam.gameObject.SetActive(false);
         }
     }
-
-    // Debug visualisasi radius interaksi di Scene View
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, interactRadius);
-    }
 }
+
