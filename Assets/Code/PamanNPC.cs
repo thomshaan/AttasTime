@@ -50,6 +50,7 @@ public class PamanNPC : MonoBehaviour, IInteractable
     public void Interact()
     {
         if (questManager == null || dialogManager == null) return;
+        Debug.Log("[PamanNPC] Interact method called");
 
         if (pamanAnimator != null)
             pamanAnimator.PlayAnim("jualBeli", 2f); // animasi saat mulai interaksi
@@ -70,7 +71,7 @@ public class PamanNPC : MonoBehaviour, IInteractable
             {
                 pamanAnimator.PlayAnim("jualBeli", 2f);
                 dialogManager.StartSimpleDialog("Kamu belum cukup beras, ayo lanjutkan mengumpulkan!", "Paman");
-                
+
             }
         }
         else if (!questManager.IsQuestInProgress())
@@ -99,10 +100,14 @@ public class PamanNPC : MonoBehaviour, IInteractable
             pamanAnimator.PlayAnim("jualBeli", 2f);
             dialogManager.StartSimpleDialog("Sedang ada quest lain yang harus diselesaikan dulu.", "Paman");
         }
+        Debug.Log("[PamanNPC] Interact finished");
     }
 
     public string GetInteractionPrompt()
     {
-        return "Tekan [E] untuk berbicara dengan Paman";
+        Debug.Log("[PamanNPC] GetInteractionPrompt called");
+        string prompt = "Tekan [E] untuk berbicara dengan Paman";
+        Debug.Log("[PamanNPC] Interaction prompt: " + prompt);
+        return prompt;
     }
 }

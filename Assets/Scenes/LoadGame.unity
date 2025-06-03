@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -390,7 +389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mau melanjutkan quest kamu yang belum selesai sekarang?
+  m_text: Mau melanjutkan yang sebelumnya kamu mainkan?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 33a694538e01a9649ba2c9f0baace0eb, type: 2}
   m_sharedMaterial: {fileID: 1421067036368373389, guid: 33a694538e01a9649ba2c9f0baace0eb,
@@ -418,7 +417,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.8
+  m_fontSize: 29.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -454,7 +453,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -258.70825, w: 0}
+  m_margin: {x: 0, y: 0, z: -258.70825, w: -15.539061}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1146,6 +1145,7 @@ GameObject:
   - component: {fileID: 302256276}
   - component: {fileID: 302256275}
   - component: {fileID: 302256278}
+  - component: {fileID: 302256279}
   m_Layer: 5
   m_Name: SelectSlot1
   m_TagString: Untagged
@@ -1282,6 +1282,20 @@ MonoBehaviour:
   slot: 1
   titleText: {fileID: 1704249604}
   metaText: {fileID: 15362819}
+--- !u!114 &302256279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302256273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8b8b245ab1a1b4a932f0d5eb443eb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotNumber: 1
+  slotButton: {fileID: 302256275}
 --- !u!1 &395367858
 GameObject:
   m_ObjectHideFlags: 0
@@ -1928,6 +1942,7 @@ GameObject:
   - component: {fileID: 681300196}
   - component: {fileID: 681300195}
   - component: {fileID: 681300198}
+  - component: {fileID: 681300199}
   m_Layer: 5
   m_Name: SelectSlot2
   m_TagString: Untagged
@@ -2064,6 +2079,20 @@ MonoBehaviour:
   slot: 2
   titleText: {fileID: 190524833}
   metaText: {fileID: 218371860}
+--- !u!114 &681300199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681300193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8b8b245ab1a1b4a932f0d5eb443eb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotNumber: 2
+  slotButton: {fileID: 681300195}
 --- !u!1 &682197661
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,12 +2318,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &1030067055
 GameObject:
   m_ObjectHideFlags: 0
@@ -3287,6 +3316,10 @@ MonoBehaviour:
   popup: {fileID: 682197662}
   playerSpawnPoint: {fileID: 0}
   saveSystem: {fileID: 1914205253}
+  saveSlotButtons:
+  - {fileID: 302256279}
+  - {fileID: 681300199}
+  - {fileID: 2089241184}
 --- !u!1 &1916125484
 GameObject:
   m_ObjectHideFlags: 0
@@ -3645,6 +3678,7 @@ GameObject:
   - component: {fileID: 2089241181}
   - component: {fileID: 2089241180}
   - component: {fileID: 2089241183}
+  - component: {fileID: 2089241184}
   m_Layer: 5
   m_Name: SelectSlot3
   m_TagString: Untagged
@@ -3728,6 +3762,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2089241178}
+        m_TargetAssemblyTypeName: ResumeGameManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2089241181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3781,6 +3827,20 @@ MonoBehaviour:
   slot: 3
   titleText: {fileID: 1841544471}
   metaText: {fileID: 395367860}
+--- !u!114 &2089241184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089241178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8b8b245ab1a1b4a932f0d5eb443eb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotNumber: 3
+  slotButton: {fileID: 2089241180}
 --- !u!1 &2103556030
 GameObject:
   m_ObjectHideFlags: 0

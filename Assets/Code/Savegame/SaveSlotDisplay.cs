@@ -19,13 +19,13 @@ public class SaveSlotDisplay : MonoBehaviour
 
         if (data.coins == 0 && data.xp == 0 && data.lastPlayed == "Never")
         {
-            titleText.text = "Empty Slot";
-            metaText.text = "Start New Game";
+            titleText.text = "Kosong";
+            metaText.text = "Mulai";
         }
         else
         {
-            titleText.text = $"Savegame {slot}";
-            metaText.text = $"Coins: {data.coins} | XP: {data.xp}\nLast Played: {data.lastPlayed}";
+            titleText.text = $"Slot {slot}";
+            metaText.text = $"Koin: {data.coins} | XP: {data.xp}\nTerakhir kali bermain: {data.lastPlayed}";
         }
     }
 

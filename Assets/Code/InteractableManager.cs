@@ -1,15 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class InteractManager : MonoBehaviour
 {
+    [Header("Interaksi")]
     public float interactRadius = 2.5f;
     public LayerMask interactableLayer;
     public KeyCode interactKey = KeyCode.E;
+
+    [Header("UI")]
     public GameObject interactionUIPrompt;
     public Text promptText;
-    public Button interactButton;      // InteractBtn dari Canvas
-    public Text interactButtonText;    // Text di dalam button
+    public Button interactButton;      // Button interaksi
+    public Text interactButtonText;    // Text tombol
+
+    [Header("Kamera Cinemachine")]
+    public CinemachineFreeLook mainCam;
+    public CinemachineVirtualCamera interactionCam;
 
     private IInteractable currentTarget;
 
@@ -45,13 +53,18 @@ public class InteractManager : MonoBehaviour
 
         if (nearest != null)
         {
-            currentTarget = nearest;
-            ShowPrompt(currentTarget.GetInteractionPrompt());
+            if (currentTarget != nearest)
+            {
+                currentTarget = nearest;
+                ShowPrompt(currentTarget.GetInteractionPrompt());
+                SwitchToInteractionCam();
+            }
         }
         else
         {
             currentTarget = null;
             HidePrompt();
+            SwitchToMainCam();
         }
     }
 
@@ -62,7 +75,6 @@ public class InteractManager : MonoBehaviour
             interactButton.gameObject.SetActive(true);
             interactButtonText.text = message;
 
-            // Hapus listener lama agar tidak dobel
             interactButton.onClick.RemoveAllListeners();
 
             if (currentTarget != null)
@@ -77,5 +89,33 @@ public class InteractManager : MonoBehaviour
             interactButton.gameObject.SetActive(false);
             interactButton.onClick.RemoveAllListeners();
         }
+    }
+
+    // --- Kamera Cinemachine switch ---
+    void SwitchToInteractionCam()
+    {
+        if (mainCam != null) mainCam.Priority = 10;
+        if (interactionCam != null)
+        {
+            interactionCam.gameObject.SetActive(true);
+            interactionCam.Priority = 20;
+        }
+    }
+
+    void SwitchToMainCam()
+    {
+        if (mainCam != null) mainCam.Priority = 20;
+        if (interactionCam != null)
+        {
+            interactionCam.Priority = 10;
+            interactionCam.gameObject.SetActive(false);
+        }
+    }
+
+    // Debug visualisasi radius interaksi di Scene View
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, interactRadius);
     }
 }

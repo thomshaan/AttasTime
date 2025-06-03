@@ -66442,7 +66442,7 @@ MonoBehaviour:
     normal: {x: 0, y: 1, z: 0}
     length: {x: 0.369, y: 0.206}
     color: {x: 0.9062359, y: 0.87629926, z: 0.64508855}
-  m_InstantiatedMaterial: {fileID: 1303237815}
+  m_InstantiatedMaterial: {fileID: 1796621916}
 --- !u!4 &374681648
 Transform:
   m_ObjectHideFlags: 0
@@ -67054,6 +67054,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986074067467360379, guid: 94c4a3de4c42e104bb7fe31ee5bdd170,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7363343592539721761, guid: 94c4a3de4c42e104bb7fe31ee5bdd170,
         type: 3}
@@ -75949,51 +75954,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!21 &1303237815
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Grass(Clone)
-  m_Shader: {fileID: -6465566751694194690, guid: 242679acbb51bb443a1a879009cab4bf,
-    type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _Blend: 0
-    - _BlendMult: 1
-    - _BlendOff: 0
-    - _QueueControl: 0
-    - _QueueOffset: 0
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!4 &1306610051 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6069874364476601031, guid: e7f23a78e3e36c340a975edc6d7a8f19,
@@ -79773,6 +79733,51 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1315911471}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &1796621916
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Grass(Clone)
+  m_Shader: {fileID: -6465566751694194690, guid: 242679acbb51bb443a1a879009cab4bf,
+    type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Blend: 0
+    - _BlendMult: 1
+    - _BlendOff: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!1001 &1802286881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -81893,7 +81898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e932af78d917d4bacb5bcd8afc1c64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactRadius: 2.5
+  interactRadius: 3
   interactableLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -81902,6 +81907,14 @@ MonoBehaviour:
   promptText: {fileID: 975466293}
   interactButton: {fileID: 2572274558541256067}
   interactButtonText: {fileID: 975466293}
+  mainCam: {fileID: 1493422921}
+  interactionCam: {fileID: 537890811}
+--- !u!95 &2016854789 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2826530987301317129, guid: 56ba630cf6afd6b49b2a0e95aa7ad09a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6972732559172186034}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2017729647 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 558607733336130089, guid: 5a0588974ded4294d893d95d7900c929,
@@ -83358,6 +83371,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 867290925102177117, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -6.8000183
+      objectReference: {fileID: 0}
+    - target: {fileID: 867290925102177117, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -16.299988
+      objectReference: {fileID: 0}
     - target: {fileID: 1085896400696111449, guid: b25a039ee56abca41bd48d9028e823d2,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -83373,6 +83396,56 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 667299196}
+    - target: {fileID: 3622649792859502323, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622649792859502323, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622649792859502323, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622649792859502323, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622649792859502323, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622649792859502323, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 869
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622649792859502323, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -562
+      objectReference: {fileID: 0}
+    - target: {fileID: 4251336559941753360, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -107
+      objectReference: {fileID: 0}
+    - target: {fileID: 4251336559941753360, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 73
+      objectReference: {fileID: 0}
+    - target: {fileID: 6803400897275244071, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -155
+      objectReference: {fileID: 0}
     - target: {fileID: 6865767582230179644, guid: b25a039ee56abca41bd48d9028e823d2,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -83393,6 +83466,11 @@ PrefabInstance:
       propertyPath: inventory
       value: 
       objectReference: {fileID: 2016854746}
+    - target: {fileID: 7732500084090768028, guid: b25a039ee56abca41bd48d9028e823d2,
+        type: 3}
+      propertyPath: shownPosition.y
+      value: -200
+      objectReference: {fileID: 0}
     - target: {fileID: 9165692145386536047, guid: b25a039ee56abca41bd48d9028e823d2,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -83505,10 +83583,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.8120467
   m_Height: 2.544716
   m_Direction: 1
-  m_Center: {x: 0, y: 1.2790794, z: 0}
+  m_Center: {x: -0.0000000014729276, y: 1.2790794, z: 0.3120468}
 --- !u!1 &698203712182864352
 GameObject:
   m_ObjectHideFlags: 0
@@ -84042,6 +84120,7 @@ GameObject:
   - component: {fileID: 8121484898372014170}
   - component: {fileID: 8121484898372014171}
   - component: {fileID: 8121484898372014172}
+  - component: {fileID: 8121484898372014173}
   m_Layer: 6
   m_Name: Paman
   m_TagString: NPC
@@ -85932,6 +86011,11 @@ PrefabInstance:
       objectReference: {fileID: 1493422921}
     - target: {fileID: 7222848687116910260, guid: 56ba630cf6afd6b49b2a0e95aa7ad09a,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7222848687116910260, guid: 56ba630cf6afd6b49b2a0e95aa7ad09a,
+        type: 3}
       propertyPath: interactionUI
       value: 
       objectReference: {fileID: 2245036153867512149}
@@ -85945,6 +86029,16 @@ PrefabInstance:
       propertyPath: interactionCam
       value: 
       objectReference: {fileID: 537890811}
+    - target: {fileID: 7222848687116910260, guid: 56ba630cf6afd6b49b2a0e95aa7ad09a,
+        type: 3}
+      propertyPath: interactDistance
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8653779489571005929, guid: 56ba630cf6afd6b49b2a0e95aa7ad09a,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 2016854789}
     m_RemovedComponents:
     - {fileID: 4079135357421301711, guid: 56ba630cf6afd6b49b2a0e95aa7ad09a, type: 3}
     m_RemovedGameObjects: []
@@ -86361,6 +86455,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 434227005940711096}
+--- !u!136 &8121484898372014173
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259792034799563338}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.31, z: 0}
 --- !u!1001 &8232165417107279208
 PrefabInstance:
   m_ObjectHideFlags: 0
