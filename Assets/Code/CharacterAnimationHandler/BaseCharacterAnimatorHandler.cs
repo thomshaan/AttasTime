@@ -47,6 +47,18 @@ public class BaseCharacterAnimatorHandler : MonoBehaviour
         animator.SetBool(paramName, false);
     }
 
+    public void SetBool(string alias, bool value)
+    {
+        if (paramMap == null || !paramMap.ContainsKey(alias))
+        {
+            Debug.LogWarning($"[{name}] Tidak punya animasi untuk alias: {alias}");
+            return;
+        }
+
+        string paramName = paramMap[alias];
+        animator.SetBool(paramName, value);
+    }
+
     /// <summary>
     /// Reset semua parameter animator yang ada di allParams.
     /// </summary>
@@ -59,4 +71,5 @@ public class BaseCharacterAnimatorHandler : MonoBehaviour
             animator.SetBool(param, false);
         }
     }
+
 }

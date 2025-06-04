@@ -15,28 +15,47 @@ public class NPCSchedule : MonoBehaviour
     public int AssignedHouseIndex = 0;
     public MorningDestination morningDestination;
 
+    [Header("Interaction")]
+    public float greetRadius = 3f;
+    public float interactRadius = 2f;
+    private Transform player;
+    public BaseCharacterAnimatorHandler animHandler;
+
+    [Header("Chance Settings")]
+    [Range(0, 1)] public float helloChance = 0.5f;      // 50% chance for dialog greeting
+    [Range(0, 1)] public float xpRewardChance = 0.1f;   // 10% chance for XP gift on hello
+    [Range(5, 10)] public int minXpReward = 5;
+    [Range(5, 10)] public int maxXpReward = 10;
+
     private NavMeshAgent agent;
-    private Animator animator;
-    private Transform currentTarget;
-
-    private bool isHidden = false;
     private Renderer[] renderers;
-
+    private Transform currentTarget;
     private int lastCheckedHour = -1;
     private float arrivalThreshold = 0.5f;
     private int nextDepartureHour = -1;
-
     private bool hasSpawnedToday = false;
     private float homeStayTimer = 0f;
     private bool arrivedAtHome = false;
-
     private bool waitingToGoOutAgain = false;
+    private bool isHidden = false;
+    private bool isGreeting = false;
+    private bool isInteracting = false;
+    private bool isBlocked = false;
+    private bool isDialogGreeting = false;
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (player == null)
+            Debug.LogWarning("[NPCSchedule] No player found with tag 'Player'.");
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
         renderers = GetComponentsInChildren<Renderer>();
+        if (animHandler == null) animHandler = GetComponent<BaseCharacterAnimatorHandler>();
+        if (player == null)
+        {
+            var go = GameObject.FindGameObjectWithTag("Player");
+            if (go) player = go.transform;
+        }
         HideNPC(); // Start hidden until 7 AM
     }
 
@@ -46,38 +65,21 @@ public class NPCSchedule : MonoBehaviour
 
         int currentHour = Mathf.FloorToInt(LightingManager.Instance.TimeOfDay);
 
+        // --- SCHEDULE ---
         if (currentHour != lastCheckedHour)
         {
             lastCheckedHour = currentHour;
-
-            if (currentHour == 7)
-            {
-                SpawnForTheDay();
-            }
-
-            // Mosque at 12 PM and 6 PM
-            if ((currentHour == 12 || currentHour == 18) && !isHidden)
-            {
-                SetDestination(Mosque);
-            }
-
-            // Active hours for back and forth movement
+            if (currentHour == 7) SpawnForTheDay();
+            if ((currentHour == 12 || currentHour == 18) && !isHidden) SetDestination(Mosque);
             if ((currentHour >= 7 && currentHour < 12) || (currentHour > 12 && currentHour < 18))
             {
-                if (!isHidden && !arrivedAtHome && !waitingToGoOutAgain)
-                {
-                    SetDestination(GetRandomPublicPlace());
-                }
+                if (!isHidden && !arrivedAtHome && !waitingToGoOutAgain) SetDestination(GetRandomPublicPlace());
             }
-
-            // Return home after 8 PM
             if (currentHour >= 20 && !isHidden)
             {
                 SetDestination(Houses[AssignedHouseIndex]);
                 arrivedAtHome = true;
             }
-
-            // NPC was hidden at 7 AM and randomly goes out later
             if (isHidden && nextDepartureHour > 0 && currentHour >= nextDepartureHour && currentHour < 12)
             {
                 ShowNPC();
@@ -86,15 +88,16 @@ public class NPCSchedule : MonoBehaviour
             }
         }
 
+        // Arrived at destination
         if (!isHidden && agent.remainingDistance <= arrivalThreshold && !agent.pathPending)
         {
             agent.isStopped = true;
-            if (animator) animator.SetBool("run", false);
+            animHandler.SetBool("jalan", false);
 
             if (currentTarget == Houses[AssignedHouseIndex] && !arrivedAtHome)
             {
                 arrivedAtHome = true;
-                homeStayTimer = Random.Range(5f, 15f); // Stay 5-15 seconds
+                homeStayTimer = Random.Range(5f, 15f);
             }
         }
 
@@ -104,7 +107,6 @@ public class NPCSchedule : MonoBehaviour
             homeStayTimer -= Time.deltaTime;
             if (homeStayTimer <= 0f)
             {
-                // 50% chance to go out again if during active hours
                 if ((currentHour >= 7 && currentHour < 12) || (currentHour > 12 && currentHour < 18))
                 {
                     if (Random.value < 0.5f)
@@ -122,6 +124,47 @@ public class NPCSchedule : MonoBehaviour
                     HideNPC();
                 }
                 arrivedAtHome = false;
+            }
+        }
+
+        // --- GREETING WHEN PLAYER IS NEAR ---
+        if (!isHidden && !isInteracting && player != null)
+        {
+            float distToPlayer = Vector3.Distance(transform.position, player.position);
+
+            if (!isGreeting && distToPlayer < greetRadius && agent.velocity.magnitude > 0.1f)
+            {
+                agent.isStopped = true;
+                FacePlayer();
+
+                // Decide random: just wave, say hello (dialog), or both
+                float roll = Random.value;
+                if (roll < helloChance)
+                {
+                    isDialogGreeting = true;
+                    animHandler?.PlayAnim("jualBeli", 2f); // Use "greet" alias (make sure mapped)
+                    DialogManager.Instance.StartSimpleDialog("Halo, Atta!", "Warga");
+                    // Optional XP gift
+                    if (Random.value < xpRewardChance)
+                    {
+                        int xp = Random.Range(minXpReward, maxXpReward + 1);
+                        PlayerStats.Instance?.AddXP(xp);
+                        DialogManager.Instance.StartSimpleDialog($"Halo Atta! Ini ada {xp} XP!", "Warga");
+                    }
+                }
+                else
+                {
+                    isDialogGreeting = false;
+                    animHandler?.PlayAnim("jualBeli", 2f); // Just wave
+                }
+                isGreeting = true;
+            }
+            else if (isGreeting && distToPlayer >= greetRadius)
+            {
+                agent.isStopped = false;
+                isGreeting = false;
+                isDialogGreeting = false;
+                animHandler.SetBool("jalan", true);
             }
         }
     }
@@ -150,17 +193,17 @@ public class NPCSchedule : MonoBehaviour
         currentTarget = target;
         agent.isStopped = false;
         agent.SetDestination(GetOffsetPosition(target.position));
-        if (animator) animator.SetBool("run", true);
-
-        waitingToGoOutAgain = false; // Reset any waiting flag
+        animHandler.SetBool("jalan", true);
+        waitingToGoOutAgain = false;
     }
 
     void HideNPC()
     {
         isHidden = true;
         if (agent) agent.isStopped = true;
-        if (animator) animator.SetBool("run", false);
+        animHandler.SetBool("jalan", false);
         foreach (var r in renderers) r.enabled = false;
+        isGreeting = false; isInteracting = false; isBlocked = false;
     }
 
     void ShowNPC()
@@ -168,7 +211,7 @@ public class NPCSchedule : MonoBehaviour
         isHidden = false;
         foreach (var r in renderers) r.enabled = true;
         if (agent) agent.isStopped = false;
-        if (animator) animator.SetBool("run", true);
+        animHandler.SetBool("jalan", false);
     }
 
     Vector3 GetOffsetPosition(Vector3 basePos)
@@ -177,9 +220,7 @@ public class NPCSchedule : MonoBehaviour
         Vector3 pos = basePos + new Vector3(offset.x, 0, offset.y);
 
         if (NavMesh.SamplePosition(pos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
-        {
             return hit.position;
-        }
 
         return basePos;
     }
@@ -188,12 +229,9 @@ public class NPCSchedule : MonoBehaviour
     {
         switch (morningDestination)
         {
-            case MorningDestination.Market:
-                return Market;
-            case MorningDestination.CityCenter:
-                return CityCenter;
-            case MorningDestination.Home:
-                return Houses[AssignedHouseIndex];
+            case MorningDestination.Market: return Market;
+            case MorningDestination.CityCenter: return CityCenter;
+            case MorningDestination.Home: return Houses[AssignedHouseIndex];
         }
         return Market;
     }
@@ -204,5 +242,61 @@ public class NPCSchedule : MonoBehaviour
         if (rand == 0) return Market;
         if (rand == 1) return CityCenter;
         return Houses[AssignedHouseIndex];
+    }
+
+    void FacePlayer()
+    {
+        Vector3 look = player.position - transform.position;
+        look.y = 0;
+        if (look.sqrMagnitude > 0.01f)
+            transform.rotation = Quaternion.LookRotation(look);
+    }
+
+    // -------- INTERACTION LOGIC --------
+
+    public void Interact()
+    {
+        if (isHidden || isInteracting || player == null) return;
+        if (Vector3.Distance(transform.position, player.position) > interactRadius) return;
+
+        isInteracting = true;
+        agent.isStopped = true;
+        FacePlayer();
+        animHandler?.PlayAnim("jualBeli", 2f);
+
+        // Replace dialog below as needed
+        DialogManager.Instance.StartSimpleDialog("Halo Atta!", "Warga");
+        Invoke(nameof(EndInteraction), 2f);
+    }
+
+    void EndInteraction()
+    {
+        isInteracting = false;
+        agent.isStopped = false;
+       animHandler.SetBool("jalan", true);
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (isHidden || isBlocked) return;
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            isBlocked = true;
+            agent.isStopped = true;
+            animHandler?.PlayAnim("jualBeli", 1.5f);
+
+            // Show excuse dialog (random chance)
+            if (Random.value < 0.75f)
+                DialogManager.Instance.StartSimpleDialog("Permisi, Atta", "Warga");
+
+            Invoke(nameof(OnBumpResume), 1.5f);
+        }
+    }
+
+    void OnBumpResume()
+    {
+        isBlocked = false;
+        agent.isStopped = false;
+        animHandler.SetBool("jalan", true);
     }
 }

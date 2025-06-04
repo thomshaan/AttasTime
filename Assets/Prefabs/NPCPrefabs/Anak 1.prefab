@@ -105,6 +105,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3812054776931303862}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 56497203ac2c98f4e8a5ae2f7b35a46c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3486380881372187563}
   m_SourcePrefab: {fileID: 100100000, guid: 56497203ac2c98f4e8a5ae2f7b35a46c, type: 3}
 --- !u!1 &3357095476702644679 stripped
 GameObject:
@@ -247,6 +251,14 @@ MonoBehaviour:
   - {fileID: 1831466945023988264, guid: 87c10c86398cf5843b41a591977a0dfa, type: 3}
   AssignedHouseIndex: 0
   morningDestination: 0
+  greetRadius: 3
+  interactRadius: 2
+  player: {fileID: 0}
+  animHandler: {fileID: 3486380881372187563}
+  helloChance: 0.5
+  xpRewardChance: 0.1
+  minXpReward: 5
+  maxXpReward: 10
 --- !u!114 &3812054776931303862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,3 +272,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcType: 1
+--- !u!114 &3486380881372187563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3357095476702644679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff6e170f47cba4e4fb2ef2ce1f31b9f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2826530987301317129}
