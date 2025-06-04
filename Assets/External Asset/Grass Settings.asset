@@ -15,15 +15,15 @@ MonoBehaviour:
   shaderToUse: {fileID: 7200000, guid: 2b9b8a7a8a1af3b478a93dbfa8974c91, type: 3}
   materialToUse: {fileID: 2100000, guid: 0500b554522a0c444a59d3f7bbed720d, type: 2}
   grassRandomHeightMin: 0
-  grassRandomHeightMax: 0.26
-  bladeRadius: 0.383
+  grassRandomHeightMax: 1
+  bladeRadius: 0.374
   bladeForwardAmount: 0.456
   bladeCurveAmount: 1
-  bottomWidth: 0.366
+  bottomWidth: 0.01
   MinWidth: 0.01
   MinHeight: 0.01
-  MaxWidth: 0.175
-  MaxHeight: 1
+  MaxWidth: 0.1
+  MaxHeight: 0.4
   windSpeed: 2
   windStrength: 0.05
   allowedBladesPerVertex: 5
