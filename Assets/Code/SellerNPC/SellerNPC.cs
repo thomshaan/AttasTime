@@ -69,16 +69,63 @@ public class SellerNPC : MonoBehaviour, IInteractable
         {
             animHandler?.PlayAnim("jualBeli", 2f);
 
+            // Pilihan beli
             DialogManager.Instance.StartChoiceDialog(
                 $"Aku menjual {item.name}, mau beli?",
                 OnBuyConfirmed,
-                OnBuyDeclined,
+                OnBuyDeclinedOrSellPrompt,
                 "Penjual");
         }
         else
         {
             Debug.LogWarning("[SellerNPC] DialogData belum di-set.");
         }
+    }
+
+    private void OnBuyDeclinedOrSellPrompt()
+    {
+        DialogManager.Instance.StartChoiceDialog(
+            "Apa kamu mau jual item ini ke penjual?",
+            OnSellConfirmed,
+            OnSellDeclined,
+            "Penjual");
+    }
+
+    private void OnSellConfirmed()
+    {
+        animHandler?.PlayAnim("bawaBarang", 2f);
+
+        if (playerStats == null || inventory == null || item == null) return;
+
+        // Apakah pemain punya item yang ingin dijual?
+        if (inventory.CountOf(item) <= 0)
+        {
+            DialogManager.Instance.StartSimpleDialog($"Kamu tidak punya {item.name} untuk dijual.", "Penjual");
+            return;
+        }
+
+        // Harga jual = harga item - 5 (minimal 1)
+        int sellPrice = Mathf.Max(1, item.price - 5);
+
+        // Remove 1 item, tambahkan uang ke player
+        bool removed = inventory.RemoveItem(item, 1);
+        if (removed)
+        {
+            playerStats.AddCoins(sellPrice);
+            DialogManager.Instance.StartSimpleDialog(
+                $"Terima kasih! {item.name} berhasil dijual seharga {sellPrice} koin.", "Penjual");
+        }
+        else
+        {
+            DialogManager.Instance.StartSimpleDialog(
+                $"Gagal menjual {item.name}.", "Penjual");
+        }
+    }
+
+    private void OnSellDeclined()
+    {
+        DialogManager.Instance.StartSimpleDialog(
+            "Baiklah, semoga harimu menyenangkan.", "Penjual");
     }
 
     private void OnBuyConfirmed()

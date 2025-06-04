@@ -1020,7 +1020,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -1416,7 +1416,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -1642,7 +1642,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -1834,7 +1834,7 @@
     "m_ObjectId": "2ddcb9078ba4429d8824b64d46c11ff2",
     "m_Title": "Depth Fade",
     "m_Position": {
-        "x": -874.0000610351563,
+        "x": -874.0,
         "y": -138.0
     }
 }
@@ -2271,7 +2271,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -2592,7 +2592,7 @@
     "m_StageCapability": 2,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 1
@@ -2619,7 +2619,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "isMainTexture": false,
@@ -3643,8 +3643,8 @@
     "m_ObjectId": "8be54e7b32cb4ec3a2e57ea77eb38193",
     "m_Title": "Parallax",
     "m_Position": {
-        "x": -2011.8883056640625,
-        "y": -2502.35107421875
+        "x": -2012.0,
+        "y": -2502.0
     }
 }
 
@@ -3655,7 +3655,7 @@
     "m_Title": "Noise",
     "m_Position": {
         "x": -3071.0,
-        "y": -1832.0001220703125
+        "y": -1832.0
     }
 }
 
@@ -3920,7 +3920,7 @@
     "m_ObjectId": "a0521a154a214a43b3f135646f69af03",
     "m_Title": "Vertex Offset",
     "m_Position": {
-        "x": -39.0,
+        "x": 204.0,
         "y": -2792.0
     }
 }
@@ -4237,7 +4237,7 @@
     "m_Title": "Colors",
     "m_Position": {
         "x": 501.0,
-        "y": -1633.0001220703125
+        "y": -1633.0
     }
 }
 
@@ -4963,7 +4963,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0

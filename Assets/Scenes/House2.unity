@@ -39,6 +39,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
+  m_IndirectSpecularColor: {r: 0.11614029, g: 0.424029, b: 0.73008376, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -641,12 +642,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    m_Quality: 3
-    m_FrameInfluence: 0.1
-    m_JitterScale: 1
-    m_MipBias: 0
-    m_VarianceClampScale: 0.9
-    m_ContrastAdaptiveSharpening: 0
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!20 &582161013
 Camera:
   m_ObjectHideFlags: 0
@@ -2479,12 +2480,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    m_Quality: 3
-    m_FrameInfluence: 0.1
-    m_JitterScale: 1
-    m_MipBias: 0
-    m_VarianceClampScale: 0.9
-    m_ContrastAdaptiveSharpening: 0
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!81 &1679627176
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2571,6 +2572,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1800539937 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 510873686715940159, guid: b25a039ee56abca41bd48d9028e823d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1584132437}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1800539938 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3224248878436821146, guid: b25a039ee56abca41bd48d9028e823d2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1584132437}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1848191523 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6867865634458849923, guid: b25a039ee56abca41bd48d9028e823d2,
@@ -2765,9 +2778,19 @@ PrefabInstance:
       objectReference: {fileID: 835560477}
     - target: {fileID: 8332837919448272876, guid: 56bb707ff6d9a4144aa1c32beb27d93c,
         type: 3}
+      propertyPath: iconPrefab
+      value: 
+      objectReference: {fileID: 1800539937}
+    - target: {fileID: 8332837919448272876, guid: 56bb707ff6d9a4144aa1c32beb27d93c,
+        type: 3}
       propertyPath: textProgress
       value: 
       objectReference: {fileID: 1118480264}
+    - target: {fileID: 8332837919448272876, guid: 56bb707ff6d9a4144aa1c32beb27d93c,
+        type: 3}
+      propertyPath: iconContainer
+      value: 
+      objectReference: {fileID: 1800539938}
     - target: {fileID: 8332837919448272876, guid: 56bb707ff6d9a4144aa1c32beb27d93c,
         type: 3}
       propertyPath: textQuestName

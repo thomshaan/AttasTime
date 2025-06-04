@@ -1,20 +1,24 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class UIObjective : MonoBehaviour
 {
-    public GameObject panelObjective; // Panel UI yang berisi info quest
+    public GameObject panelObjective;
     public TextMeshProUGUI textQuestName;
     public TextMeshProUGUI textDescription;
     public TextMeshProUGUI textProgress;
-    private Inventory inventory;
+    public Transform iconContainer;        // parent for icons
+    public GameObject iconPrefab;          // prefab with Icon (Image) + Qty (TMP)
 
+    private List<GameObject> currentIcons = new();
+    private Inventory inventory;
     private QuestData currentQuest;
 
     private void Start()
     {
-        inventory = FindObjectOfType<Inventory>(); // Sesuaikan akses inventory-mu
+        inventory = FindObjectOfType<Inventory>();
         panelObjective.SetActive(false);
 
         QuestManager.Instance.OnQuestChanged += UpdateUI;
@@ -31,26 +35,70 @@ public class UIObjective : MonoBehaviour
     {
         panelObjective.SetActive(false);
         currentQuest = null;
+        ClearIcons();
     }
 
     private void UpdateUI()
     {
-        if (currentQuest == null) return;
+        ClearIcons();
+
+        if (currentQuest == null || inventory == null) return;
 
         textQuestName.text = currentQuest.questName;
         textDescription.text = currentQuest.description;
 
-        int collected = 0;
-        if (inventory != null)
+        if (currentQuest is QuestMakanBajambaData bajambaQuest &&
+            bajambaQuest.modularRequiredItems != null &&
+            bajambaQuest.modularRequiredItems.Count > 0)
         {
-            foreach (var item in currentQuest.requiredItems)
+            // Modular (multi-item)
+            List<string> progressParts = new List<string>();
+
+            foreach (var req in bajambaQuest.modularRequiredItems)
             {
+                if (req.item == null) continue;
+                int owned = inventory.CountOf(req.item);
+
+                // Create icon for each required item
+                GameObject icon = Instantiate(iconPrefab, iconContainer);
+                icon.transform.Find("Icon").GetComponent<Image>().sprite = req.item.icon;
+                currentIcons.Add(icon);
+
+                // Progress part for this item
+                string itemText = $"{req.item.name}: {owned}/{req.requiredAmount}";
+                progressParts.Add(itemText);
+            }
+
+            textProgress.text = string.Join(", ", progressParts);
+        }
+        else
+        {
+            // Classic Quest (single type)
+            int collected = 0;
+            foreach (var item in currentQuest.requiredItems)
                 collected += inventory.CountOf(item);
+
+            if (currentQuest.requiredItems.Count > 0)
+            {
+                var firstItem = currentQuest.requiredItems[0];
+                GameObject icon = Instantiate(iconPrefab, iconContainer);
+                icon.transform.Find("Icon").GetComponent<Image>().sprite = firstItem.icon;
+                currentIcons.Add(icon);
+
+                textProgress.text = $"{collected}/{currentQuest.requiredItemAmount}";
+            }
+            else
+            {
+                textProgress.text = "";
             }
         }
+    }
 
-        textProgress.text = $"Beras: {collected}/{currentQuest.requiredItemAmount}";
-        textProgress.color = collected >= currentQuest.requiredItemAmount ? Color.green : Color.red;
+
+    private void ClearIcons()
+    {
+        foreach (var go in currentIcons) Destroy(go);
+        currentIcons.Clear();
     }
 
     private void OnDestroy()
