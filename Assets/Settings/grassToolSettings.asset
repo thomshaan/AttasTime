@@ -24,7 +24,7 @@ MonoBehaviour:
   layerFading: 0101010101010101
   VertexColorSettings: 0
   VertexFade: 0
-  sizeWidth: 0.369
+  sizeWidth: 0.443
   sizeLength: 0.206
   adjustWidth: 0
   adjustLength: 0
@@ -50,4 +50,4 @@ MonoBehaviour:
   density: 0.44
   normalLimit: 0.121
   grassAmountToGenerate: 200
-  generationDensity: 0.153
+  generationDensity: 0.174

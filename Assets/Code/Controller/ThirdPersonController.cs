@@ -5,50 +5,64 @@ using System.Collections;
 public class ThirdPersonController : MonoBehaviour
 {
     public float velocity = 5f;
-    public float sprintAdittion = 3.5f;
+    public float sprintAddition = 3.5f;
     public float jumpForce = 18f;
     public float jumpTime = 0.85f;
     public float gravity = 9.8f;
 
-    float jumpElapsedTime = 0;
-    bool isJumping = false;
-    bool isSprinting = false;
-    bool isCrouching = false;
-    Vector2 moveInput;
-    bool inputJump;
-    bool inputSprint;
-    bool inputCrouch;
-    Animator animator;
-    CharacterController cc;
+    // Reference to AttaAnimator (AnimHandler)
+    public AttaAnimator animHandler;
+
+    private float jumpElapsedTime = 0;
+    private bool isJumping = false;
+    private bool isSprinting = false;
+    private bool isCrouching = false;
+    private Vector2 moveInput;
+    private bool inputJump;
+    private bool inputSprint;
+    private bool inputCrouch;
+    private CharacterController cc;
 
     private bool forceForwardInput = false;
     private bool canMove = true;
     private bool skipNextFixedUpdate = false;
 
-    private void Awake()
-    {
-    }
-
     void Start()
     {
         cc = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
+        if (animHandler == null)
+            animHandler = GetComponent<AttaAnimator>();  // Ensure AttaAnimator is properly referenced
 
-        if (animator == null)
-            Debug.LogWarning("Animator component not found on player.");
+        if (animHandler == null)
+            Debug.LogWarning("AnimHandler (AttaAnimator) component not found on player.");
+
+        if (cc == null)
+            Debug.LogWarning("CharacterController not found.");
     }
 
     void Update()
     {
+        // If movement is locked (dialog active), ignore input and stop all movement.
         if (!canMove)
         {
-            moveInput = Vector2.zero;
-            inputJump = false;
-            inputSprint = false;
-            inputCrouch = false;
-            return;
+            Debug.Log("[ThirdPersonController] Movement input blocked.");
+
+            // Clear all movement-related inputs
+            moveInput = Vector2.zero;  // Reset movement input
+            inputJump = false;         // Reset jump input
+            inputSprint = false;       // Reset sprint input
+            inputCrouch = false;       // Reset crouch input
+
+            // Explicitly stop movement
+            cc.Move(Vector3.zero);  // Stop movement
+
+            // Ensure the character is in idle state
+            animHandler.SetBool("jalan", false);  // Set "jalan" animation to false (idle)
+
+            return; // Skip the rest of the movement logic
         }
 
+        // Handle input if movement is allowed
         if (Gamepad.current != null)
         {
             moveInput = Gamepad.current.leftStick.ReadValue();
@@ -66,9 +80,16 @@ public class ThirdPersonController : MonoBehaviour
         if (inputCrouch)
             isCrouching = !isCrouching;
 
-        if (cc.isGrounded && animator != null)
+        // Debug: Log when movement input is detected
+        if (moveInput != Vector2.zero)
         {
-            animator.SetBool("run", cc.velocity.magnitude > 0.9f);
+            Debug.Log("[ThirdPersonController] Movement detected: " + moveInput);
+        }
+
+        // Handle grounded check and movement animation
+        if (cc.isGrounded)
+        {
+            animHandler.SetBool("jalan", cc.velocity.magnitude > 0.9f);  // "jalan" -> movement animation
             isSprinting = cc.velocity.magnitude > 0.9f && inputSprint;
         }
 
@@ -86,6 +107,7 @@ public class ThirdPersonController : MonoBehaviour
             moveInput.y = moveInput.y != 0 ? moveInput.y : Input.GetAxis("Vertical");
         }
 
+        // Call head hitting detection
         HeadHittingDetect();
     }
 
@@ -93,17 +115,29 @@ public class ThirdPersonController : MonoBehaviour
     {
         if (skipNextFixedUpdate)
         {
-            skipNextFixedUpdate = false; // reset flag, skip movement sekali saja
+            skipNextFixedUpdate = false; // Skip movement once
             return;
         }
 
-        float velocityAdittion = isSprinting ? sprintAdittion : (isCrouching ? -(velocity * 0.50f) : 0);
+        if (!canMove)
+        {
+            Debug.Log("[ThirdPersonController] Movement is halted in FixedUpdate.");
 
-        float directionX = moveInput.x * (velocity + velocityAdittion) * Time.deltaTime;
-        float directionZ = moveInput.y * (velocity + velocityAdittion) * Time.deltaTime;
+            // Zero out movement completely and make sure the character doesn't move
+            cc.Move(Vector3.zero);  // This stops the movement
+
+            // Make sure animator shows idle animation
+            animHandler.SetBool("jalan", false);  // "jalan" -> idle animation
+            return; // No movement when blocked by dialog
+        }
+
+        // Movement calculations and application (if allowed)
+        float velocityAddition = isSprinting ? sprintAddition : (isCrouching ? -(velocity * 0.50f) : 0);
+        float directionX = moveInput.x * (velocity + velocityAddition) * Time.deltaTime;
+        float directionZ = moveInput.y * (velocity + velocityAddition) * Time.deltaTime;
         float directionY = 0;
 
-        // Jump logic (sesuaikan sesuai kode asli mu)
+        // Jump logic (adjust as needed)
         if (isJumping)
         {
             directionY = Mathf.SmoothStep(jumpForce, jumpForce * 0.30f, jumpElapsedTime / jumpTime) * Time.deltaTime;
@@ -117,7 +151,7 @@ public class ThirdPersonController : MonoBehaviour
 
         directionY -= gravity * Time.deltaTime;
 
-        // --- Character rotation ---
+        // Character rotation
         Vector3 forward = Camera.main.transform.forward;
         Vector3 right = Camera.main.transform.right;
 
@@ -138,14 +172,19 @@ public class ThirdPersonController : MonoBehaviour
         }
 
         Vector3 movement = Vector3.up * directionY + forward + right;
-        cc.Move(movement);
+        cc.Move(movement);  // Move character
     }
 
+
+
+
+    // Skips next fixed update
     public void SkipMovementNextFrame()
     {
         skipNextFixedUpdate = true;
     }
 
+    // Detect head hitting objects (if needed)
     void HeadHittingDetect()
     {
         float headHitDistance = 1.1f;
@@ -159,6 +198,7 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
+    // Teleportation logic (if needed)
     public void TeleportToPosition(Vector3 newPosition, float rotationY)
     {
         StartCoroutine(TeleportRoutine(newPosition, rotationY));
@@ -192,8 +232,29 @@ public class ThirdPersonController : MonoBehaviour
         yield break;
     }
 
+    // Force forward input (if needed)
     public void SetForceForward(bool enabled)
     {
         forceForwardInput = enabled;
+    }
+
+    // Halts all movement and sets idle animation
+    public void HaltMovement()
+    {
+        Debug.Log("[ThirdPersonController] Movement is halted. No more input should be processed.");
+
+        // Clear movement input
+        moveInput = Vector2.zero;
+        inputJump = false;
+        inputSprint = false;
+        inputCrouch = false;
+        isJumping = false;
+        jumpElapsedTime = 0;
+
+        // Stop CharacterController's residual movement
+        cc.Move(Vector3.zero);  // Zero movement
+
+        // Ensure animator shows idle animation
+        animHandler.SetBool("jalan", false);  // Use animHandler to set "jalan" to false (idle)
     }
 }

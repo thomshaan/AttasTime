@@ -26,14 +26,17 @@ public class DialogManager : MonoBehaviour
 
     private DialogData currentDialog;
     private int currentLineIndex;
-
     private Action yesCallback;
     private Action noCallback;
-
     private bool isAnimating = false;
+
+    // Player movement lock
+    private MonoBehaviour playerMovement; // Use your player movement script here
+    private System.Reflection.PropertyInfo canMoveProp;
 
     private void Awake()
     {
+        // Singleton pattern
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -48,10 +51,36 @@ public class DialogManager : MonoBehaviour
         yesButton.onClick.RemoveAllListeners();
         yesButton.onClick.AddListener(OnYesClicked);
         noButton.onClick.AddListener(OnNoClicked);
+
+        // Get reference to player controller (by tag)
+        var playerGO = GameObject.FindGameObjectWithTag("Player");
+        if (playerGO)
+        {
+            // CHANGE "PlayerController" TO YOUR ACTUAL MOVEMENT SCRIPT!
+            playerMovement = playerGO.GetComponent<MonoBehaviour>(); // e.g. playerGO.GetComponent<PlayerController>()
+            // Reflection to get the canMove property (change if your field is different)
+            canMoveProp = playerMovement?.GetType().GetProperty("canMove");
+            if (canMoveProp == null)
+            {
+                Debug.LogWarning("[DialogManager] No 'canMove' property found on player movement script. Player won't be locked.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[DialogManager] Player not found for movement lock!");
+        }
     }
 
     public void StartDialog(DialogData dialogData)
     {
+        // Before starting the dialog, stop movement
+        ThirdPersonController playerController = FindObjectOfType<ThirdPersonController>();
+        if (playerController != null)
+        {
+            playerController.HaltMovement();  // This stops the movement and locks the character
+        }
+
+        // Continue with your dialog setup
         if (isAnimating)
         {
             Debug.LogWarning("[DialogManager] Animasi sedang berjalan, abaikan StartDialog");
@@ -70,20 +99,22 @@ public class DialogManager : MonoBehaviour
         StartCoroutine(StartDialogRoutine());
     }
 
+
     private IEnumerator StartDialogRoutine()
     {
         isAnimating = true;
-
         dialogAnimator.Show();
 
         uiManager.Hide("InteractButton");
         uiManager.Hide("Joystick");
         uiManager.Hide("Inventory");
 
-        yield return new WaitForSeconds(0.1f); // wait a bit to ensure everything shown
+        // 🚩 Lock player movement
+        SetPlayerCanMove(false);
+
+        yield return new WaitForSeconds(0.1f);
 
         ShowLine();
-
         isAnimating = false;
     }
 
@@ -148,7 +179,6 @@ public class DialogManager : MonoBehaviour
     {
         if (isAnimating) return;
 
-        Debug.Log("Yes button clicked");
         yesCallback?.Invoke();
         EndDialog();
     }
@@ -157,7 +187,6 @@ public class DialogManager : MonoBehaviour
     {
         if (isAnimating) return;
 
-        Debug.Log("No button clicked");
         noCallback?.Invoke();
         EndDialog();
     }
@@ -171,7 +200,6 @@ public class DialogManager : MonoBehaviour
     private IEnumerator EndDialogRoutine()
     {
         isAnimating = true;
-
         dialogAnimator.Hide();
 
         yield return new WaitForSeconds(dialogAnimator.animationDuration);
@@ -179,6 +207,9 @@ public class DialogManager : MonoBehaviour
         uiManager.Show("InteractButton");
         uiManager.Show("Joystick");
         uiManager.Show("Inventory");
+
+        // 🚩 Unlock player movement
+        SetPlayerCanMove(true);
 
         dialogBox.SetActive(false);
         choicePanel.SetActive(false);
@@ -189,4 +220,34 @@ public class DialogManager : MonoBehaviour
 
         isAnimating = false;
     }
+
+    /// <summary>
+    /// Set the player's movement ability via "canMove" property.
+    /// </summary>
+    private void SetPlayerCanMove(bool canMove)
+    {
+        if (playerMovement != null && canMoveProp != null)
+        {
+            canMoveProp.SetValue(playerMovement, canMove, null);
+        }
+
+        if (!canMove)
+        {
+            Debug.Log("[DialogManager] Movement locked during dialog.");
+        }
+        else
+        {
+            Debug.Log("[DialogManager] Movement unlocked after dialog.");
+        }
+
+        // Halt movement immediately if dialog is shown
+        if (!canMove && playerMovement != null)
+        {
+            var haltMethod = playerMovement.GetType().GetMethod("HaltMovement");
+            if (haltMethod != null)
+                haltMethod.Invoke(playerMovement, null); // Call HaltMovement() when dialog shows
+        }
+    }
+
+
 }
