@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 5359197550745712568}
   - component: {fileID: 6986074067467360379}
   - component: {fileID: 726090588267994054}
+  - component: {fileID: 2057533183043089371}
   m_Layer: 6
   m_Name: ladang
   m_TagString: Untagged
@@ -287,8 +288,6 @@ MonoBehaviour:
     type: 3}
   harvestPrefab: {fileID: 5096148561637055106, guid: 83742cf69aa206e47bbe4e93ae4b45b5,
     type: 3}
-  riceItemPrefab: {fileID: 4122315345749798147, guid: adcb276803813df46ade4e0681fe55e5,
-    type: 3}
   modelSpawnPoints:
   - {fileID: 7671799077862698741}
   - {fileID: 1575840480880496989}
@@ -296,8 +295,22 @@ MonoBehaviour:
   - {fileID: 4036493171841791363}
   - {fileID: 3826368848662973880}
   - {fileID: 4400019619805474756}
-  riceDropPoints: []
   riceItem: {fileID: 11400000, guid: 8e6a88c72205d2a42afbab59c4d2d426, type: 2}
+  inventory: {fileID: 0}
+--- !u!114 &2057533183043089371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4759216587198569421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab4dd128ea5d9f4ba0ad66229aa07d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followObject: 0
+  minimapIcon: {fileID: 21300000, guid: a3cbca0f18ecb1145a591fda7e52e696, type: 3}
 --- !u!1 &5083887751396399496
 GameObject:
   m_ObjectHideFlags: 0

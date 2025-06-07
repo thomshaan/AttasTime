@@ -76,6 +76,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogBox: {fileID: 0}
+  cutsceneImagePanel: {fileID: 0}
+  cutsceneImageRenderer: {fileID: 0}
   speakerNameText: {fileID: 0}
   dialogText: {fileID: 0}
   nextButton: {fileID: 0}
@@ -426,6 +428,8 @@ MonoBehaviour:
   textQuestName: {fileID: 0}
   textDescription: {fileID: 0}
   textProgress: {fileID: 0}
+  iconContainer: {fileID: 0}
+  iconPrefab: {fileID: 0}
 --- !u!1 &3503063889666296650
 GameObject:
   m_ObjectHideFlags: 0

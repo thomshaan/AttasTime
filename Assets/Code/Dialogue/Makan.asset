@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 07ff9171feaa92d45a8c8c8d9bef04a7, type: 3}
-  m_Name: NewDialogData
+  m_Name: Makan
   m_EditorClassIdentifier: 
   lines:
-  - speakerName: Syekh
-    text: Marilah kita berdoa
+  - speaker: Syekh
+    text: Selamat makan.
+    image: {fileID: 0}
     isChoice: 0
-    triggersQuest: 0
-    triggersShop: 0
+    choices: []

@@ -11,6 +11,8 @@ public class DialogManager : MonoBehaviour
 
     [Header("UI References")]
     public GameObject dialogBox;
+    [SerializeField] private GameObject cutsceneImagePanel;
+    [SerializeField] private Image cutsceneImageRenderer;
     public TMP_Text speakerNameText;
     public TMP_Text dialogText;
     public Button nextButton;
@@ -29,6 +31,7 @@ public class DialogManager : MonoBehaviour
     private Action yesCallback;
     private Action noCallback;
     private bool isAnimating = false;
+    
 
     // Player movement lock
     private MonoBehaviour playerMovement; // Use your player movement script here
@@ -121,12 +124,13 @@ public class DialogManager : MonoBehaviour
     public void StartSimpleDialog(string text, string speaker = "NPC")
     {
         var simpleDialog = ScriptableObject.CreateInstance<DialogData>();
-        simpleDialog.lines = new List<DialogLine>()
-        {
-            new DialogLine { speakerName = speaker, text = text, isChoice = false }
-        };
+        simpleDialog.lines = new List<DialogData.DialogLine>()
+    {
+        new DialogData.DialogLine { speaker = speaker, text = text, isChoice = false }
+    };
         StartDialog(simpleDialog);
     }
+
 
     public void StartChoiceDialog(string text, Action onYes, Action onNo, string speaker = "NPC")
     {
@@ -134,19 +138,28 @@ public class DialogManager : MonoBehaviour
         noCallback = onNo;
 
         var choiceDialog = ScriptableObject.CreateInstance<DialogData>();
-        choiceDialog.lines = new List<DialogLine>()
-        {
-            new DialogLine { speakerName = speaker, text = text, isChoice = true }
-        };
+        choiceDialog.lines = new List<DialogData.DialogLine>()
+    {
+        new DialogData.DialogLine { speaker = speaker, text = text, isChoice = true }
+    };
 
         StartDialog(choiceDialog);
     }
 
     private void ShowLine()
     {
-        var line = currentDialog.lines[currentLineIndex];
-        speakerNameText.text = line.speakerName;
+        DialogData.DialogLine line = currentDialog.lines[currentLineIndex];
+        speakerNameText.text = line.speaker;
         dialogText.text = line.text;
+        if (line.image != null)
+        {
+            cutsceneImageRenderer.sprite = line.image;
+            cutsceneImagePanel.SetActive(true);
+        }
+        else
+        {
+            cutsceneImagePanel.SetActive(false);
+        }
 
         if (line.isChoice)
         {

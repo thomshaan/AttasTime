@@ -153,6 +153,7 @@ public class MinimapController : MonoBehaviour
 
     private void UpdateMiniMapIcons()
     {
+
         float iconScale = 1 / contentRectTransform.transform.localScale.x;
 
         // Gunakan temporary list untuk menyimpan key yang sudah null
@@ -160,6 +161,7 @@ public class MinimapController : MonoBehaviour
 
         foreach (var kvp in miniMapWorldObjectsLookup)
         {
+
             var miniMapWorldObject = kvp.Key;
             var miniMapIcon = kvp.Value;
 
@@ -175,6 +177,7 @@ public class MinimapController : MonoBehaviour
             var rotation = miniMapWorldObject.transform.rotation.eulerAngles;
             miniMapIcon.IconRectTransform.localRotation = Quaternion.AngleAxis(-rotation.y, Vector3.forward);
             miniMapIcon.IconRectTransform.localScale = Vector3.one * iconScale;
+            Debug.Log($"{miniMapWorldObject.name} — World: {miniMapWorldObject.transform.position}, Map: {mapPosition}");
         }
 
         // Hapus entry yang rusak dari dictionary
