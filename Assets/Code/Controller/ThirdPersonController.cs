@@ -81,10 +81,6 @@ public class ThirdPersonController : MonoBehaviour
             isCrouching = !isCrouching;
 
         // Debug: Log when movement input is detected
-        if (moveInput != Vector2.zero)
-        {
-            Debug.Log("[ThirdPersonController] Movement detected: " + moveInput);
-        }
 
         // Handle grounded check and movement animation
         if (cc.isGrounded)

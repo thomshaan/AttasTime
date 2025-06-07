@@ -4,5 +4,6 @@ public enum QuestState
     InProgress,
     CookingDone,
     TidyingMat,
+    ReadyToComplete,
     Completed
 }

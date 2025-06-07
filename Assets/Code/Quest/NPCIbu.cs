@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class NPCIbu : MonoBehaviour, IInteractable
 {
-    public QuestMakanBajambaData questData;
+    public QuestMakanBajambaData questData;  // QuestMakanBajambaData digunakan di sini
     private QuestManager questManager;
     private Inventory inventory;
     private DialogManager dialogManager;
@@ -35,7 +35,6 @@ public class NPCIbu : MonoBehaviour, IInteractable
 
         if (questManager.currentQuestState == QuestState.InProgress)
         {
-            // Pastikan modularRequiredItems diakses dengan casting
             if (questData != null && questData is QuestMakanBajambaData makanBajambaQuest)
             {
                 if (questManager.HasAllItemsModular(makanBajambaQuest.modularRequiredItems, inventory))
@@ -65,13 +64,13 @@ public class NPCIbu : MonoBehaviour, IInteractable
             inventory.RemoveItem(req.item, req.requiredAmount);
         }
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(5f);  // Simulasi memasak
 
-        Item makanBajambaItem = ItemDatabase.GetItemById("MakanBajamba"); // pakai GetItemById
+        Item makanBajambaItem = ItemDatabase.GetItemById("rendang");
         if (makanBajambaItem != null)
             inventory.AddItem(makanBajambaItem);
 
-        dialogManager.StartSimpleDialog("Makan bajamba sudah siap! Silakan antar ke Rumah Gadang.", "Ibu");
+        dialogManager.StartSimpleDialog("Makanan sudah siap! Silakan antar ke Rumah Gadang.", "Ibu");
 
         questManager.UpdateQuestState(QuestState.CookingDone);
 

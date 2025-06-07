@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19e18b1e80cc8f347859f68ccb994e92, type: 3}
   m_Name: Quest_MembantuPaman
   m_EditorClassIdentifier: 
-  questName: Bertani.
-  description: Help uncle to get 3 rice bag.
+  questName: Bertani
+  description: Bantu paman mengumpulkan 3 karung beras.
   requiredItems:
   - {fileID: 11400000, guid: 8e6a88c72205d2a42afbab59c4d2d426, type: 2}
   questId: quest_membantu_paman

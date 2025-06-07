@@ -1,56 +1,58 @@
-using UnityEngine;
+using System;
 using System.Collections;
+using UnityEngine;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class UIFader : MonoBehaviour
 {
-    public RectTransform rectTransform;
+    [Tooltip("CanvasGroup used for fade transitions")] 
+    public CanvasGroup canvasGroup;
+    [Tooltip("Duration of fade transitions in seconds")]
+    public float fadeDuration = 1f;
 
-    public float slideDuration = 0.5f;
-    public float slideDistance = 200f;
+    /// <summary>
+    /// Event invoked when a fade completes.
+    /// </summary>
+    public event Action OnFadeComplete;
 
-    private Vector2 originalPosition;
-    private Coroutine currentCoroutine;
-
-    private void Awake()
+    private void Reset()
     {
-        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
-        originalPosition = rectTransform.anchoredPosition;
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    // Slide keluar (ke kiri atau kanan)
-    public void SlideOut(bool slideLeft)
+    /// <summary>
+    /// Fades the CanvasGroup to targetAlpha over fadeDuration seconds.
+    /// </summary>
+    public IEnumerator Fade(float targetAlpha)
     {
-        if (currentCoroutine != null)
-        {
-            StopCoroutine(currentCoroutine);
-            currentCoroutine = null;
-        }
-        Vector2 targetPos = originalPosition + (slideLeft ? Vector2.left : Vector2.right) * slideDistance;
-        currentCoroutine = StartCoroutine(SlideRoutine(targetPos));
-    }
-
-    // Slide kembali ke posisi awal
-    public void SlideIn()
-    {
-        if (currentCoroutine != null)
-        {
-            StopCoroutine(currentCoroutine);
-            currentCoroutine = null;
-        }
-        currentCoroutine = StartCoroutine(SlideRoutine(originalPosition));
-    }
-
-    private IEnumerator SlideRoutine(Vector2 targetPos)
-    {
-        Vector2 startPos = rectTransform.anchoredPosition;
+        float startAlpha = canvasGroup.alpha;
         float elapsed = 0f;
 
-        while (elapsed < slideDuration)
+        // Block interactions during fade
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = true;
+
+        while (elapsed < fadeDuration)
         {
             elapsed += Time.deltaTime;
-            rectTransform.anchoredPosition = Vector2.Lerp(startPos, targetPos, elapsed / slideDuration);
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / fadeDuration);
             yield return null;
         }
-        rectTransform.anchoredPosition = targetPos;
+
+        canvasGroup.alpha = targetAlpha;
+        canvasGroup.interactable = targetAlpha > 0f;
+        canvasGroup.blocksRaycasts = targetAlpha > 0f;
+
+        OnFadeComplete?.Invoke();
+    }
+
+    public IEnumerator FadeIn()
+    {
+        yield return StartCoroutine(Fade(1f));
+    }
+
+    public IEnumerator FadeOut()
+    {
+        yield return StartCoroutine(Fade(0f));
     }
 }

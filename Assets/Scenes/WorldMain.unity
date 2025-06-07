@@ -66443,7 +66443,7 @@ MonoBehaviour:
     normal: {x: 0, y: 1, z: 0}
     length: {x: 0.369, y: 0.206}
     color: {x: 0.9062359, y: 0.87629926, z: 0.64508855}
-  m_InstantiatedMaterial: {fileID: 402335606}
+  m_InstantiatedMaterial: {fileID: 1503746970}
 --- !u!4 &374681648
 Transform:
   m_ObjectHideFlags: 0
@@ -66640,51 +66640,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1698813123}
   m_PrefabAsset: {fileID: 0}
---- !u!21 &402335606
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Grass(Clone)
-  m_Shader: {fileID: -6465566751694194690, guid: 242679acbb51bb443a1a879009cab4bf,
-    type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _Blend: 0
-    - _BlendMult: 1
-    - _BlendOff: 0
-    - _QueueControl: 0
-    - _QueueOffset: 0
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1001 &410802076
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74832,6 +74787,30 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0516f8afb1fe0214897b9213fbc79a7d, type: 3}
+--- !u!114 &1184170316 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 381240788614369584, guid: 951429f231930c347b890a522c0e4b50,
+    type: 3}
+  m_PrefabInstance: {fileID: 919700425190830644}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77e05172de56efc4aa8a60d0cb379c9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1184170318 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 552368364872561797, guid: 951429f231930c347b890a522c0e4b50,
+    type: 3}
+  m_PrefabInstance: {fileID: 919700425190830644}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b27d1b914485dd1489a4f1c8661a1568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1186129616 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 558607733336130089, guid: 5a0588974ded4294d893d95d7900c929,
@@ -77788,6 +77767,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c89f5cd6cdeb81b4782cdf757a6f5c40, type: 3}
+--- !u!21 &1503746970
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Grass(Clone)
+  m_Shader: {fileID: -6465566751694194690, guid: 242679acbb51bb443a1a879009cab4bf,
+    type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Blend: 0
+    - _BlendMult: 1
+    - _BlendOff: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!1001 &1505219922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -82818,6 +82842,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2081504217}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2093290415 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2498160767261707898, guid: 951429f231930c347b890a522c0e4b50,
+    type: 3}
+  m_PrefabInstance: {fileID: 919700425190830644}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c07f49432448d9448fa2ae20094d99b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2101392613
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83409,19 +83445,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1213611252}
   m_SourcePrefab: {fileID: 100100000, guid: b25a039ee56abca41bd48d9028e823d2, type: 3}
---- !u!114 &164930955344972812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8825353247113438402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19e66b307062b7345805c15aa7c65baa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogData: {fileID: 11400000, guid: 40f52eef474d6954d9c602b9ba30320e, type: 2}
 --- !u!1 &187392749154525885
 GameObject:
   m_ObjectHideFlags: 0
@@ -85191,19 +85214,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2412250201175134775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8825353247113438402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db193ebc0bed1dc4288e2b665c40829f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sellerType: 0
 --- !u!4 &2430788141878538857
 Transform:
   m_ObjectHideFlags: 0
@@ -89020,9 +89030,7 @@ GameObject:
   - component: {fileID: 8156622180792745592}
   - component: {fileID: 7055868246865828460}
   - component: {fileID: 5839412845635776995}
-  - component: {fileID: 2412250201175134775}
   - component: {fileID: 9200455636246220840}
-  - component: {fileID: 164930955344972812}
   - component: {fileID: 3550312203761138864}
   - component: {fileID: 9200455636246220841}
   m_Layer: 6
@@ -89348,10 +89356,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8825353247113438402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3c6d46270ff74449ae4475460eb1bf9, type: 3}
+  m_Script: {fileID: 11500000, guid: 7114a44511d56c54d999a15fd3e794bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  role: 0
   questData: {fileID: 11400000, guid: e97c3d5c139074c46944f7e2480c7eb1, type: 2}
+  questManager: {fileID: 1184170318}
+  inventory: {fileID: 2016854746}
+  dialogManager: {fileID: 2093290415}
+  animator: {fileID: 7055868246865828460}
+  uiObjective: {fileID: 1184170316}
+  questIcon: {fileID: 8121484898372014171}
+  cutsceneController: {fileID: 0}
+  cookDuration: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

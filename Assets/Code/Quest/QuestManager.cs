@@ -73,7 +73,7 @@ public class QuestManager : MonoBehaviour
 
     public void CompleteQuest()
     {
-        if (currentQuestData == null || currentQuestState != QuestState.InProgress)
+        if (currentQuestData == null || currentQuestState != QuestState.InProgress && currentQuestState != QuestState.ReadyToComplete)
             return;
 
         if (currentQuestData is QuestMakanBajambaData makanBajambaQuest)
@@ -170,6 +170,8 @@ public class QuestManager : MonoBehaviour
     {
         questCooldownTimers[questId] = cooldownDays;
     }
+
+    
 
 
 }

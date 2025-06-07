@@ -26,8 +26,9 @@ public class UIObjective : MonoBehaviour
 
     public void ShowQuest(QuestData quest)
     {
+        Debug.Log("ShowQuest called for quest: " + quest.questName); // Log quest yang dipanggil
         currentQuest = quest;
-        panelObjective.SetActive(true);
+        panelObjective.SetActive(true);  // Pastikan panel aktif
         UpdateUI();
     }
 

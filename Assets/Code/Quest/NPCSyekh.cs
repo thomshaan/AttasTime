@@ -3,14 +3,14 @@ using UnityEngine.SceneManagement;
 
 public class NPCSyekh : MonoBehaviour, IInteractable
 {
-    public QuestMakanBajambaData questData;
+    public QuestMakanBajambaData questData; // QuestMakanBajambaData digunakan untuk quest ini
     private QuestManager questManager;
     private Inventory inventory;
     private DialogManager dialogManager;
     private QuestIconController questIcon;
     private PlayerStats playerStats;
     private SyekhAnimator syekhAnimator;
-
+    private UIObjective uiObjective;
     private void Start()
     {
         questManager = FindObjectOfType<QuestManager>();
@@ -19,10 +19,12 @@ public class NPCSyekh : MonoBehaviour, IInteractable
         questIcon = GetComponent<QuestIconController>();
         playerStats = FindObjectOfType<PlayerStats>();
         syekhAnimator = GetComponent<SyekhAnimator>();
+        uiObjective = FindObjectOfType<UIObjective>();
 
         UpdateQuestIcon();
     }
 
+    // Memperbarui ikon status quest
     public void UpdateQuestIcon()
     {
         if (questIcon == null || questManager == null) return;
@@ -35,8 +37,6 @@ public class NPCSyekh : MonoBehaviour, IInteractable
                     questIcon.ShowNotStarted();
                     break;
                 case QuestState.InProgress:
-                case QuestState.CookingDone:
-                case QuestState.TidyingMat:
                     questIcon.ShowInProgress();
                     break;
                 case QuestState.Completed:
@@ -52,7 +52,11 @@ public class NPCSyekh : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (questManager == null || dialogManager == null) return;
+        if (questManager == null || dialogManager == null)
+        {
+            Debug.LogError("QuestManager or DialogManager is not assigned.");
+            return;
+        }
 
         if (syekhAnimator != null)
             syekhAnimator.PlayAnim("doa", 2f);
@@ -73,8 +77,19 @@ public class NPCSyekh : MonoBehaviour, IInteractable
                     "Syekh: Mau bantu saya siapkan makan bajamba?",
                     () =>
                     {
-                        questManager.StartQuest(questData);
+                        questManager.StartQuest(questData);  // Mulai quest
                         UpdateQuestIcon();
+
+                        // Tambahkan pengecekan uiObjective
+                        if (uiObjective != null)
+                        {
+                            uiObjective.ShowQuest(questData);   // Tampilkan UI quest
+                        }
+                        else
+                        {
+                            Debug.LogError("UIObjective is not assigned or not found!");
+                        }
+
                         dialogManager.StartSimpleDialog("Kumpulkan dulu bahan-bahannya ya!", "Syekh");
                     },
                     () =>
@@ -102,43 +117,12 @@ public class NPCSyekh : MonoBehaviour, IInteractable
                 dialogManager.StartSimpleDialog("Sedang ada quest lain yang harus diselesaikan dulu.", "Syekh");
             }
         }
-        else if (currentScene == "RumahGadang")
-        {
-            if (questManager.currentQuestData != questData)
-            {
-                dialogManager.StartSimpleDialog("Tidak ada yang harus dilakukan sekarang.", "Syekh");
-                return;
-            }
-
-            switch (questManager.currentQuestState)
-            {
-                case QuestState.CookingDone:
-                    dialogManager.StartSimpleDialog("Silakan antar makan bajamba ke Rumah Gadang terlebih dahulu.", "Syekh");
-                    break;
-
-                case QuestState.TidyingMat:
-                    dialogManager.StartSimpleDialog("Terima kasih sudah membantu merapihkan tikar. Ini hadiahmu!", "Syekh");
-                    playerStats.AddCoins(100);
-                    playerStats.AddXP(50);
-                    questManager.CompleteQuest();
-                    questManager.StartQuestCooldown(questData.questId, questData.cooldownDays);
-                    UpdateQuestIcon();
-                    break;
-
-                case QuestState.Completed:
-                    dialogManager.StartSimpleDialog("Quest sudah selesai. Terima kasih.", "Syekh");
-                    break;
-
-                default:
-                    dialogManager.StartSimpleDialog("Tunggu instruksi selanjutnya.", "Syekh");
-                    break;
-            }
-        }
         else
         {
             dialogManager.StartSimpleDialog("Tidak ada yang harus dilakukan di sini.", "Syekh");
         }
     }
+
 
     public string GetInteractionPrompt()
     {
