@@ -17,6 +17,10 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Animation")]
     public AttaAnimator animHandler;
 
+    [Header("Audio")]
+    public AudioSource footstepAudioSource;  // Drag your AudioSource here
+    public AudioClip footstepSound;  // Drag the footstep sound effect here
+
     private CharacterController cc;
     private Vector2 moveInput;
     private bool isSprinting = false;
@@ -41,6 +45,9 @@ public class ThirdPersonController : MonoBehaviour
 
         if (cc == null) Debug.LogWarning("CharacterController missing.");
         if (animHandler == null) Debug.LogWarning("AttaAnimator missing.");
+        
+        if (footstepAudioSource == null)
+            Debug.LogWarning("Footstep AudioSource is missing.");
     }
 
     void Update()
@@ -78,6 +85,9 @@ public class ThirdPersonController : MonoBehaviour
             isJumping = true;
         }
 
+        // Play footstep sound when moving
+        PlayFootsteps();
+        
         // Head hitting detection
         HeadHittingDetect();
     }
@@ -197,5 +207,23 @@ public class ThirdPersonController : MonoBehaviour
         cc.Move(Vector3.zero);
         animHandler?.SetBool("jalan", false);
         animHandler?.SetBool("lari", false);
+    }
+
+    // Play footstep sound based on player movement
+    private void PlayFootsteps()
+    {
+        if (footstepAudioSource == null || footstepSound == null) return;
+
+        // Play footstep sound when walking or running
+        if (moveInput.magnitude > 0.1f && !footstepAudioSource.isPlaying)
+        {
+            footstepAudioSource.clip = footstepSound;
+            footstepAudioSource.loop = true;
+            footstepAudioSource.Play();
+        }
+        else if (moveInput.magnitude <= 0.1f && footstepAudioSource.isPlaying)
+        {
+            footstepAudioSource.Stop();
+        }
     }
 }
