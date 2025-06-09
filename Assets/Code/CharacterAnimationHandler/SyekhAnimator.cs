@@ -10,7 +10,8 @@ public class SyekhAnimator : BaseCharacterAnimatorHandler
             { "doa", "doa" },
             { "duduk", "duduk" },
             { "makan", "makan" },
-            { "ceramah", "ceramah" }
+            { "ceramah", "ceramah" },
+            { "jualBeli", "ceramah" }
         };
 
         allParams = new string[paramMap.Values.Count];

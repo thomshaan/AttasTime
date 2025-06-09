@@ -10,19 +10,17 @@ public class SellerNPC : MonoBehaviour, IInteractable
     private GameObject iconGO;
     public DialogData dialogData;
 
-    private BaseCharacterAnimatorHandler animatorHandler;
+    private BaseCharacterAnimatorHandler animHandler;
 
     private void Awake()
     {
         inventory = FindObjectOfType<Inventory>();
-        if (inventory == null)
-            Debug.LogWarning("[SellerNPC] Inventory tidak ditemukan.");
-
         playerStats = FindObjectOfType<PlayerStats>();
-        if (playerStats == null)
-            Debug.LogWarning("[SellerNPC] PlayerStats tidak ditemukan.");
+        animHandler = GetComponent<BaseCharacterAnimatorHandler>();
 
-        animatorHandler = GetComponent<BaseCharacterAnimatorHandler>();
+        if (inventory == null) Debug.LogWarning("[SellerNPC] Inventory tidak ditemukan.");
+        if (playerStats == null) Debug.LogWarning("[SellerNPC] PlayerStats tidak ditemukan.");
+        if (animHandler == null) Debug.LogWarning("[SellerNPC] SellerAnimatorHandler tidak ditemukan.");
     }
 
     public void InitializeSeller(Item newItem, int newStock)
@@ -32,16 +30,23 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
         if (item != null && item.icon != null)
         {
-            GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/SellerIconUI");
-            if (floatingIconPrefab != null)
+            if (iconUI == null)
             {
-                iconGO = Instantiate(floatingIconPrefab);
-                iconUI = iconGO.GetComponentInChildren<SellerIconUI>();
-                iconUI.Initialize(transform, item.icon);
+                GameObject floatingIconPrefab = Resources.Load<GameObject>("UI/SellerIconUI");
+                if (floatingIconPrefab != null)
+                {
+                    iconGO = Instantiate(floatingIconPrefab);
+                    iconUI = iconGO.GetComponentInChildren<SellerIconUI>();
+                }
+                else
+                {
+                    Debug.LogWarning("[SellerNPC] ❌ FloatingIconUI prefab tidak ditemukan.");
+                }
             }
-            else
+
+            if (iconUI != null)
             {
-                Debug.LogWarning("[SellerNPC] ❌ FloatingIconUI prefab tidak ditemukan.");
+                iconUI.Initialize(transform, item.icon);
             }
         }
     }
@@ -60,14 +65,10 @@ public class SellerNPC : MonoBehaviour, IInteractable
             return;
         }
 
-        // 🔁 Panggil animasi jualBeli (jika animatorHandler ada dan param tersedia)
-        if (animatorHandler != null)
-        {
-            animatorHandler.PlayAnim("jualBeli", 2f); // durasi disesuaikan
-        }
-
         if (dialogData != null)
         {
+            animHandler?.PlayAnim("jualBeli", 2f);
+
             DialogManager.Instance.StartChoiceDialog(
                 $"Aku menjual {item.name}, mau beli?",
                 OnBuyConfirmed,
@@ -82,23 +83,13 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
     private void OnBuyConfirmed()
     {
-        Debug.Log("OnBuyConfirmed triggered");
+        animHandler?.PlayAnim("bawaBarang", 2f);
 
-        if (playerStats == null || inventory == null)
-        {
-            Debug.LogWarning("[SellerNPC] PlayerStats atau Inventory belum di-assign.");
-            return;
-        }
-
-        if (item == null)
-        {
-            Debug.LogWarning("[SellerNPC] Item null saat beli.");
-            return;
-        }
+        if (playerStats == null || inventory == null) return;
+        if (item == null) return;
 
         if (playerStats.coins < item.price)
         {
-            Debug.Log("[SellerNPC] Koin kurang untuk beli item.");
             DialogManager.Instance.StartSimpleDialog("Koin kamu kurang.", "Penjual");
             return;
         }
@@ -130,9 +121,16 @@ public class SellerNPC : MonoBehaviour, IInteractable
 
     private void OnDestroy()
     {
+        if (iconUI != null)
+        {
+            iconUI.HideIcon();
+            iconUI = null;
+        }
+
         if (iconGO != null)
         {
             Destroy(iconGO);
+            iconGO = null;
         }
     }
 }

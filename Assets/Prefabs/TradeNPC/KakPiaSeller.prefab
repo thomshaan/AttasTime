@@ -439,7 +439,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 81513a6de26c30345852108edbee9f21,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3490573493083167402}
+      addedObject: {fileID: 2622688063770147569}
   m_SourcePrefab: {fileID: 100100000, guid: 81513a6de26c30345852108edbee9f21, type: 3}
 --- !u!1 &7198085920763790216 stripped
 GameObject:
@@ -558,7 +558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogData: {fileID: 11400000, guid: 40f52eef474d6954d9c602b9ba30320e, type: 2}
---- !u!114 &3490573493083167402
+--- !u!114 &2622688063770147569
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

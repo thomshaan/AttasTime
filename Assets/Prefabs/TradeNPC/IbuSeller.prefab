@@ -2128,7 +2128,7 @@ GameObject:
   - component: {fileID: -8705253656244677726}
   - component: {fileID: 5134232812030791772}
   - component: {fileID: 6864993026669772261}
-  - component: {fileID: 6474102278613413546}
+  - component: {fileID: 28315210403683484}
   m_Layer: 6
   m_Name: IbuSeller
   m_TagString: NPC
@@ -2264,7 +2264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogData: {fileID: 11400000, guid: 40f52eef474d6954d9c602b9ba30320e, type: 2}
---- !u!114 &6474102278613413546
+--- !u!114 &28315210403683484
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -13,7 +13,8 @@ public class PiaAnimator : BaseCharacterAnimatorHandler
             { "bawaBarang", "bawaBarang" },
             { "duduk", "duduk" },
             { "makan", "makan" },
-            { "doa", "doa" }
+            { "doa", "doa" },
+            { "jualBeli", "doa" }
         };
 
         allParams = new string[paramMap.Values.Count];

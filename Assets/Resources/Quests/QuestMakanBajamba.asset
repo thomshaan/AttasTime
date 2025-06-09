@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9e543cfead16654ca8a85059689bb8e, type: 3}
+  m_Name: QuestMakanBajamba
+  m_EditorClassIdentifier: 
+  questName: makanbajamba
+  description: Quest Makan Bajamba.
+  requiredItems: []
+  questId: makan_bajamba
+  requiredItemAmount: 1
+  rewardItem: {fileID: 0}
+  rewardCoins: 100
+  rewardXP: 50
+  modularRequiredItems:
+  - item: {fileID: 11400000, guid: 8e6a88c72205d2a42afbab59c4d2d426, type: 2}
+    requiredAmount: 1
+  - item: {fileID: 11400000, guid: e10d0797e5b9f5340b3ee35cc8af87c6, type: 2}
+    requiredAmount: 2
+  - item: {fileID: 11400000, guid: b02985222fb63a94780eda5f8b0e0e04, type: 2}
+    requiredAmount: 2
+  - item: {fileID: 11400000, guid: a62a43011fbe03343ad8efc1eb4eec83, type: 2}
+    requiredAmount: 2
+  - item: {fileID: 0}
+    requiredAmount: 0
+  cooldownDays: 2

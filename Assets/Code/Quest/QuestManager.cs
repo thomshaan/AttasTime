@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour
@@ -14,6 +15,20 @@ public class QuestManager : MonoBehaviour
 
     public delegate void QuestUpdated();
     public event QuestUpdated OnQuestChanged;
+    private Dictionary<string, float> questCooldownTimers = new Dictionary<string, float>();
+
+
+    private void Update()
+    {
+        float deltaTimeInDays = Time.deltaTime / 86400f; // Asumsi 1 hari = 86400 detik nyata
+        List<string> keys = new List<string>(questCooldownTimers.Keys);
+        foreach (var key in keys)
+        {
+            questCooldownTimers[key] -= deltaTimeInDays;
+            if (questCooldownTimers[key] <= 0f)
+                questCooldownTimers.Remove(key);
+        }
+    }
 
     private void Awake()
     {
@@ -55,30 +70,35 @@ public class QuestManager : MonoBehaviour
         return true;
     }
 
+
     public void CompleteQuest()
     {
         if (currentQuestData == null || currentQuestState != QuestState.InProgress)
             return;
 
-        if (!HasRequiredItems())
-            return; // Pastikan cukup item
-
-        // Kurangi item yang diminta sesuai jumlah quest
-        foreach (var requiredItem in currentQuestData.requiredItems)
+        if (currentQuestData is QuestMakanBajambaData makanBajambaQuest)
         {
-            inventory.RemoveItem(requiredItem, currentQuestData.requiredItemAmount);
+            foreach (var req in makanBajambaQuest.modularRequiredItems)
+            {
+                inventory.RemoveItem(req.item, req.requiredAmount);
+            }
+        }
+        else
+        {
+            foreach (var item in currentQuestData.requiredItems)
+            {
+                inventory.RemoveItem(item, currentQuestData.requiredItemAmount);
+            }
         }
 
         currentQuestState = QuestState.Completed;
 
-        // Berikan reward coins dan XP
         if (playerStats != null)
         {
             playerStats.AddCoins(currentQuestData.rewardCoins);
             playerStats.AddXP(currentQuestData.rewardXP);
         }
 
-        // Berikan reward item jika ada
         if (currentQuestData.rewardItem != null)
         {
             inventory.AddItem(currentQuestData.rewardItem);
@@ -105,6 +125,12 @@ public class QuestManager : MonoBehaviour
         OnQuestChanged?.Invoke();
     }
 
+    public void UpdateQuestState(QuestState newState)
+    {
+        currentQuestState = newState;
+        OnQuestChanged?.Invoke();
+    }
+
     public void UpdateQuestProgress(Item item)
     {
         if (currentQuestData == null || currentQuestState != QuestState.InProgress) return;
@@ -123,5 +149,27 @@ public class QuestManager : MonoBehaviour
             }
         }
     }
+
+    public bool HasAllItemsModular(List<QuestMakanBajambaData.QuestRequirement> requirements, Inventory inventory)
+    {
+        foreach (var req in requirements)
+        {
+            int playerAmount = inventory.CountOf(req.item);
+            if (playerAmount < req.requiredAmount)
+                return false;
+        }
+        return true;
+    }
+
+    public bool IsQuestOnCooldown(string questId)
+    {
+        return questCooldownTimers.TryGetValue(questId, out float remaining) && remaining > 0f;
+    }
+
+    public void StartQuestCooldown(string questId, float cooldownDays)
+    {
+        questCooldownTimers[questId] = cooldownDays;
+    }
+
 
 }
