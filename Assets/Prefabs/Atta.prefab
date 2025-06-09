@@ -428,13 +428,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dbd62af2a25df34c9a8e8a7bcb2c370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 2826530987301317129}
   velocity: 3.5
   sprintAddition: 3.5
   jumpForce: 18
   jumpTime: 0.85
   gravity: 9.8
-  animHandler: {fileID: 1538447523107525693}
+  moveAction: {fileID: 0}
+  animHandler: {fileID: 0}
 --- !u!114 &5103139474465284851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,7 +709,7 @@ PrefabInstance:
     - target: {fileID: 4783023495221205318, guid: 4fb8aee9f0a443f44a355a3c346a2368,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5272420126249026556, guid: 4fb8aee9f0a443f44a355a3c346a2368,
         type: 3}

@@ -255,12 +255,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3060584583061467615}
-  - component: {fileID: 2680308294381389475}
   - component: {fileID: 4481485012627620976}
   - component: {fileID: 3754895888141704724}
   - component: {fileID: 5238241837088092112}
   - component: {fileID: 6881056149066984345}
   - component: {fileID: 8066284488649069664}
+  - component: {fileID: 3894621810113638545}
+  - component: {fileID: 7482836646518733682}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -293,22 +294,6 @@ Transform:
   - {fileID: 4475091171846215447}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2680308294381389475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3647671135171573330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c311d35f36da52146b35268d12595acb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DirectionalLight: {fileID: 0}
-  Preset: {fileID: 11400000, guid: 6feabddbae748ed48875e3c51a254732, type: 2}
-  TimeMultiplier: 0.03
-  TimeOfDay: 12.7
 --- !u!114 &4481485012627620976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +371,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b74293049929e4b9ac35d82e02ac5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3894621810113638545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3647671135171573330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78e68ef37bb342a4c8bb12b38283758c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contentRect: {fileID: 0}
+  expectedPivot: {x: 0.5, y: 0.5}
+--- !u!114 &7482836646518733682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3647671135171573330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c311d35f36da52146b35268d12595acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DirectionalLight: {fileID: 0}
+  Preset: {fileID: 0}
+  TimeMultiplier: 1
+  TimeOfDay: 0
 --- !u!1 &3933623499280463196
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,6 +688,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogBox: {fileID: 0}
+  cutsceneImagePanel: {fileID: 0}
+  cutsceneImageRenderer: {fileID: 0}
   speakerNameText: {fileID: 0}
   dialogText: {fileID: 0}
   nextButton: {fileID: 0}

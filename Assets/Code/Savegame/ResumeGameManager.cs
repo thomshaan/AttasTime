@@ -26,6 +26,8 @@ public class ResumeGameManager : MonoBehaviour
     // Called when player clicks a save slot button
     public void OnSlotClicked(int slot)
     {
+        AudioManager.Instance.PlaySFX("klik");
+        AudioManager.Instance.StopMusic();
         var data = SaveSystem.LoadPlayerStats(slot);
 
         if (data.coins == 0 && data.xp == 0 && data.position == Vector3.zero)
@@ -40,6 +42,7 @@ public class ResumeGameManager : MonoBehaviour
     // Called when player confirms "Yes" on confirmation popup
     public void LoadSlot(int slot)
     {
+        AudioManager.Instance.StopMusic();
         SaveManager.currentSaveSlot = slot;
         SceneManager.LoadScene("WorldMain");  // Load main game scene
     }

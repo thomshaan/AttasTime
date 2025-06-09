@@ -201,7 +201,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6216484320037926249}
-  - component: {fileID: 1509289573856046741}
   - component: {fileID: 956911632642838771}
   - component: {fileID: 6736573520052340624}
   - component: {fileID: 171800913265942194}
@@ -227,6 +226,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 332428118831164558}
   - {fileID: 253296710813758744}
   - {fileID: 4647837427491925630}
   - {fileID: 6858498118128654902}
@@ -239,22 +239,6 @@ Transform:
   - {fileID: 1704368460489831204}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1509289573856046741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2943221752738605902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c311d35f36da52146b35268d12595acb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DirectionalLight: {fileID: 0}
-  Preset: {fileID: 11400000, guid: 6feabddbae748ed48875e3c51a254732, type: 2}
-  TimeMultiplier: 0.03
-  TimeOfDay: 6.9
 --- !u!114 &956911632642838771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,7 +246,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2943221752738605902}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b8f6f3ba9a87564b943426e7c967304, type: 3}
   m_Name: 
@@ -278,7 +262,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2943221752738605902}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a3425b508cb3b546bfea93635991acd, type: 3}
   m_Name: 
@@ -327,7 +311,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2943221752738605902}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61b74293049929e4b9ac35d82e02ac5b, type: 3}
   m_Name: 
@@ -500,7 +484,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4041094667978268629}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75b3f0c1fa774dc449b9cb20e8907bc0, type: 3}
   m_Name: 
@@ -548,6 +532,80 @@ MonoBehaviour:
     - {fileID: 2800000, guid: 20fd01f0f7d5635489e4fde11bd243a7, type: 3}
     - {fileID: 2800000, guid: ee3a089f0ca7af6478c363ab2dd113b7, type: 3}
     - {fileID: 2800000, guid: c03f8626f5fbab049b87056143504962, type: 3}
+--- !u!1 &4105961609782814848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 332428118831164558}
+  - component: {fileID: 190021160459752705}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &332428118831164558
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105961609782814848}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6216484320037926249}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &190021160459752705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105961609782814848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b68499570914c4e9c966fa4e7445e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterMixer: {fileID: 24100000, guid: fcb6523bd62682f4f98daa0a264db07a, type: 2}
+  menuBGM: {fileID: 8300000, guid: 2a8390cfbb54e104e88c61f839a5d43c, type: 3}
+  defaultBGM: {fileID: 8300000, guid: 59e0751b1aecfea4ca778718589cb719, type: 3}
+  sfxClips:
+  - key: adzan
+    clip: {fileID: 8300000, guid: e0bcb0c791bffbf42938d62bb406bf0b, type: 3}
+  - key: adzansubuh
+    clip: {fileID: 8300000, guid: 7ded89eef5d330749a89cb1609f7d0ac, type: 3}
+  - key: airterjun
+    clip: {fileID: 8300000, guid: 4e4c7dbc142001e45b7d7f6b19a6e094, type: 3}
+  - key: ambience
+    clip: {fileID: 8300000, guid: 1eb2c48061b05ec4a901e3ef7f01c1b8, type: 3}
+  - key: beli
+    clip: {fileID: 8300000, guid: d128c9294305838419fa4ec732fc5123, type: 3}
+  - key: klik
+    clip: {fileID: 8300000, guid: 94af58028663ac74aa75b8bc9cdf7f87, type: 3}
+  - key: masak
+    clip: {fileID: 8300000, guid: 53016bf7195de5e44a17bc0852ce2d43, type: 3}
+  - key: dropbarang
+    clip: {fileID: 8300000, guid: 58f0aeff2df8fef42971ec05bfe26dde, type: 3}
+  - key: larirumput
+    clip: {fileID: 8300000, guid: f558584ae0384f648aa40e8b0d1e9873, type: 3}
+  - key: jalanrumput
+    clip: {fileID: 8300000, guid: 0de6425d3d5e3274383b18f92b5e159a, type: 3}
+  - key: ambiencemalam
+    clip: {fileID: 8300000, guid: 6f919e25616ff814f9dab395a2e5eee3, type: 3}
+  - key: menanam
+    clip: {fileID: 8300000, guid: 47957592e8ab57e44a85595e0d101f92, type: 3}
+  - key: ngaji
+    clip: {fileID: 8300000, guid: b48ad6e943c07ae4fa0cf3f043303da0, type: 3}
 --- !u!1 &4514127287892229852
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +872,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8056568089174925108}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d512d23a48265134485722d3a30f49cc, type: 3}
   m_Name: 

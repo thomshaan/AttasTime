@@ -21,6 +21,7 @@ public class SaveSlotManager : MonoBehaviour
     // Fungsi dipanggil dari UI tombol delete, hapus slot dan refresh UI
     public void DeleteSlot(int slot)
     {
+        AudioManager.Instance.PlaySFX("klik");
         SaveSystem.DeleteSaveSlot(slot);  // langsung panggil SaveSystem statis tanpa SaveManager
 
         // Jika ingin reset slot ke fresh save default, panggil juga NewGameData:

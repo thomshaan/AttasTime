@@ -14,6 +14,7 @@ public class SelectSaveManager : MonoBehaviour
 
         if (!dataExists)
         {
+            
             // New game: create fresh save with initial position
             SaveManager.currentSaveSlot = slot;
             NewGameData.CreateFreshSave(slot, initialSpawnPosition, initialRotationY);

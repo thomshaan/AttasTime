@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2501572006527543075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8980370389606151821}
+  - component: {fileID: 1672469005041302472}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8980370389606151821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2501572006527543075}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 196, y: 96.7, z: 164.64166}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1672469005041302472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2501572006527543075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b68499570914c4e9c966fa4e7445e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterMixer: {fileID: 24100000, guid: fcb6523bd62682f4f98daa0a264db07a, type: 2}
+  menuBGM: {fileID: 8300000, guid: 2a8390cfbb54e104e88c61f839a5d43c, type: 3}
+  defaultBGM: {fileID: 8300000, guid: 59e0751b1aecfea4ca778718589cb719, type: 3}
+  sfxClips:
+  - key: adzan
+    clip: {fileID: 8300000, guid: e0bcb0c791bffbf42938d62bb406bf0b, type: 3}
+  - key: adzansubuh
+    clip: {fileID: 8300000, guid: 7ded89eef5d330749a89cb1609f7d0ac, type: 3}
+  - key: airterjun
+    clip: {fileID: 8300000, guid: 4e4c7dbc142001e45b7d7f6b19a6e094, type: 3}
+  - key: ambience
+    clip: {fileID: 8300000, guid: 1eb2c48061b05ec4a901e3ef7f01c1b8, type: 3}
+  - key: beli
+    clip: {fileID: 8300000, guid: d128c9294305838419fa4ec732fc5123, type: 3}
+  - key: klik
+    clip: {fileID: 8300000, guid: 94af58028663ac74aa75b8bc9cdf7f87, type: 3}
+  - key: masak
+    clip: {fileID: 8300000, guid: 53016bf7195de5e44a17bc0852ce2d43, type: 3}
+  - key: dropbarang
+    clip: {fileID: 8300000, guid: 58f0aeff2df8fef42971ec05bfe26dde, type: 3}
+  - key: larirumput
+    clip: {fileID: 8300000, guid: f558584ae0384f648aa40e8b0d1e9873, type: 3}
+  - key: jalanrumput
+    clip: {fileID: 8300000, guid: 0de6425d3d5e3274383b18f92b5e159a, type: 3}
+  - key: ambiencemalam
+    clip: {fileID: 8300000, guid: 6f919e25616ff814f9dab395a2e5eee3, type: 3}
+  - key: menanam
+    clip: {fileID: 8300000, guid: 47957592e8ab57e44a85595e0d101f92, type: 3}
+  - key: ngaji
+    clip: {fileID: 8300000, guid: b48ad6e943c07ae4fa0cf3f043303da0, type: 3}
