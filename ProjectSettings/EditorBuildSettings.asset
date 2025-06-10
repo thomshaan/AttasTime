@@ -30,6 +30,8 @@ EditorBuildSettings:
     path: Assets/Scenes/RumahAtta.unity
     guid: 7f9b688c7fffcf349bb1185cfbfb6ea6
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 000eaf333c57ddd4b869e3a0e2a4c518,
+      type: 2}
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000,
       guid: 482c198908ac9b549b7d40820d4b69cb, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 03c2a0e126e5f75418d9f6958e5ebc08,
@@ -39,4 +41,6 @@ EditorBuildSettings:
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
       guid: 3155c8d429670ac46af78121f455901c, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: a58f947b0fc306145bb2b82ae0da848d,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: fea3e316dfe124442ab57ca3ef72e54b,
       type: 2}
