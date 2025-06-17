@@ -8,7 +8,10 @@ public class PamanNPC : MonoBehaviour, IInteractable
     private UIObjective uiObjective;
     private DialogManager dialogManager;
     private QuestIconController questIcon;
-    private PamanAnimator pamanAnimator; // integrasi animator
+    private PamanAnimator pamanAnimator;
+
+    private enum PamanState { Idle, OfferQuest, QuestInProgress, QuestCompleted }
+    private PamanState currentState;
 
     private void Start()
     {
@@ -17,9 +20,94 @@ public class PamanNPC : MonoBehaviour, IInteractable
         uiObjective = FindObjectOfType<UIObjective>();
         dialogManager = DialogManager.Instance;
         questIcon = GetComponent<QuestIconController>();
-        pamanAnimator = GetComponent<PamanAnimator>(); // ambil komponen animator
+        pamanAnimator = GetComponent<PamanAnimator>();
 
+        UpdateState();
         UpdateQuestIcon();
+    }
+
+    private void UpdateState()
+    {
+        if (questManager == null)
+        {
+            currentState = PamanState.Idle;
+            return;
+        }
+
+        if (questManager.currentQuestData == questData)
+        {
+            switch (questManager.currentQuestState)
+            {
+                case QuestState.NotStarted:
+                    currentState = PamanState.OfferQuest;
+                    break;
+                case QuestState.InProgress:
+                    currentState = PamanState.QuestInProgress;
+                    break;
+                case QuestState.Completed:
+                    currentState = PamanState.OfferQuest;
+                    break;
+            }
+        }
+        else
+        {
+            currentState = PamanState.OfferQuest;
+        }
+    }
+
+
+
+    public void Interact()
+    {
+        if (dialogManager == null || questManager == null) return;
+
+        pamanAnimator?.PlayAnim("jualBeli", 2f);
+
+        switch (currentState)
+        {
+            case PamanState.OfferQuest:
+                dialogManager.StartChoiceDialog(
+                    "Paman: Mau bantu saya mengumpulkan 3 beras?",
+                    () =>
+                    {
+                        questManager.StartQuest(questData);
+                        uiObjective.ShowQuest(questData);
+                        UpdateState();
+                        UpdateQuestIcon();
+                        pamanAnimator.PlayAnim("jualBeli", 3f);
+                    },
+                    () =>
+                    {
+                        dialogManager.StartSimpleDialog("Paman: Baiklah, kalau berubah pikiran bilang ya!", "Paman");
+                    },
+                    "Paman"
+                );
+                break;
+
+            case PamanState.QuestInProgress:
+                if (questManager.HasRequiredItems())
+                {
+                    dialogManager.StartSimpleDialog("Kamu sudah mengumpulkan beras. Terima kasih, misi selesai!", "Paman");
+                    questManager.CompleteQuest();
+                    uiObjective.Hide();
+                    UpdateState();
+                    UpdateQuestIcon();
+                    pamanAnimator.PlayAnim("bawaBarang", 2f);
+                }
+                else
+                {
+                    dialogManager.StartSimpleDialog("Kamu belum cukup beras, ayo lanjutkan mengumpulkan!", "Paman");
+                }
+                break;
+
+            case PamanState.QuestCompleted:
+                dialogManager.StartSimpleDialog("Sedang ada quest lain yang harus diselesaikan dulu.", "Paman");
+                break;
+
+            default:
+                dialogManager.StartSimpleDialog("Hai Atta!", "Paman");
+                break;
+        }
     }
 
     public void UpdateQuestIcon()
@@ -47,67 +135,8 @@ public class PamanNPC : MonoBehaviour, IInteractable
         }
     }
 
-    public void Interact()
-    {
-        if (questManager == null || dialogManager == null) return;
-        Debug.Log("[PamanNPC] Interact method called");
-
-        if (pamanAnimator != null)
-            pamanAnimator.PlayAnim("jualBeli", 2f); // animasi saat mulai interaksi
-
-        if (questManager.IsQuestInProgress() && questManager.currentQuestData == questData)
-        {
-            if (questManager.HasRequiredItems())
-            {
-                dialogManager.StartSimpleDialog("Kamu sudah mengumpulkan beras. Terima kasih, misi selesai!", "Paman");
-                questManager.CompleteQuest();
-                uiObjective.Hide();
-                UpdateQuestIcon();
-
-                if (pamanAnimator != null)
-                    pamanAnimator.PlayAnim("bawaBarang", 2f); // animasi beri item
-            }
-            else
-            {
-                pamanAnimator.PlayAnim("jualBeli", 2f);
-                dialogManager.StartSimpleDialog("Kamu belum cukup beras, ayo lanjutkan mengumpulkan!", "Paman");
-
-            }
-        }
-        else if (!questManager.IsQuestInProgress())
-        {
-            dialogManager.StartChoiceDialog(
-                "Paman: Mau bantu saya mengumpulkan 3 beras?",
-                () =>
-                {
-                    questManager.StartQuest(questData);
-                    uiObjective.ShowQuest(questData);
-                    UpdateQuestIcon();
-
-                    if (pamanAnimator != null)
-                        pamanAnimator.PlayAnim("jualBeli", 3f); // animasi tanam saat mulai quest
-                },
-                () =>
-                {
-                    pamanAnimator.PlayAnim("jualBeli", 2f);
-                    dialogManager.StartSimpleDialog("Paman: Baiklah, kalau berubah pikiran bilang ya!", "Paman");
-                },
-                "Paman"
-            );
-        }
-        else
-        {
-            pamanAnimator.PlayAnim("jualBeli", 2f);
-            dialogManager.StartSimpleDialog("Sedang ada quest lain yang harus diselesaikan dulu.", "Paman");
-        }
-        Debug.Log("[PamanNPC] Interact finished");
-    }
-
     public string GetInteractionPrompt()
     {
-        Debug.Log("[PamanNPC] GetInteractionPrompt called");
-        string prompt = "Tekan [E] untuk berbicara dengan Paman";
-        Debug.Log("[PamanNPC] Interaction prompt: " + prompt);
-        return prompt;
+        return "Tekan [E] untuk berbicara dengan Paman";
     }
 }

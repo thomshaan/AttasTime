@@ -1,0 +1,34 @@
+{
+    "name": "PlayerControls",
+    "maps": [
+        {
+            "name": "Move",
+            "id": "c769301f-7adf-4f8e-b208-bb58f1cebfdf",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "58a4ca92-7b91-4ec9-a289-4e8d6972fa50",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "aa1cf4a7-7af6-46aa-b343-109976c3cd67",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

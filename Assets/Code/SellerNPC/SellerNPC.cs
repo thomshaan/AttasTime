@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class SellerNPC : MonoBehaviour, IInteractable
 {
+    private enum SellerState { Idle, Offer, Buying, Selling, OutOfStock }
+    private SellerState currentState = SellerState.Idle;
+
     private Item item;
     private int stock;
     private Inventory inventory;
@@ -9,7 +12,6 @@ public class SellerNPC : MonoBehaviour, IInteractable
     private SellerIconUI iconUI;
     private GameObject iconGO;
     public DialogData dialogData;
-
     private BaseCharacterAnimatorHandler animHandler;
 
     private void Awake()
@@ -49,95 +51,82 @@ public class SellerNPC : MonoBehaviour, IInteractable
                 iconUI.Initialize(transform, item.icon);
             }
         }
+
+        currentState = (stock > 0) ? SellerState.Offer : SellerState.OutOfStock;
     }
 
     public void Interact()
     {
-        if (item == null)
+        if (item == null || dialogData == null)
         {
-            Debug.LogWarning("[SellerNPC] Item belum di-set.");
+            Debug.LogWarning("[SellerNPC] Interact gagal, item/dialogData kosong.");
             return;
         }
 
-        if (stock <= 0)
+        switch (currentState)
         {
-            DialogManager.Instance.StartSimpleDialog("Maaf, stok sudah habis.", "Penjual");
-            return;
-        }
+            case SellerState.Offer:
+                animHandler?.PlayAnim("jualBeli", 2f);
+                DialogManager.Instance.StartChoiceDialog(
+                    $"Aku menjual {item.name}, mau beli?",
+                    () => ChangeState(SellerState.Buying),
+                    () => ChangeState(SellerState.Selling),
+                    "Penjual"
+                );
+                break;
 
-        if (dialogData != null)
-        {
-            animHandler?.PlayAnim("jualBeli", 2f);
+            case SellerState.Buying:
+                animHandler?.PlayAnim("bawaBarang", 2f);
+                TryBuyItem();
+                break;
 
-            // Pilihan beli
-            DialogManager.Instance.StartChoiceDialog(
-                $"Aku menjual {item.name}, mau beli?",
-                OnBuyConfirmed,
-                OnBuyDeclinedOrSellPrompt,
-                "Penjual");
-        }
-        else
-        {
-            Debug.LogWarning("[SellerNPC] DialogData belum di-set.");
-        }
-    }
+            case SellerState.Selling:
+                TrySellItem();
+                break;
 
-    private void OnBuyDeclinedOrSellPrompt()
-    {
-        DialogManager.Instance.StartChoiceDialog(
-            "Apa kamu mau jual item ini ke penjual?",
-            OnSellConfirmed,
-            OnSellDeclined,
-            "Penjual");
-    }
+            case SellerState.OutOfStock:
+                DialogManager.Instance.StartSimpleDialog("Maaf, stok sudah habis.", "Penjual");
+                break;
 
-    private void OnSellConfirmed()
-    {
-        animHandler?.PlayAnim("bawaBarang", 2f);
-
-        if (playerStats == null || inventory == null || item == null) return;
-
-        // Apakah pemain punya item yang ingin dijual?
-        if (inventory.CountOf(item) <= 0)
-        {
-            DialogManager.Instance.StartSimpleDialog($"Kamu tidak punya {item.name} untuk dijual.", "Penjual");
-            return;
-        }
-
-        // Harga jual = harga item - 5 (minimal 1)
-        int sellPrice = Mathf.Max(1, item.price - 5);
-
-        // Remove 1 item, tambahkan uang ke player
-        bool removed = inventory.RemoveItem(item, 1);
-        if (removed)
-        {
-            playerStats.AddCoins(sellPrice);
-            DialogManager.Instance.StartSimpleDialog(
-                $"Terima kasih! {item.name} berhasil dijual seharga {sellPrice} koin.", "Penjual");
-        }
-        else
-        {
-            DialogManager.Instance.StartSimpleDialog(
-                $"Gagal menjual {item.name}.", "Penjual");
+            case SellerState.Idle:
+            default:
+                DialogManager.Instance.StartSimpleDialog("Selamat datang!", "Penjual");
+                break;
         }
     }
 
-    private void OnSellDeclined()
+    private void ChangeState(SellerState next)
     {
-        DialogManager.Instance.StartSimpleDialog(
-            "Baiklah, semoga harimu menyenangkan.", "Penjual");
+        currentState = next;
+
+        // Langsung jalankan behavior setelah transisi state
+        switch (next)
+        {
+            case SellerState.Buying:
+                Interact(); // panggil ulang untuk lanjut beli
+                break;
+
+            case SellerState.Selling:
+                DialogManager.Instance.StartChoiceDialog(
+                    "Apa kamu mau jual item ini ke penjual?",
+                    TrySellItem,
+                    () =>
+                    {
+                        DialogManager.Instance.StartSimpleDialog("Baiklah, semoga harimu menyenangkan.", "Penjual");
+                        currentState = SellerState.Offer;
+                    },
+                    "Penjual"
+                );
+                break;
+        }
     }
 
-    private void OnBuyConfirmed()
+    private void TryBuyItem()
     {
-        animHandler?.PlayAnim("bawaBarang", 2f);
-
-        if (playerStats == null || inventory == null) return;
-        if (item == null) return;
-
         if (playerStats.coins < item.price)
         {
             DialogManager.Instance.StartSimpleDialog("Koin kamu kurang.", "Penjual");
+            currentState = SellerState.Offer;
             return;
         }
 
@@ -148,17 +137,42 @@ public class SellerNPC : MonoBehaviour, IInteractable
             stock--;
             DebugLogManager.Instance.ShowLog($"[SellerNPC] Item {item.name} berhasil dibeli. Stok tersisa: {stock}");
             DialogManager.Instance.StartSimpleDialog("Terima kasih!", "Penjual");
+
+            // Update state jika stok habis
+            currentState = (stock > 0) ? SellerState.Offer : SellerState.OutOfStock;
         }
         else
         {
             DebugLogManager.Instance.ShowLog("[SellerNPC] Transaksi gagal saat SpendCoins.");
             DialogManager.Instance.StartSimpleDialog("Transaksi gagal.", "Penjual");
+            currentState = SellerState.Offer;
         }
     }
 
-    private void OnBuyDeclined()
+    private void TrySellItem()
     {
-        DialogManager.Instance.StartSimpleDialog("Baiklah, semoga harimu menyenangkan.", "Penjual");
+        animHandler?.PlayAnim("bawaBarang", 2f);
+
+        if (inventory.CountOf(item) <= 0)
+        {
+            DialogManager.Instance.StartSimpleDialog($"Kamu tidak punya {item.name} untuk dijual.", "Penjual");
+            currentState = SellerState.Offer;
+            return;
+        }
+
+        int sellPrice = Mathf.Max(1, item.price - 5);
+        bool removed = inventory.RemoveItem(item, 1);
+        if (removed)
+        {
+            playerStats.AddCoins(sellPrice);
+            DialogManager.Instance.StartSimpleDialog($"Terima kasih! {item.name} berhasil dijual seharga {sellPrice} koin.", "Penjual");
+        }
+        else
+        {
+            DialogManager.Instance.StartSimpleDialog($"Gagal menjual {item.name}.", "Penjual");
+        }
+
+        currentState = SellerState.Offer;
     }
 
     public string GetInteractionPrompt()

@@ -29,12 +29,12 @@ public class TimeDisplayUI : MonoBehaviour
     private string GetTimePeriod(float time)
     {
         if (time >= 5f && time < 7f)
-            return "Dawn";
+            return "Subuh";
         else if (time >= 7f && time < 18f)
-            return "Daylight";
+            return "Pagi";
         else if (time >= 18f && time < 19f)
-            return "Sunset";
+            return "Sore";
         else
-            return "Nighttime";
+            return "Malam";
     }
 }

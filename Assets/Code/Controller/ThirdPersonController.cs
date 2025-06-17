@@ -45,7 +45,7 @@ public class ThirdPersonController : MonoBehaviour
 
         if (cc == null) Debug.LogWarning("CharacterController missing.");
         if (animHandler == null) Debug.LogWarning("AttaAnimator missing.");
-        
+
         if (footstepAudioSource == null)
             Debug.LogWarning("Footstep AudioSource is missing.");
     }
@@ -87,7 +87,7 @@ public class ThirdPersonController : MonoBehaviour
 
         // Play footstep sound when moving
         PlayFootsteps();
-        
+
         // Head hitting detection
         HeadHittingDetect();
     }
@@ -225,5 +225,26 @@ public class ThirdPersonController : MonoBehaviour
         {
             footstepAudioSource.Stop();
         }
+    }
+    public void Move(float moveAmount, float turnAmount)
+    {
+        // Apply movement and rotation
+        float directionX = moveAmount * velocity * Time.deltaTime;
+        float directionZ = turnAmount * velocity * Time.deltaTime;
+
+        Vector3 forward = Camera.main.transform.forward;
+        Vector3 right = Camera.main.transform.right;
+
+        forward.y = 0;
+        right.y = 0;
+
+        forward.Normalize();
+        right.Normalize();
+
+        forward *= directionZ;
+        right *= directionX;
+
+        Vector3 movement = forward + right;
+        cc.Move(movement);  // Move the character
     }
 }
