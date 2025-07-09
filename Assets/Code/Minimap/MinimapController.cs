@@ -10,6 +10,9 @@ public class MinimapController : MonoBehaviour
 {
     public static MinimapController Instance;
 
+    private List<MinimapWorldObject> trackedObjects = new();
+    private Dictionary<MinimapWorldObject, MinimapIcon> minimapIcons = new();
+
     [SerializeField] private Vector2 worldSize = new Vector2(400, 400);
 
     [SerializeField]
@@ -82,11 +85,17 @@ public class MinimapController : MonoBehaviour
 
     public void RemoveMinimapWorldObject(MinimapWorldObject minimapWorldObject)
     {
-        if (miniMapWorldObjectsLookup.TryGetValue(minimapWorldObject, out MinimapIcon icon))
+        if (minimapWorldObject == null || !trackedObjects.Contains(minimapWorldObject))
+            return;
+
+        // OPTIONAL: If you store icon in a dictionary, make sure to check:
+        if (minimapIcons.TryGetValue(minimapWorldObject, out var icon) && icon != null)
         {
-            miniMapWorldObjectsLookup.Remove(minimapWorldObject);
             Destroy(icon.gameObject);
+            minimapIcons.Remove(minimapWorldObject);
         }
+
+        trackedObjects.Remove(minimapWorldObject);
     }
 
 
@@ -137,28 +146,47 @@ public class MinimapController : MonoBehaviour
         if (followIcon != null)
         {
             float mapScale = contentRectTransform.transform.localScale.x;
-            
+
             contentRectTransform.anchoredPosition = (-followIcon.RectTransform.anchoredPosition * mapScale);
         }
     }
 
     private void UpdateMiniMapIcons()
     {
+
         float iconScale = 1 / contentRectTransform.transform.localScale.x;
+
+        // Gunakan temporary list untuk menyimpan key yang sudah null
+        List<MinimapWorldObject> toRemove = new();
+
         foreach (var kvp in miniMapWorldObjectsLookup)
         {
+
             var miniMapWorldObject = kvp.Key;
             var miniMapIcon = kvp.Value;
-            var mapPosition = WorldPositionToMapPosition(miniMapWorldObject.transform.position);
 
+            if (miniMapWorldObject == null || miniMapIcon == null)
+            {
+                toRemove.Add(miniMapWorldObject);
+                continue;
+            }
+
+            var mapPosition = WorldPositionToMapPosition(miniMapWorldObject.transform.position);
             miniMapIcon.RectTransform.anchoredPosition = mapPosition;
+
             var rotation = miniMapWorldObject.transform.rotation.eulerAngles;
             miniMapIcon.IconRectTransform.localRotation = Quaternion.AngleAxis(-rotation.y, Vector3.forward);
             miniMapIcon.IconRectTransform.localScale = Vector3.one * iconScale;
+            Debug.Log($"{miniMapWorldObject.name} — World: {miniMapWorldObject.transform.position}, Map: {mapPosition}");
         }
 
-
+        // Hapus entry yang rusak dari dictionary
+        foreach (var removedKey in toRemove)
+        {
+            miniMapWorldObjectsLookup.Remove(removedKey);
+        }
     }
+
 
     private Vector2 WorldPositionToMapPosition(Vector3 worldPos)
     {

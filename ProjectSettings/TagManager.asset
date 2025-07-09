@@ -10,6 +10,9 @@ TagManager:
   - Mosque
   - NPC
   - DroppedItem
+  - InteractionButton
+  - PlayerSpawnPoint
+  - PlayerSpawn
   layers:
   - Default
   - TransparentFX
